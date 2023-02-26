@@ -14,7 +14,7 @@ jobs:
     - id: 'zipservice'
       uses: montudor/action-zip@v1
       with:
-        args: zip -qq -r test-service.zip backend/service-test
+        args: zip -r -j test-service.zip backend/service-test/*
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
@@ -26,4 +26,4 @@ jobs:
       uses: 'google-github-actions/upload-cloud-storage@v1'
       with:
         path: 'test-service.zip'
-        destination: 'vovanoktk-functions/test-servise.zip'
+        destination: 'vovanoktk-functions'
