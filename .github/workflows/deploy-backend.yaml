@@ -1,9 +1,7 @@
 name: publish-backend-to-bucket
 
 on:
-  push:
-    branches:
-    - 'main'
+  workflow_dispatch
 
 jobs:
   upload_zip_files:
@@ -11,7 +9,6 @@ jobs:
     permissions:
       contents: 'read'
       id-token: 'write'
-
     steps:
     - uses: actions/checkout@v3
     - id: 'zipservice'
