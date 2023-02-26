@@ -1,6 +1,10 @@
 # gcp-serverless
 Sample project for learing serverless approach in GCP
 
+## Current architecture (in progress)
+
+![gcp serverless](https://user-images.githubusercontent.com/7352031/221429972-bf2a0bed-d788-4bb3-953e-7a9c416386d4.png)
+
 ## Setting up Identity Federation for GitHub Actions
 
 To use the new GitHub Actions auth action, you need to set up and configure Workload Identity Federation by creating a Workload Identity Pool and Workload Identity Provider:
