@@ -6,7 +6,8 @@ on:
     - 'main'
 
 jobs:
-  job_id:
+  upload_zip_files:
+    runs-on: ubuntu-latest
     permissions:
       contents: 'read'
       id-token: 'write'
