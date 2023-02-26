@@ -6,17 +6,17 @@ Sample project for learing serverless approach in GCP
 To use the new GitHub Actions auth action, you need to set up and configure Workload Identity Federation by creating a Workload Identity Pool and Workload Identity Provider:
 
 ```shell
-gcloud iam workload-identity-pools create "my-pool" \
-  --project="${PROJECT_ID}" \
+gcloud iam workload-identity-pools create "idpool" \
+  --project="learning-words-trial" \
   --location="global" \
-  --display-name="Demo pool"
+  --display-name="idpool"
 
-gcloud iam workload-identity-pools providers create-oidc "my-provider" \
-  --project="${PROJECT_ID}" \
+gcloud iam workload-identity-pools providers create-oidc "idprovider" \
+  --project="learning-words-trial" \
   --location="global" \
-  --workload-identity-pool="my-pool" \
-  --display-name="Demo provider" \
-  --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.aud=assertion.aud" \
+  --workload-identity-pool="idpool" \
+  --display-name="idprovider" \
+  --attribute-mapping="google.subject=assertion.sub,attribute.repository=assertion.repository" \
   --issuer-uri="https://token.actions.githubusercontent.com"
   ```
 
@@ -26,10 +26,10 @@ The attribute mappings map claims in the GitHub Actions JWT to assertions you ca
 Finally, allow authentications from the Workload Identity Provider to impersonate the desired Service Account:
 
 ```shell
-gcloud iam service-accounts add-iam-policy-binding "github-sa@learning-words-trial.iam.gserviceaccount.com" \
+gcloud iam service-accounts add-iam-policy-binding "githubsanew@learning-words-trial.iam.gserviceaccount.com" \
   --project="learning-words-trial" \
   --role="roles/iam.workloadIdentityUser" \
-  --member="principalSet://iam.googleapis.com/projects/736194043976/locations/global/workloadIdentityPools/githubactions/attribute.repository/vyshkovgcp-serverless"
+  --member="principalSet://iam.googleapis.com/projects/736194043976/locations/global/workloadIdentityPools/idpool/attribute.repository/vyshkov/gcp-serverless"
   ```
 https://iam.googleapis.com/projects/736194043976/locations/global/workloadIdentityPools/githubactions/providers/github  
 
