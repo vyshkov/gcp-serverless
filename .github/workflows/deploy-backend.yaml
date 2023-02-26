@@ -21,8 +21,8 @@ jobs:
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
-        workload_identity_provider: 'projects/736194043976/locations/global/workloadIdentityPools/githubactions/providers/github'
-        service_account: 'github-sa@learning-words-trial.iam.gserviceaccount.com'
+        workload_identity_provider: 'projects/736194043976/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+        service_account: 'githubsa@learning-words-trial.iam.gserviceaccount.com'
 
     - id: 'upload-file'
       uses: 'google-github-actions/upload-cloud-storage@v1'
