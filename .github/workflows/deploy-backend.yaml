@@ -1,3 +1,10 @@
+name: publish-backend-to-bucket
+
+on:
+  push:
+    branches:
+    - 'main'
+
 jobs:
   job_id:
     permissions:
