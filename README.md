@@ -26,10 +26,11 @@ The attribute mappings map claims in the GitHub Actions JWT to assertions you ca
 Finally, allow authentications from the Workload Identity Provider to impersonate the desired Service Account:
 
 ```shell
-gcloud iam service-accounts add-iam-policy-binding "my-service-account@${PROJECT_ID}.iam.gserviceaccount.com" \
-  --project="${PROJECT_ID}" \
+gcloud iam service-accounts add-iam-policy-binding "github-sa@learning-words-trial.iam.gserviceaccount.com" \
+  --project="learning-words-trial" \
   --role="roles/iam.workloadIdentityUser" \
-  --member="principalSet://iam.googleapis.com/projects/1234567890/locations/global/workloadIdentityPools/my-pool/attribute.repository/my-org/my-repo"
+  --member="principalSet://iam.googleapis.com/projects/736194043976/locations/global/workloadIdentityPools/githubactions/attribute.repository/vyshkovgcp-serverless"
   ```
-  
+https://iam.googleapis.com/projects/736194043976/locations/global/workloadIdentityPools/githubactions/providers/github  
+
 For more configuration options, see the Workload Identity Federation documentation. If you are using Terraform to automate your infrastructure provisioning, check out the GitHub OIDC Terraform module too.
