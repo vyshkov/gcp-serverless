@@ -23,8 +23,8 @@ jobs:
         token_format: 'access_token'
     - name: Terraform Init
       id: init
-      run: terraform init
-    - run: ls -la
+      run: terraform -chdir=infra init
+    - run: ls -la infra
     - name: Terraform Apply
       id: apply
-      run: terraform apply -auto-approve
+      run: terraform -chdir=infra apply -auto-approve
