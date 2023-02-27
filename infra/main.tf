@@ -1,37 +1,11 @@
-resource "google_cloudfunctions2_function" "function" {
-  name        = "testfn"
-  location    = "us-central1"
-  description = "a new function"
-
-  build_config {
-    runtime     = "nodejs18"
-    entry_point = "helloHttp" # Set the entry point
-    source {
-      storage_source {
-        bucket = var.functions_bucket
-        object = "test.zip"
-      }
-    }
-  }
-
-  service_config {
-    max_instance_count = 1
-    available_memory   = "256M"
-    timeout_seconds    = 60
-  }
+module "function_test_service" {
+  source = "./modules/function"
+  function_name = "http_test1"
+  function_description = "http_test1 desc"
 }
 
-# Cloud run biding to make it able to call from anywhere
-resource "google_cloud_run_service_iam_binding" "default" {
-  location = google_cloudfunctions2_function.function.location
-  service  = google_cloudfunctions2_function.function.name
-  role     = "roles/run.invoker"
-  members = [
-    "allUsers"
-  ]
-}
-
-# Output
-output "function_uri" { 
-  value = google_cloudfunctions2_function.function.service_config[0].uri
+module "function_test_service_2" {
+  source = "./modules/function"
+  function_name = "http_test1"
+  function_description = "http_test1 desc"
 }
