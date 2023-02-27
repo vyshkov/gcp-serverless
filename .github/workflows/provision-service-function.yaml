@@ -1,0 +1,31 @@
+# https://www.cloudskillsboost.google/focuses/15845?parent=catalog
+# in progress
+
+name: provision-service-function
+
+on:
+  workflow_dispatch:
+    inputs:
+        service_name:
+          description: 'Which service to re-deploy'
+          required: true
+          default: 'service-test'
+
+jobs:
+  upload_zip_files:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+    - uses: actions/checkout@v3
+    - run: ls
+    - run: |
+        echo "Log level: ${{ inputs.service_name }}"
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        workload_identity_provider: 'projects/736194043976/locations/global/workloadIdentityPools/idpool/providers/idprovider'
+        service_account: 'githubsanew@learning-words-trial.iam.gserviceaccount.com'
+        token_format: 'access_token'
