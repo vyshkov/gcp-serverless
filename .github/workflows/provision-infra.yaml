@@ -1,0 +1,28 @@
+name: provision-whole-infra
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload_zip_files:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+    - uses: actions/checkout@v3
+    - uses: hashicorp/setup-terraform@v2
+    - run: ls
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        workload_identity_provider: 'projects/736194043976/locations/global/workloadIdentityPools/idpool/providers/idprovider'
+        service_account: 'githubsanew@learning-words-trial.iam.gserviceaccount.com'
+        token_format: 'access_token'
+    - name: Terraform Init
+      id: init
+      run: terraform init
+    - name: Terraform Apply
+      id: init
+      run: terraform apply -auto-approve
