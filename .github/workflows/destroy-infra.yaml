@@ -25,6 +25,6 @@ jobs:
       id: init
       run: terraform -chdir=infra init
     - run: ls -la infra
-    - name: Terraform Apply
+    - name: Terraform Destroy!
       id: apply
       run: terraform -chdir=infra destroy -auto-approve
