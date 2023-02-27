@@ -3,7 +3,25 @@ Sample project for learing serverless approach in GCP
 
 ## Current architecture (in progress)
 
-![gcp serverless](https://user-images.githubusercontent.com/7352031/221429972-bf2a0bed-d788-4bb3-953e-7a9c416386d4.png)
+![gcp serverless (1)](https://user-images.githubusercontent.com/7352031/221591262-a4bb4120-d884-470a-939e-f3aff7037ae5.png)
+
+## Automate Terraform with GitHub Actions
+
+GitHub Actions add continuous integration to GitHub repositories to automate software builds, tests, and deployments. Automating Terraform with CI/CD enforces configuration best practices, promotes collaboration and automates the Terraform workflow.
+
+HashiCorp's "Setup Terraform" GitHub Action sets up and configures the Terraform CLI in Github Actions workflows. This allows most Terraform commands to work exactly like they do on your local command line.
+
+A Cloud Storage backend stores the state as an object in a configurable prefix in a given bucket on Cloud Storage. This backend also supports state locking. This will lock state for all operations that could write state. This prevents others from acquiring the lock and potentially corrupting the state.
+
+```
+terraform {
+  backend "gcs" {
+    bucket  = "# REPLACE WITH YOUR BUCKET NAME"
+    prefix  = "terraform/state"
+  }
+}
+```
+
 
 ## Setting up Identity Federation for GitHub Actions
 
