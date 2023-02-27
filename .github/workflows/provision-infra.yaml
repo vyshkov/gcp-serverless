@@ -24,6 +24,7 @@ jobs:
     - name: Terraform Init
       id: init
       run: terraform init
+    - run: ls -la
     - name: Terraform Apply
       id: apply
       run: terraform apply -auto-approve
