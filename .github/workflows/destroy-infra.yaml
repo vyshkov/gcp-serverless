@@ -1,4 +1,4 @@
-name: provision-whole-infra
+name: destroy-whole-infra
 
 on:
   workflow_dispatch:
