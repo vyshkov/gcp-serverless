@@ -35,4 +35,4 @@ jobs:
     - run: ls -la infra
     - name: Terraform Apply
       id: apply
-      run: terraform -chdir=infra apply -target=module.{{ inputs.service_name }} -auto-approve
+      run: terraform -chdir=infra apply -target=module.${{ inputs.service_name }} -auto-approve
