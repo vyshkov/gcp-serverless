@@ -35,7 +35,7 @@ jobs:
     - run: ls -la infra
     - name: Terraform taint
       id: taint
-      run: terraform -chdir=infra taint -module ${{ inputs.service_name }} google_cloudfunctions2_function.function
+      run: terraform -chdir=infra taint module.${{ inputs.service_name }}.google_cloudfunctions2_function.function
     - name: Terraform Apply
       id: apply
       run: terraform -chdir=infra apply -auto-approve
