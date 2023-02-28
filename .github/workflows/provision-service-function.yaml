@@ -7,12 +7,12 @@ on:
   workflow_dispatch:
     inputs:
         service_name:
-          description: 'Which service to re-deploy'
+          description: 'Which module to re-deploy'
           required: true
           default: 'service-test'
 
 jobs:
-  upload_zip_files:
+  update_specific_resource:
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
@@ -29,3 +29,10 @@ jobs:
         workload_identity_provider: 'projects/736194043976/locations/global/workloadIdentityPools/idpool/providers/idprovider'
         service_account: 'githubsanew@learning-words-trial.iam.gserviceaccount.com'
         token_format: 'access_token'
+    - name: Terraform Init
+      id: init
+      run: terraform -chdir=infra init
+    - run: ls -la infra
+    - name: Terraform Apply
+      id: apply
+      run: terraform -chdir=infra apply -target=module.{{ inputs.service_name }} -auto-approve
