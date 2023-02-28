@@ -36,6 +36,9 @@ jobs:
     - name: Terraform taint
       id: taint
       run: terraform -chdir=infra taint module.${{ inputs.service_name }}.google_cloudfunctions2_function.function
+    - name: Terraform taint2
+      id: taint2
+      run: terraform -chdir=infra taint module.${{ inputs.service_name }}.google_cloud_run_service_iam_binding.default
     - name: Terraform Apply
       id: apply
       run: terraform -chdir=infra apply -auto-approve
