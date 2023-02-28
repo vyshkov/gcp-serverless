@@ -9,7 +9,7 @@ on:
         service_name:
           description: 'Which module to re-deploy'
           required: true
-          default: 'service-test'
+          default: 'function_test_service'
 
 jobs:
   update_specific_resource:
