@@ -6,7 +6,7 @@ module "function_test_service" {
   function_description = "http_test1 desc"
 }
 output "function_uri_1" { 
-  value = function_test_service.google_cloudfunctions2_function.function.service_config[0].uri
+  value = module.function_test_service.function_uri
 }
 
 #FN 2
@@ -17,5 +17,5 @@ module "function_test_service_2" {
 }
 
 output "function_uri_2" { 
-  value = function_test_service_2.google_cloudfunctions2_function.function.service_config[0].uri
+  value = module.function_test_service_2.function_uri
 }
