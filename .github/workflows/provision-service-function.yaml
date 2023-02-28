@@ -34,7 +34,7 @@ jobs:
       run: terraform -chdir=infra init
     - run: ls -la infra
     - name: Terraform taint
-      id: apply
+      id: taint
       run: terraform -chdir=infra taint module.${{ inputs.service_name }} -auto-approve
     - name: Terraform Apply
       id: apply
