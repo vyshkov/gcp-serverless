@@ -35,7 +35,7 @@ jobs:
     - run: ls -la infra
     - name: Terraform taint
       id: taint
-      run: terraform state list|grep ${{ inputs.service_name }} | xargs terraform taint 
+      run: terraform -chdir=infra init state list|grep ${{ inputs.service_name }} | xargs terraform -chdir=infra init taint 
     - name: Terraform Apply
       id: apply
-      run: terraform apply -auto-approve
+      run: terraform -chdir=infra init apply -auto-approve
