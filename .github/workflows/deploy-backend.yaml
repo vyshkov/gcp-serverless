@@ -27,5 +27,5 @@ jobs:
     - id: 'upload-file'
       uses: 'google-github-actions/upload-cloud-storage@v1'
       with:
-        path: 'test-service.zip'
+        path: 'backend/service-test/test-service.zip'
         destination: 'vovanoktk-functions'
