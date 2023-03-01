@@ -9,7 +9,7 @@ resource "google_cloudfunctions2_function" "function" {
     source {
       storage_source {
         bucket = var.functions_bucket
-        object = "test.zip"
+        object = var.archive
       }
     }
   }

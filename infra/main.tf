@@ -4,6 +4,7 @@ module "function_test_service" {
   source = "./modules/function"
   function_name = "httptest1"
   function_description = "http_test1 desc"
+  archive = "test-service.zip"
 }
 output "function_uri_1" { 
   value = module.function_test_service.function_uri

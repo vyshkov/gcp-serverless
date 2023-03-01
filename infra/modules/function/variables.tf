@@ -12,3 +12,8 @@ variable "function_description" {
   type = string
   default = "test-function"  
 }
+
+variable "archive" {
+  type = string
+  default = "test.zip"  
+}
