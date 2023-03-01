@@ -15,7 +15,7 @@ const functions = require('@google-cloud/functions-framework');
 functions.http('helloHttp', (req, res) => {
   switch (req.method) {
     case 'GET':
-      res.status(200).send('Hello World!');
+      res.status(200).sendFile('./static/index.html', { root: __dirname });
       break;
     case 'PUT':
       res.status(403).send('Forbidden!');
