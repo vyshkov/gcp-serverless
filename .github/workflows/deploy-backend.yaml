@@ -12,12 +12,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: ls
-    - run: cd backend/service-test && ls
     - id: 'zipservice'
       uses: montudor/action-zip@v1
-      with:
-        args: zip -r ../../test-service.zip . *
-    - run: cd ../..
+      run: zip -qq -r test-service.zip *
+      working-directory: backend/service-test
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
