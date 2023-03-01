@@ -11,6 +11,8 @@ jobs:
       id-token: 'write'
     steps:
     - uses: actions/checkout@v3
+    - name: Install zip
+      uses: montudor/action-zip@v1
     - run: ls
     - id: 'zipservice'
       uses: montudor/action-zip@v1
