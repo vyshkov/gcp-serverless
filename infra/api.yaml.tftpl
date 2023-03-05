@@ -14,7 +14,18 @@ paths:
       summary: Greet a user
       operationId: hello
       x-google-backend:
-        address: https://us-central1-learning-words-trial.cloudfunctions.net/httptest1
+        address: ${function_test_service}
+      responses:
+        '200':
+          description: A successful response
+          schema:
+            type: string
+  /hello2:
+    get:
+      summary: Greet a user 2
+      operationId: hello2
+      x-google-backend:
+        address: ${function_test_service_2}
       responses:
         '200':
           description: A successful response

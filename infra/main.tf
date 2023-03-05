@@ -1,6 +1,5 @@
 locals {
-  timestamp = "${timestamp()}"
-  name_suffix = "1"
+  name_suffix = "4"
 }
 
 # FN 1
@@ -40,42 +39,10 @@ resource "google_api_gateway_api_config" "api_cfg" {
   openapi_documents {
     document {
       path = "spec.yaml"
-      contents = "${base64encode(<<EOF
-# openapi2-functions.yaml
-swagger: '2.0'
-info:
-  title: learning-words-trial
-  description: Sample API on API Gateway with a Google Cloud Functions backend
-  version: 1.0.0
-schemes:
-  - https
-produces:
-  - application/json
-paths:
-  /hello:
-    get:
-      summary: Greet a user
-      operationId: hello
-      x-google-backend:
-        address: ${module.function_test_service.function_uri}
-      responses:
-        '200':
-          description: A successful response
-          schema:
-            type: string
-  /hello2:
-    get:
-      summary: Greet a user 2
-      operationId: hello2
-      x-google-backend:
-        address: ${module.function_test_service_2.function_uri}
-      responses:
-        '200':
-          description: A successful response
-          schema:
-            type: string
-EOF
-)}"
+      contents = "${base64encode(templatefile("api.yaml.tftpl", {
+        function_test_service = module.function_test_service.function_uri
+        function_test_service_2 = module.function_test_service_2.function_uri
+      }))}"
     }
   }
   lifecycle {
