@@ -14,7 +14,7 @@ paths:
       summary: Greet a user
       operationId: hello
       x-google-backend:
-        address: https://us-central1-learning-words-trial.cloudfunctions.net/helloHTTP
+        address: https://us-central1-learning-words-trial.cloudfunctions.net/httptest1
       responses:
         '200':
           description: A successful response
