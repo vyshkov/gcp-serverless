@@ -31,3 +31,35 @@ paths:
           description: A successful response
           schema:
             type: string
+      x-security:
+      - google_id_token:
+          audiences:
+          # Your OAuth2 client's Client ID must be added here. You can add
+          # multiple client IDs to accept tokens from multiple clients.
+          - "736194043976-jco02kmcrjb1bu748m34b9rcphf0ghdj.apps.googleusercontent.com"
+securityDefinitions:
+  # This section configures basic authentication with an API key.
+  api_key:
+    type: "apiKey"
+    name: "key"
+    in: "query"
+  # This section configures authentication using Google API Service Accounts
+  # to sign a json web token. This is mostly used for server-to-server
+  # communication.
+  google_jwt:
+    authorizationUrl: ""
+    flow: "implicit"
+    type: "oauth2"
+    # This must match the 'iss' field in the JWT.
+    x-google-issuer: "jwt-client.endpoints.sample.google.com"
+    # Update this with your service account's email address.
+    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/jwk/YOUR-SERVICE-ACCOUNT-EMAIL"
+  # This section configures authentication using Google OAuth2 ID Tokens.
+  # ID Tokens can be obtained using OAuth2 clients, and can be used to access
+  # your API on behalf of a particular user.
+  google_id_token:
+    authorizationUrl: ""
+    flow: "implicit"
+    type: "oauth2"
+    x-google-issuer: "accounts.google.com"
+    x-google-jwks_uri: "https://www.googleapis.com/oauth2/v1/certs"
