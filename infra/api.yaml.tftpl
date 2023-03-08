@@ -12,6 +12,8 @@ host: ${managed_service}
 x-google-endpoints:
 - name: ${managed_service}
   allowCors: true
+  cors:
+    allowHeaders: "Content-Type, access-control-allow-origin"
 paths:
   /hello:
     get:

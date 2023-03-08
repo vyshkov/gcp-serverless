@@ -13,15 +13,19 @@ function App() {
     setClientId(response.clientId);
     fetch("https://api-gw-main-9e7axbuw.uc.gateway.dev/hello2", {
       headers: {
-        Authorization: `Bearer ${response.credential}`,
+        Authorization: `Bearer ${response.credential}`
       }
     })
       .then(resp => resp.text())
       .then(resp => setResult2(resp))
       .catch(err => setResult2(JSON.stringify(err)));
-    fetch("https://api-gw-main-9e7axbuw.uc.gateway.dev/hello")
-      .then(resp => resp.text())
-      .then(resp => setResult(resp))
+    fetch(`https://www.googleapis.com/oauth2/v1/userinfo`, {
+      headers: {
+        Authorization: `Bearer ${response.credential}`
+      }
+    })
+      .then(resp => resp.json())
+      .then(resp => setResult(JSON.stringify(resp)))
       .catch(err => setResult(JSON.stringify(err)));  
    
   };
@@ -30,7 +34,12 @@ function App() {
   };
   return (
     <div className="App">
-      <GoogleLogin onSuccess={responseMessage} onError={errorMessage} useOneTap auto_select />
+      <GoogleLogin 
+        onSuccess={responseMessage} 
+        onError={errorMessage} 
+        useOneTap 
+        auto_select 
+      />
       <div>
         API call result: {result ? result : "-"}
         <br />
