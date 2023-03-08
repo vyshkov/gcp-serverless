@@ -37,6 +37,7 @@ paths:
           # Your OAuth2 client's Client ID must be added here. You can add
           # multiple client IDs to accept tokens from multiple clients.
           - "736194043976-jco02kmcrjb1bu748m34b9rcphf0ghdj.apps.googleusercontent.com"
+          - "736194043976-ks3e2r68img0ldda4danrbo9j9olvjf3.apps.googleusercontent.com"
 securityDefinitions:
   # This section configures basic authentication with an API key.
   api_key:
@@ -61,5 +62,5 @@ securityDefinitions:
     authorizationUrl: ""
     flow: "implicit"
     type: "oauth2"
-    x-google-issuer: "accounts.google.com"
-    x-google-jwks_uri: "https://www.googleapis.com/oauth2/v1/certs"
+    x-google-issuer: "https://accounts.google.com"
+    x-google-jwks_uri: "https://www.googleapis.com/oauth2/v3/certs"

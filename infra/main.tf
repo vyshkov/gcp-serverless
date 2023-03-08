@@ -1,5 +1,5 @@
 locals {
-  name_suffix = "5"
+  name_suffix = "6"
 }
 
 # FN 1
