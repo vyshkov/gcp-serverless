@@ -1,5 +1,5 @@
 locals {
-  name_suffix = "6"
+  name_suffix = "8"
 }
 
 # FN 1
@@ -42,6 +42,7 @@ resource "google_api_gateway_api_config" "api_cfg" {
       contents = "${base64encode(templatefile("api.yaml.tftpl", {
         function_test_service = module.function_test_service.function_uri
         function_test_service_2 = module.function_test_service_2.function_uri
+        managed_service = google_api_gateway_api.api_cfg.managed_service
       }))}"
     }
   }
@@ -60,6 +61,9 @@ resource "google_api_gateway_gateway" "api_gw" {
   }
 }
 
+output "api_gateway_main" { 
+  value = google_api_gateway_api.api_cfg.managed_service
+}
 output "api_gateway" { 
   value = google_api_gateway_gateway.api_gw.default_hostname
 }

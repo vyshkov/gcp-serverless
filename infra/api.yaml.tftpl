@@ -8,6 +8,10 @@ schemes:
   - https
 produces:
   - application/json
+host: ${managed_service}
+x-google-endpoints:
+- name: ${managed_service}
+  allowCors: true
 paths:
   /hello:
     get:
@@ -39,25 +43,10 @@ paths:
           - "736194043976-jco02kmcrjb1bu748m34b9rcphf0ghdj.apps.googleusercontent.com"
           - "736194043976-ks3e2r68img0ldda4danrbo9j9olvjf3.apps.googleusercontent.com"
 securityDefinitions:
-  # This section configures basic authentication with an API key.
   api_key:
     type: "apiKey"
     name: "key"
     in: "query"
-  # This section configures authentication using Google API Service Accounts
-  # to sign a json web token. This is mostly used for server-to-server
-  # communication.
-  google_jwt:
-    authorizationUrl: ""
-    flow: "implicit"
-    type: "oauth2"
-    # This must match the 'iss' field in the JWT.
-    x-google-issuer: "jwt-client.endpoints.sample.google.com"
-    # Update this with your service account's email address.
-    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/jwk/YOUR-SERVICE-ACCOUNT-EMAIL"
-  # This section configures authentication using Google OAuth2 ID Tokens.
-  # ID Tokens can be obtained using OAuth2 clients, and can be used to access
-  # your API on behalf of a particular user.
   google_id_token:
     authorizationUrl: ""
     flow: "implicit"
