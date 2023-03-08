@@ -1,49 +1,56 @@
-import React, { useState } from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
+
+//import { CredentialResponse, useGoogleOneTapLogin } from '@react-oauth/google';
+
 import './App.css';
-import { CredentialResponse, GoogleLogin } from '@react-oauth/google';
+import { useGoogleOneTapLogin } from './auth/useLogin';
 
 function App() {
-  const [clientId, setClientId] = useState<string | undefined>("");
-  const [result, setResult] = useState<string | undefined>("");
-  const [result2, setResult2] = useState<string | undefined>("");
 
-  const responseMessage = (response: CredentialResponse) => {
-    console.log("Token is", response);
-    setClientId(response.clientId);
-    fetch("https://api-gw-main-9e7axbuw.uc.gateway.dev/hello2", {
-      headers: {
-        Authorization: `Bearer ${response.credential}`
+  const [data, setData] = useState("-");
+  const [token, setToken] = useState<string | undefined | null>(localStorage.getItem("credential"));
+  console.log('current token', token)
+
+
+  useEffect(() => {
+    if (token) {
+
+      const jwtPayload = JSON.parse(window.atob(token.split('.')[1]))
+      console.log(jwtPayload.exp);
+      if (Date.now() >= jwtPayload.exp * 1000) {
+        alert("expired");
+        localStorage.clear();
+        setToken(undefined);
+      } else {
+        setData("...");
+        fetch("https://api-gw-main-9e7axbuw.uc.gateway.dev/hello2", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+        .then(resp => resp.text())
+        .then(resp => setData(resp || 'no'))
+        .catch(err => setData(err.errorMessage));
       }
-    })
-      .then(resp => resp.text())
-      .then(resp => setResult2(resp))
-      .catch(err => setResult2(JSON.stringify(err)));
-    fetch(`https://www.googleapis.com/oauth2/v1/userinfo`, {
-      headers: {
-        Authorization: `Bearer ${response.credential}`
-      }
-    })
-      .then(resp => resp.json())
-      .then(resp => setResult(JSON.stringify(resp)))
-      .catch(err => setResult(JSON.stringify(err)));  
-   
-  };
-  const errorMessage = () => {
-    console.log("error");
-  };
+    }
+  }, [token])
+
+  useGoogleOneTapLogin({
+    client_id: "736194043976-ks3e2r68img0ldda4danrbo9j9olvjf3.apps.googleusercontent.com",
+    disabled: Boolean(token),
+    callback: ({ credential }) => {
+        console.log('credential', credential);
+        setToken(credential);
+        localStorage.setItem('credential', credential);
+
+        
+    }
+  })
+
   return (
     <div className="App">
-      <GoogleLogin 
-        onSuccess={responseMessage} 
-        onError={errorMessage} 
-        useOneTap 
-        auto_select 
-      />
       <div>
-        API call result: {result ? result : "-"}
-        <br />
-        SECURED API call result: {result2 ? result2 : "-"}
+        Secured API response: {data}
       </div>
     </div>
   );
