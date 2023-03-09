@@ -5,6 +5,13 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import { useGoogleOneTapLogin } from './auth/useLogin';
 
+const dev = false;
+
+const GW_API_PATH = "https://api-gw-main-9e7axbuw.uc.gateway.dev";
+const LOCAL_API_PATH = "http://localhost:8080"
+
+const API_PATH = dev ? LOCAL_API_PATH : GW_API_PATH;
+
 function App() {
 
   const [data, setData] = useState("-");
@@ -23,9 +30,9 @@ function App() {
         setToken(undefined);
       } else {
         setData("...");
-        fetch("https://api-gw-main-9e7axbuw.uc.gateway.dev/hello2", {
+        fetch(`${API_PATH}/hello2`, {
           headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           }
         })
         .then(resp => resp.text())
