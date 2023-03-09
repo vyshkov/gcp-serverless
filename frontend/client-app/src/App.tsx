@@ -25,7 +25,6 @@ function App() {
       const jwtPayload = JSON.parse(window.atob(token.split('.')[1]))
       console.log(jwtPayload.exp);
       if (Date.now() >= jwtPayload.exp * 1000) {
-        alert("expired");
         localStorage.clear();
         setToken(undefined);
       } else {
@@ -49,8 +48,6 @@ function App() {
         console.log('credential', credential);
         setToken(credential);
         localStorage.setItem('credential', credential);
-
-        
     }
   })
 
