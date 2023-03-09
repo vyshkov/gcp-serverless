@@ -3,7 +3,7 @@ Sample project for learing serverless approach in GCP
 
 ## An idea of the architecture (implementation in progress)
 
-![gcp serverless (1)](https://user-images.githubusercontent.com/7352031/223109140-b52827a7-61bc-4ce2-b7cd-fd5ac6fe75c7.png)
+![gcp serverless (2)](https://user-images.githubusercontent.com/7352031/224037230-1b5eb90a-e602-4f87-a7d5-fc4976f93987.png)
 
 ## Automate Terraform with GitHub Actions
 
