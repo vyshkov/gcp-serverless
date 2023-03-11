@@ -1,7 +1,10 @@
 name: publish-frontend-to-bucket
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+  push:
+    paths:
+      - frontend/client-app/**
 
 jobs:
   upload_fe:
