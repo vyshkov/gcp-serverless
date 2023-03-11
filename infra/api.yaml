@@ -44,6 +44,21 @@ paths:
           # multiple client IDs to accept tokens from multiple clients.
           - "736194043976-jco02kmcrjb1bu748m34b9rcphf0ghdj.apps.googleusercontent.com"
           - "736194043976-ks3e2r68img0ldda4danrbo9j9olvjf3.apps.googleusercontent.com"
+  #configure root route to serve index.html file
+  /:
+    get:
+      summary: Get a get Index from a GCP bucket
+      operationId: getIndex
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+            format: binary
+      x-google-backend:
+        address: https://storage.googleapis.com/vovanoktk-static/index.html
+        disable_auth: true
+        protocol: HTTP/1.1        
   # any other route is mapped to static file in a bucket
   /**:
     get:
