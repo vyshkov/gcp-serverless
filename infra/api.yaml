@@ -12,9 +12,8 @@ host: ${managed_service}
 x-google-endpoints:
 - name: ${managed_service}
   allowCors: true
-  cors:
-    allowHeaders: "Content-Type, access-control-allow-origin"
 paths:
+  # Public API
   /hello:
     get:
       summary: Greet a user
@@ -26,6 +25,7 @@ paths:
           description: A successful response
           schema:
             type: string
+  # Secured API
   /hello2:
     get:
       summary: Greet a user 2
@@ -44,6 +44,28 @@ paths:
           # multiple client IDs to accept tokens from multiple clients.
           - "736194043976-jco02kmcrjb1bu748m34b9rcphf0ghdj.apps.googleusercontent.com"
           - "736194043976-ks3e2r68img0ldda4danrbo9j9olvjf3.apps.googleusercontent.com"
+  # any other route is mapped to static file in a bucket
+  /**:
+    get:
+      summary: Get a file from a GCP bucket
+      operationId: getFile
+      parameters:
+        - name: path
+          in: path
+          required: true
+          description: The path of the file
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+            format: binary
+      x-google-backend:
+        address: https://storage.googleapis.com/vovanoktk-static
+        path_translation: APPEND_PATH_TO_ADDRESS
+        disable_auth: true
+        protocol: HTTP/1.1
 securityDefinitions:
   api_key:
     type: "apiKey"

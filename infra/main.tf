@@ -1,5 +1,5 @@
 locals {
-  name_suffix = "10"
+  name_suffix = "16"
 }
 
 # FN 1
@@ -39,7 +39,7 @@ resource "google_api_gateway_api_config" "api_cfg" {
   openapi_documents {
     document {
       path = "spec.yaml"
-      contents = "${base64encode(templatefile("api.yaml.tftpl", {
+      contents = "${base64encode(templatefile("api.yaml", {
         function_test_service = module.function_test_service.function_uri
         function_test_service_2 = module.function_test_service_2.function_uri
         managed_service = google_api_gateway_api.api_cfg.managed_service
