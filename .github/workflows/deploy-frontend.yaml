@@ -16,9 +16,10 @@ jobs:
         node-version: 18
     - run: ls
     - run: cd frontend/client-app
-    - run: npm i
-    - run: npm run build
-    - run: npm run postbuild
+    - run: npm i -p ./frontend/client-app
+    - run: npm run build -p ./frontend/client-app
+    - run: npm run postbuild -p ./frontend/client-app
+    - run: ls -la 
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
       uses: 'google-github-actions/auth@v1'
