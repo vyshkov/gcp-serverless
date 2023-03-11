@@ -1,0 +1,37 @@
+name: publish-backend-to-bucket
+
+on:
+  workflow_dispatch
+
+jobs:
+  upload_zip_files:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - run: ls
+    - run: cd frontend/client-app
+    - run: npm i
+    - run: npm run build
+    - run: npm run postbuild
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        workload_identity_provider: 'projects/736194043976/locations/global/workloadIdentityPools/idpool/providers/idprovider'
+        service_account: 'githubsanew@learning-words-trial.iam.gserviceaccount.com'
+        token_format: 'access_token'
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@master
+    - name: Delete files from bucket
+      run: gsutil rm gs://vovanoktk-static/**
+    - id: 'upload-file'
+      uses: 'google-github-actions/upload-cloud-storage@v1'
+      with:
+        path: 'frontend/client-app/build'
+        destination: 'vovanoktk-static'
