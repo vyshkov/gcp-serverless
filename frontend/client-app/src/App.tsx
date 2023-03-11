@@ -72,7 +72,7 @@ function App() {
     <Box>
       <AppBar position='static'>
         <Toolbar>
-          <Typography variant="h6" sx={{flexGrow: 1 }}>My App</Typography>
+          <Typography variant="h6" sx={{flexGrow: 1 }}>MyDictionary</Typography>
             {token ? (
             <Stack sx={{ flexDirection: "row" }}>
               <Typography variant="h6" sx={{ paddingRight: 2 }}>{userData.given_name}</Typography>
