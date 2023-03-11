@@ -1,9 +1,14 @@
 # gcp-serverless
-Sample project for learing serverless approach in GCP
+Goals of this project:
+ - Learn GCP
+ - Use serverless approach to build scalable web-app
+ - Use as less costs as possible for infra hosting
+ - Use IaaC approach
+ - Implement CI/CD for an app
 
 ## An idea of the architecture (implementation in progress)
 
-![gcp serverless (2)](https://user-images.githubusercontent.com/7352031/224037230-1b5eb90a-e602-4f87-a7d5-fc4976f93987.png)
+![gcp serverless (2)](https://user-images.githubusercontent.com/7352031/224483371-c2767fd6-d094-4361-bf33-1ce94b9d1124.png)
 
 ## Automate Terraform with GitHub Actions
 
