@@ -4,7 +4,7 @@ on:
   workflow_dispatch
 
 jobs:
-  upload_zip_files:
+  upload_fe:
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
@@ -15,10 +15,11 @@ jobs:
       with:
         node-version: 18
     - run: ls
-    - run: cd frontend/client-app
-    - run: npm i -p ./frontend/client-app
-    - run: npm run build -p ./frontend/client-app
-    - run: npm run postbuild -p ./frontend/client-app
+    - run: cp -r frontend/client-app .
+    - run: ls -la
+    - run: npm i 
+    - run: npm run build 
+    - run: npm run postbuild 
     - run: ls -la 
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
@@ -34,5 +35,5 @@ jobs:
     - id: 'upload-file'
       uses: 'google-github-actions/upload-cloud-storage@v1'
       with:
-        path: 'frontend/client-app/build'
+        path: 'build'
         destination: 'vovanoktk-static'
