@@ -102,12 +102,12 @@ interface CredentialResponse {
 export const useGoogleOneTapLogin = (configuration: UseGoogleOneTapLoginProps) => {
   const script = useScript(googleSignInScriptURL);
 
-  const listener = useEffect(() => {
+  useEffect(() => {
     if (script === "ready" && !configuration.disabled) {
       window.google.accounts.id.initialize({ ...configuration });
       window.google.accounts.id.prompt();
     }
   }, [configuration, script]);
 
-  return () => listener;
+  return () => window.google.accounts.id.prompt();
 };

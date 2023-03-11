@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useGoogleOneTapLogin } from './auth/useLogin';
 
-import { AppBar, Avatar, Box, CircularProgress, Container, IconButton, Toolbar, Typography } from '@mui/material';
+import { AppBar, Avatar, Box, Button, CircularProgress, Container, IconButton, Toolbar, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 
 const dev = false;
@@ -58,7 +58,7 @@ function App() {
     }
   }, [token])
 
-  useGoogleOneTapLogin({
+  const login = useGoogleOneTapLogin({
     client_id: "736194043976-ks3e2r68img0ldda4danrbo9j9olvjf3.apps.googleusercontent.com",
     disabled: Boolean(token),
     callback: ({ credential }) => {
@@ -74,15 +74,14 @@ function App() {
         <Toolbar>
           <Typography variant="h6" sx={{flexGrow: 1 }}>MyDictionary</Typography>
             {token ? (
-            <Stack sx={{ flexDirection: "row" }}>
-              <Typography variant="h6" sx={{ paddingRight: 2 }}>{userData.given_name}</Typography>
-              <IconButton sx={{ p: 0 }}>
-                <Avatar alt={userData.given_name} src={userData.picture} />
-              </IconButton>
-            </Stack>
-            
+              <Stack sx={{ flexDirection: "row", alignItems: "center" }}>
+                <Typography variant="h6" sx={{ paddingRight: 2 }}>{userData.given_name}</Typography>
+                <IconButton sx={{ p: 0 }}>
+                  <Avatar alt={userData.given_name} src={userData.picture} />
+                </IconButton>
+              </Stack>
             ) : (
-              <Typography variant="h6">Not logged in</Typography>
+              <Button onClick={login} variant="contained" color="secondary">Login</Button>
             )}
         </Toolbar>
       </AppBar>
