@@ -32,7 +32,7 @@ function App() {
   const [token, setToken] = useState<string | undefined | null>(localStorage.getItem("credential"));
   const [isInProgress, setInProgress] = useState(false);
 
-  const userData = token && parseJwt(token) || {};
+  const userData = (token && parseJwt(token)) || {};
   console.log('current token', userData);
   console.log('current data', data);
 
