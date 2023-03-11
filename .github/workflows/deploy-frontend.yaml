@@ -1,4 +1,4 @@
-name: publish-backend-to-bucket
+name: publish-frontend-to-bucket
 
 on:
   workflow_dispatch
