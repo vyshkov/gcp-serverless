@@ -10,6 +10,36 @@ Goals of this project:
 
 ![gcp serverless (2)](https://user-images.githubusercontent.com/7352031/224483371-c2767fd6-d094-4361-bf33-1ce94b9d1124.png)
 
+## Pricing
+
+### GCP cloud funtions pricing 
+
+Cloud Functions includes a perpetual free tier for invocations to allow you to experiment with the platform at no [charge](https://cloud.google.com/functions/pricing#:~:text=Cloud%20Functions%20includes%20a%20perpetual,require%20a%20valid%20billing%20account.)
+
+| Invocations per month	| Price/million |
+|-----------------------|---------------|
+| First 2 million	      | Free          |
+| Beyond 2 million 	    | $0.40         |
+
+Once you exceed the free tier, you will be charged for any additional compute time and network egress used by your Cloud Functions. You can find more information about Cloud Functions pricing on the official Google Cloud pricing page.
+E.g. 256MB	.167 vCPU will cost $0.000000648 per sec (which is ~$1.5 per month). So in case you use it for websocket long living connections, and you have many users, it may cost you lot of money.
+
+### API gateway pricing 
+
+| API calls per month per billing account	| Cost per million API calls |
+|-----------------------------------------|----------------------------|
+| 0-2M	                                  | Free                       |
+| 2M-1B 	                                | $3.00                      |
+| 1B+ 	                                  | $1.50                      |
+
+Ingress is always free, but *Egress require some consts e.g. ~$0.1 per GB*
+
+### Cloud Storage
+
+- 5 GB-months of regional storage (US regions only) per month - is free
+
+Other thatn that it will cost you ~$0.026 per GB-month
+
 ## Automate Terraform with GitHub Actions
 
 GitHub Actions add continuous integration to GitHub repositories to automate software builds, tests, and deployments. Automating Terraform with CI/CD enforces configuration best practices, promotes collaboration and automates the Terraform workflow.
