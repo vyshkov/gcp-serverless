@@ -1,4 +1,6 @@
 # gcp-serverless
+https://api-gw-main-9e7axbuw.uc.gateway.dev/
+
 Goals of this project:
  - Learn GCP
  - Use serverless approach to build scalable web-app
