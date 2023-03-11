@@ -27,7 +27,7 @@ jobs:
         service_account: 'githubsanew@learning-words-trial.iam.gserviceaccount.com'
         token_format: 'access_token'
     - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@master
+      uses: google-github-actions/setup-gcloud@v1
     - name: Delete files from bucket
       run: gsutil rm gs://vovanoktk-static/**
     - id: 'upload-file'
