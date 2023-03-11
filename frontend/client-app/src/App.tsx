@@ -26,9 +26,15 @@ type User = {
   family_name: string;
   picture: string;
 }
+
+type Quote = {
+  text: string;
+  author: string;
+}
   
 function App() {
   const [data, setData] = useState<User>();
+  const [quote, setQuote] = useState<Quote>();
   const [token, setToken] = useState<string | undefined | null>(localStorage.getItem("credential"));
   const [isInProgress, setInProgress] = useState(false);
 
@@ -52,9 +58,12 @@ function App() {
         })
         .then(resp => resp.json())
         .then(resp => setData(resp || {}))
-        .catch(err => setData(err.errorMessage))
         .finally(() => setInProgress(false));
       }
+
+      fetch(`${API_PATH}/hello`)
+        .then(resp => resp.json())
+        .then(resp => setQuote(resp || {}))
     }
   }, [token])
 
@@ -90,6 +99,10 @@ function App() {
           <CircularProgress />
         ) : (
           <Typography variant="h6">Secured API response: {data?.given_name || "-"}</Typography>
+        )}
+
+        {quote && (
+          <Typography>{quote.text} ({quote.author})</Typography>
         )}
       </Container>
     </Box>
