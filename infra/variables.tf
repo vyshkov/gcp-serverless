@@ -1,14 +1,14 @@
 variable "project_id" {
-  type = string
+  type    = string
   default = "learning-words-trial"
 }
 
 variable "region" {
-  type = string
+  type    = string
   default = "us-central1"
 }
 
 variable "functions_bucket" {
-  type = string
-  default = "vovanoktk-functions"  
+  type    = string
+  default = "vovanoktk-functions"
 }
