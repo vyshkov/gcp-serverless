@@ -12,6 +12,30 @@ Goals of this project:
 
 ![gcp serverless (2)](https://user-images.githubusercontent.com/7352031/224483371-c2767fd6-d094-4361-bf33-1ce94b9d1124.png)
 
+## Prerequisites 
+
+In order to automate the deployment of the infrastructure, you need to install the following tools:
+ - [Terraform](https://www.terraform.io/downloads.html)
+ - [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) (Optional)
+
+Also you will need to create several service accounts
+ - Github service account (for CI/CD)
+ - Local service account (for local development)
+ - You can also create separate service accounts for each component (e.g. for Cloud Functions, for API Gateway, etc.), but it is not required and for the simplicity of the project I will use only one service account for all components.
+
+### Required API
+
+You should enable couple APIs in GCP in order to be able to provusion API Gateway, Cloud Fuctions, Firestore and etc:
+ - App Engine Admin API (Firestore)
+ - Cloud Functions API 	
+ - Service Control API 	
+ - API Gateway API 
+ - etc
+
+Your service account should have following roles
+ - Owner (to create firestore database)
+
+
 ## Pricing
 
 ### GCP cloud funtions pricing 

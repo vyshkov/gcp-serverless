@@ -16,7 +16,7 @@ paths:
   # Public API
   /hello:
     get:
-      summary: Greet a user
+      summary: Test 2
       operationId: hello
       x-google-backend:
         address: ${function_test_service}
