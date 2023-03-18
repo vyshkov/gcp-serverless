@@ -143,30 +143,6 @@ interface AuthProviderProps {
 
 const CLIENT_ID = "397907536090-h8dln0rh8picm5vvk1qkeu0qhvkgek49.apps.googleusercontent.com";
 
-interface JWT {
-  header?: {
-    alg: string;
-    typ: string;
-  };
-  payload?: {
-    iss: string;
-    sub: string;
-    aud: string;
-    exp: number;
-    iat: number;
-    email: string;
-    email_verified: boolean;
-    at_hash: string;
-    name: string;
-    picture: string;
-    given_name: string;
-    family_name: string;
-    locale: string;
-    alg: string;
-    kid: string;
-  };
-}
-
 function parseJwt (token: string) {
   var base64Url = token.split('.')[1];
   var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
