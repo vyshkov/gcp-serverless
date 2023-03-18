@@ -1,5 +1,5 @@
 # gcp-serverless
-https://api-gw-main-9e7axbuw.uc.gateway.dev/
+https://api-gw-main-52snvftm.uc.gateway.dev/
 
 Goals of this project:
  - Learn GCP
@@ -7,6 +7,16 @@ Goals of this project:
  - Use as less costs as possible for infra hosting
  - Use IaaC approach
  - Implement CI/CD for an app
+
+## This project is not fully automated (its not possible)
+
+You will have to maually setup some things:
+ - Enable needed APIs in GCP
+ - Create service accounts and setup roles for them
+ - Create GCP bucket for terraform state
+ - Create Identity Federation config for GitHub Actions
+ - Setup GitHub Actions secrets
+ - Create OAuth client ID for Google Sign In
 
 ## An idea of the architecture (implementation in progress)
 
@@ -33,6 +43,7 @@ You should enable couple APIs in GCP in order to be able to provusion API Gatewa
  - Cloud Run API 
  - Artifact Registry API
  - Cloud Build API
+ - IAM Service Account Credentials API (for CI/CD identity federation) 
 
 Your service account should have following roles
  - Owner (to create firestore database)
