@@ -1,6 +1,6 @@
 variable "project_id" {
   type    = string
-  default = "learning-words-trial"
+  default = "learning-words-trial-2"
 }
 
 variable "region" {

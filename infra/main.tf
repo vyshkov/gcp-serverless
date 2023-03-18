@@ -1,35 +1,91 @@
 locals {
-  name_suffix = "17"
+  name_suffix = "1"
   openapi_cfg = file("api.yaml")
+}
+
+# A bucket for SPA static files
+resource "google_storage_bucket" "static_bucket" {
+  name = "vovanoktk-static"
+  project = var.project_id
+  storage_class = "standard"
+  location = "US"
+}
+
+data "google_iam_policy" "viewer" {
+  binding {
+    role = "roles/storage.objectViewer"
+    members = [
+        "allUsers",
+    ] 
+  }
+}
+
+resource "google_storage_bucket_iam_policy" "viewer" {
+  bucket = google_storage_bucket.static_bucket.name
+  policy_data = "${data.google_iam_policy.viewer.policy_data}"
+}
+
+resource "google_storage_bucket" "functions_bucket" {
+  name = "vovanoktk-functions"
+  project = var.project_id
+  storage_class = "standard"
+  location = "US"
 }
 
 # FN 1
 module "function_test_service" {
-  source               = "./modules/function"
+  # the path to the module
+  source = "./modules/function"
+  
+  # the path of the source code
+  source_dir = "../backend/service-secured-test"
+
+  # bucket where the function zip will be stored
+  bucket_name = google_storage_bucket.functions_bucket.name
+  
   function_name        = "httptest1"
   function_description = "http_test1 desc"
-  archive              = "test-service.zip"
 }
 output "function_uri_1" {
   value = module.function_test_service.function_uri
 }
 
-#FN 2
+# FN 2
 module "function_test_service_2" {
-  source               = "./modules/function"
+  # the path to the module
+  source = "./modules/function"
+  
+  # the path of the source code
+  source_dir = "../backend/service-test"
+
+  # bucket where the function zip will be stored
+  bucket_name = google_storage_bucket.functions_bucket.name
+  
   function_name        = "httptest2"
   function_description = "http_test2 desc"
 }
-
 output "function_uri_2" {
   value = module.function_test_service_2.function_uri
 }
 
-# resource "google_app_engine_application" "app" {
-#   project     = "${var.project_id}"
-#   location_id = var.region
-#   database_type = "CLOUD_FIRESTORE"
-# }
+
+resource "google_project_service" "firestore" {
+  provider = google-beta
+  project  = var.project_id
+  service  = "firestore.googleapis.com"
+}
+
+resource "google_firestore_database" "database" {
+  provider                    = google-beta
+  project                     = var.project_id
+  name                        = "(default)"
+  location_id                 = "nam5"
+  type                        = "FIRESTORE_NATIVE"
+  concurrency_mode            = "OPTIMISTIC"
+  app_engine_integration_mode = "DISABLED"
+
+  depends_on = [google_project_service.firestore]
+}
 
 resource "google_api_gateway_api" "api_cfg" {
   provider = google-beta

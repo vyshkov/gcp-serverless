@@ -1,3 +1,15 @@
+data "archive_file" "src" {
+  type        = "zip"
+  source_dir  = var.source_dir
+  output_path = ".build/${var.function_name}.zip"
+}
+
+resource "google_storage_bucket_object" "object" {
+  name   = "${var.function_name}.zip"
+  bucket = var.bucket_name
+  source = data.archive_file.src.output_path
+}
+
 resource "google_cloudfunctions2_function" "function" {
   name        = var.function_name
   description = var.function_description
@@ -8,8 +20,8 @@ resource "google_cloudfunctions2_function" "function" {
     entry_point = "helloHttp" # Set the entry point
     source {
       storage_source {
-        bucket = var.functions_bucket
-        object = var.archive
+        bucket = var.bucket_name
+        object = "${var.function_name}.zip"
       }
     }
   }
@@ -22,16 +34,16 @@ resource "google_cloudfunctions2_function" "function" {
 }
 
 # Cloud run biding to make it able to call from anywhere
-# resource "google_cloud_run_service_iam_binding" "default" {
-#   location = google_cloudfunctions2_function.function.location
-#   service  = google_cloudfunctions2_function.function.name
-#   role     = "roles/run.invoker"
-#   members = [
-#     "allUsers"
-#   ]
-# }
+resource "google_cloud_run_service_iam_binding" "default" {
+  location = google_cloudfunctions2_function.function.location
+  service  = google_cloudfunctions2_function.function.name
+  role     = "roles/run.invoker"
+  members = [
+    "allUsers"
+  ]
+}
 
-# Output
+#Output
 output "function_uri" { 
   value = google_cloudfunctions2_function.function.service_config[0].uri
 }

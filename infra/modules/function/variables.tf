@@ -1,6 +1,5 @@
-variable "functions_bucket" {
+variable "bucket_name" {
   type = string
-  default = "vovanoktk-functions"  
 }
 
 variable "function_name" {
@@ -13,7 +12,6 @@ variable "function_description" {
   default = "test-function"  
 }
 
-variable "archive" {
+variable "source_dir" {
   type = string
-  default = "test.zip"  
 }

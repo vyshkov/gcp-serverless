@@ -26,11 +26,13 @@ Also you will need to create several service accounts
 ### Required API
 
 You should enable couple APIs in GCP in order to be able to provusion API Gateway, Cloud Fuctions, Firestore and etc:
- - App Engine Admin API (Firestore)
+ - Cloud Resource Manager API 
  - Cloud Functions API 	
  - Service Control API 	
  - API Gateway API 
- - etc
+ - Cloud Run API 
+ - Artifact Registry API
+ - Cloud Build API
 
 Your service account should have following roles
  - Owner (to create firestore database)
