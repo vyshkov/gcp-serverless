@@ -22,10 +22,28 @@ function parseJwt (token: string) {
   return JSON.parse(jsonPayload);
 }
 
-type User = {
-  given_name: string;
-  family_name: string;
-  picture: string;
+type JWT = {
+  header: {
+    alg: string;
+    typ: string;
+  };
+  payload: {
+    iss: string;
+    sub: string;
+    aud: string;
+    exp: number;
+    iat: number;
+    email: string;
+    email_verified: boolean;
+    at_hash: string;
+    name: string;
+    picture: string;
+    given_name: string;
+    family_name: string;
+    locale: string;
+    alg: string;
+    kid: string;
+  };
 }
 
 type Quote = {
@@ -34,7 +52,7 @@ type Quote = {
 }
   
 function App() {
-  const [data, setData] = useState<User>();
+  const [data, setData] = useState<JWT>();
   const [quote, setQuote] = useState<Quote>();
   const [token, setToken] = useState<string | undefined | null>(localStorage.getItem("credential"));
   const [isInProgress, setInProgress] = useState(false);
@@ -99,7 +117,7 @@ function App() {
         {isInProgress ? (
           <CircularProgress />
         ) : (
-          <Typography variant="h6">Secured API response: {data?.given_name || "-"}</Typography>
+          <Typography variant="h6">Secured API response: {data?.payload?.given_name || "-"} {data?.payload?.family_name || "-"}</Typography>
         )}
 
         {quote && (

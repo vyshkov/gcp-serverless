@@ -1,5 +1,5 @@
 locals {
-  name_suffix = "1"
+  name_suffix = "2"
   openapi_cfg = file("api.yaml")
 }
 
@@ -102,8 +102,8 @@ resource "google_api_gateway_api_config" "api_cfg" {
     document {
       path = "spec.yaml"
       contents = (base64encode(templatefile("api.yaml", {
-        function_test_service = module.function_test_service.function_uri
-        function_service_me   = module.function_test_service_2.function_uri
+        function_test_service = module.function_test_service_2.function_uri
+        function_service_me   = module.function_test_service.function_uri
         managed_service       = google_api_gateway_api.api_cfg.managed_service
       })))
     }
