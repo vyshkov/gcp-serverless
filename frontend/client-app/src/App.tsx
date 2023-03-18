@@ -6,6 +6,7 @@ import { Stack } from '@mui/system';
 
 const dev = false;
 
+const CLIENT_ID = "397907536090-h8dln0rh8picm5vvk1qkeu0qhvkgek49.apps.googleusercontent.com";
 const GW_API_PATH = "https://api-gw-main-52snvftm.uc.gateway.dev";
 const LOCAL_API_PATH = "http://localhost:8080"
 
@@ -51,7 +52,7 @@ function App() {
         setToken(undefined);
       } else {
         setInProgress(true);
-        fetch(`${API_PATH}/hello2`, {
+        fetch(`${API_PATH}/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           }
@@ -68,7 +69,7 @@ function App() {
   }, [token])
 
   const login = useGoogleOneTapLogin({
-    client_id: "397907536090-h8dln0rh8picm5vvk1qkeu0qhvkgek49.apps.googleusercontent.com",
+    client_id: CLIENT_ID,
     disabled: Boolean(token),
     callback: ({ credential }) => {
       console.log('credential', credential);

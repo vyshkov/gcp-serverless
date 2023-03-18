@@ -26,12 +26,12 @@ paths:
           schema:
             type: string
   # Secured API
-  /hello2:
+  /me:
     get:
-      summary: Greet a user 2
-      operationId: hello2
+      summary: Get current user info
+      operationId: me
       x-google-backend:
-        address: ${function_test_service_2}
+        address: ${function_service_me}
       responses:
         '200':
           description: A successful response

@@ -102,9 +102,9 @@ resource "google_api_gateway_api_config" "api_cfg" {
     document {
       path = "spec.yaml"
       contents = (base64encode(templatefile("api.yaml", {
-        function_test_service   = module.function_test_service.function_uri
-        function_test_service_2 = module.function_test_service_2.function_uri
-        managed_service         = google_api_gateway_api.api_cfg.managed_service
+        function_test_service = module.function_test_service.function_uri
+        function_service_me   = module.function_test_service_2.function_uri
+        managed_service       = google_api_gateway_api.api_cfg.managed_service
       })))
     }
   }
