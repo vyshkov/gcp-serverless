@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 
 const googleSignInScriptURL: string = "https://accounts.google.com/gsi/client";
@@ -110,4 +110,101 @@ export const useGoogleOneTapLogin = (configuration: UseGoogleOneTapLoginProps) =
   }, [configuration, script]);
 
   return () => window.google.accounts.id.prompt();
+};
+
+interface AuthContextData {
+  login: () => void;
+  userData?: {
+    iss: string;
+    sub: string;
+    aud: string;
+    exp: number;
+    iat: number;
+    email: string;
+    email_verified: boolean;
+    at_hash: string;
+    name: string;
+    picture: string;
+    given_name: string;
+    family_name: string;
+    locale: string;
+    alg: string;
+    kid: string;
+  };
+  token: string | null | undefined;
+  isLogged: boolean;
+}
+
+const AuthContext = React.createContext<AuthContextData>({ login: () => {}, token: null, userData: undefined, isLogged: false });
+
+interface AuthProviderProps {
+  children: React.ReactNode;
+}
+
+const CLIENT_ID = "397907536090-h8dln0rh8picm5vvk1qkeu0qhvkgek49.apps.googleusercontent.com";
+
+interface JWT {
+  header?: {
+    alg: string;
+    typ: string;
+  };
+  payload?: {
+    iss: string;
+    sub: string;
+    aud: string;
+    exp: number;
+    iat: number;
+    email: string;
+    email_verified: boolean;
+    at_hash: string;
+    name: string;
+    picture: string;
+    given_name: string;
+    family_name: string;
+    locale: string;
+    alg: string;
+    kid: string;
+  };
+}
+
+function parseJwt (token: string) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+}
+
+export function AuthProvider({ children }: AuthProviderProps) {
+
+  const [token, setToken] = useState<string | undefined | null>(localStorage.getItem("credential"));
+
+  const login = useGoogleOneTapLogin({
+    client_id: CLIENT_ID,
+    disabled: Boolean(token),
+    callback: ({ credential }) => {
+      console.log('credential', credential);
+      setToken(credential);
+      localStorage.setItem('credential', credential);
+    }
+  });
+
+  const memoizedProps = useMemo(
+      () => ({ login, userData: (token && parseJwt(token)) || {}, token, isLogged: !!token }), [login, token]
+  );
+  return (
+    <AuthContext.Provider value={memoizedProps}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => {
+  const context = React.useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within a AuthProvider");
+  }
+  return context;
 };
