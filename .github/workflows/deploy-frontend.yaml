@@ -29,7 +29,7 @@ jobs:
       uses: 'google-github-actions/auth@v1'
       with:
         workload_identity_provider: 'projects/736194043976/locations/global/workloadIdentityPools/idpool/providers/idprovider'
-        service_account: 'githubsanew@learning-words-trial.iam.gserviceaccount.com'
+        service_account: ${{ GCP_GITHUB_SERVICE_ACCOUNT }}
         token_format: 'access_token'
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v1
