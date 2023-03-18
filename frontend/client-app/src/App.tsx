@@ -47,7 +47,7 @@ type JWT = {
 }
 
 type Quote = {
-  text: string;
+  quote: string;
   author: string;
 }
   
@@ -121,7 +121,7 @@ function App() {
         )}
 
         {quote && (
-          <Typography>{quote.text} ({quote.author})</Typography>
+          <Typography>{quote.quote} ({quote.author})</Typography>
         )}
       </Container>
     </Box>
