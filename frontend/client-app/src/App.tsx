@@ -6,7 +6,7 @@ import { Stack } from '@mui/system';
 
 const dev = false;
 
-const GW_API_PATH = "https://api-gw-main-9e7axbuw.uc.gateway.dev";
+const GW_API_PATH = "https://api-gw-main-52snvftm.uc.gateway.dev";
 const LOCAL_API_PATH = "http://localhost:8080"
 
 const API_PATH = dev ? LOCAL_API_PATH : GW_API_PATH;
@@ -68,7 +68,7 @@ function App() {
   }, [token])
 
   const login = useGoogleOneTapLogin({
-    client_id: "736194043976-ks3e2r68img0ldda4danrbo9j9olvjf3.apps.googleusercontent.com",
+    client_id: "397907536090-h8dln0rh8picm5vvk1qkeu0qhvkgek49.apps.googleusercontent.com",
     disabled: Boolean(token),
     callback: ({ credential }) => {
       console.log('credential', credential);

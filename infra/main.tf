@@ -5,44 +5,44 @@ locals {
 
 # A bucket for SPA static files
 resource "google_storage_bucket" "static_bucket" {
-  name = "vovanoktk-static"
-  project = var.project_id
+  name          = "vovanoktk-static"
+  project       = var.project_id
   storage_class = "standard"
-  location = "US"
+  location      = "US"
 }
 
 data "google_iam_policy" "viewer" {
   binding {
     role = "roles/storage.objectViewer"
     members = [
-        "allUsers",
-    ] 
+      "allUsers",
+    ]
   }
 }
 
 resource "google_storage_bucket_iam_policy" "viewer" {
-  bucket = google_storage_bucket.static_bucket.name
-  policy_data = "${data.google_iam_policy.viewer.policy_data}"
+  bucket      = google_storage_bucket.static_bucket.name
+  policy_data = data.google_iam_policy.viewer.policy_data
 }
 
 resource "google_storage_bucket" "functions_bucket" {
-  name = "vovanoktk-functions"
-  project = var.project_id
+  name          = "vovanoktk-functions"
+  project       = var.project_id
   storage_class = "standard"
-  location = "US"
+  location      = "US"
 }
 
 # FN 1
 module "function_test_service" {
   # the path to the module
   source = "./modules/function"
-  
+
   # the path of the source code
   source_dir = "../backend/service-secured-test"
 
   # bucket where the function zip will be stored
   bucket_name = google_storage_bucket.functions_bucket.name
-  
+
   function_name        = "httptest1"
   function_description = "http_test1 desc"
 }
@@ -54,13 +54,13 @@ output "function_uri_1" {
 module "function_test_service_2" {
   # the path to the module
   source = "./modules/function"
-  
+
   # the path of the source code
   source_dir = "../backend/service-test"
 
   # bucket where the function zip will be stored
   bucket_name = google_storage_bucket.functions_bucket.name
-  
+
   function_name        = "httptest2"
   function_description = "http_test2 desc"
 }
