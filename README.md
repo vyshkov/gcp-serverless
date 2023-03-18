@@ -20,7 +20,10 @@ You will have to maually setup some things:
 
 ## An idea of the architecture (implementation in progress)
 
-![gcp serverless (2)](https://user-images.githubusercontent.com/7352031/224483371-c2767fd6-d094-4361-bf33-1ce94b9d1124.png)
+![gcp serverless (3)](https://user-images.githubusercontent.com/7352031/226132768-0792cbc1-551a-48c2-bda8-cedbcc9c7f2d.png)
+
+This architecture is good because of its scalability and costs of hosting (almost free)
+Still, the API management with GCP API Gateway is pretty complex due to limited functionality and bad documentation.
 
 ## Prerequisites 
 
