@@ -1,0 +1,33 @@
+name: publish-frontend-to-bucket
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - frontend/client-app/**
+
+jobs:
+  upload_to_surge:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - run: ls
+    - run: cp -r frontend/client-app/* .
+    - run: ls -la
+    - run: npm i 
+    - run: npm run build 
+    - run: npm run postbuild 
+    - run: ls -la 
+    - name: Deploy to foo-bar.surge.sh
+      uses: dswistowski/surge-sh-action@v1
+      with:
+        domain: 'gcp-serverless.surge.sh'
+        project: 'build'
+        login: ${{ secrets.surge_login }}
+        token: ${{ secrets.surge_token }}
