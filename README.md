@@ -1,5 +1,6 @@
 # gcp-serverless
-https://api-gw-main-52snvftm.uc.gateway.dev/
+CDN https://gcp-serverless.surge.sh/
+API GW https://api-gw-main-52snvftm.uc.gateway.dev/
 
 Goals of this project:
  - Learn GCP
@@ -20,7 +21,7 @@ You will have to maually setup some things:
 
 ## An idea of the architecture (implementation in progress)
 
-![gcp serverless (3)](https://user-images.githubusercontent.com/7352031/226132768-0792cbc1-551a-48c2-bda8-cedbcc9c7f2d.png)
+![gcp serverless (4)](https://user-images.githubusercontent.com/7352031/226208196-ed342d2c-c7df-48da-88bb-95c863d6db82.png)
 
 *Pros of the architecture:*
  - Free for small usage (~2M requests per month)
@@ -38,6 +39,7 @@ You will have to maually setup some things:
  - API geteway is hard to configure through openAPI yaml, no any API management UI
  - Not using CDN for cost optimization (but it can be easily added)
  - Browser caching files stored on the bucket (e.g. index.html) for 1 hour 
+ - Using Surge.sh instead of GCP CDN to save costs
  
 ## Prerequisites 
 
