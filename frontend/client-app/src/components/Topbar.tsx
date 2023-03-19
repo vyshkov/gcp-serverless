@@ -6,23 +6,28 @@ import {
     Box,
     IconButton,
     Toolbar,
-    Typography,
     Menu,
-    MenuItem
+    MenuItem,
+    Tooltip,
+    Divider,
+    ListItemIcon
 } from '@mui/material';
 
 import { useAuth } from '../auth/useLogin';
+import Settings from '@mui/icons-material/Settings';
+import Logout from '@mui/icons-material/Logout';
+import PersonAdd from '@mui/icons-material/PersonAdd';
 
 function Topbar() {
     const { signOut, userData, token } = useAuth();
 
-    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null)
-    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorElUser(event.currentTarget);
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
     };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
+    const handleClose = () => {
+        setAnchorEl(null);
     };
 
     return (
@@ -36,42 +41,81 @@ function Topbar() {
                 />
                 <Box sx={{ flexGrow: 1 }} />
                 {token && (
-                    <Box>
-                        <IconButton
-                            onClick={handleOpenUserMenu}
-                            sx={{ p: 0 }}
-                        >
-                            <Avatar alt={userData?.given_name} src={userData?.picture} />
-                        </IconButton>
+                    <>
+                        <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
+                            <Tooltip title="Account settings">
+                                <IconButton
+                                    onClick={handleClick}
+                                    size="small"
+                                    sx={{ ml: 2 }}
+                                    aria-controls={open ? 'account-menu' : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={open ? 'true' : undefined}
+                                >
+                                    <Avatar sx={{ width: 32, height: 32 }} src={userData?.picture} />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
                         <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'bottom',
-                                horizontal: 'left',
+                            anchorEl={anchorEl}
+                            id="account-menu"
+                            open={open}
+                            onClose={handleClose}
+                            onClick={handleClose}
+                            PaperProps={{
+                                elevation: 0,
+                                sx: {
+                                    overflow: 'visible',
+                                    filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                                    mt: 1.5,
+                                    '& .MuiAvatar-root': {
+                                        width: 32,
+                                        height: 32,
+                                        ml: -0.5,
+                                        mr: 1,
+                                    },
+                                    '&:before': {
+                                        content: '""',
+                                        display: 'block',
+                                        position: 'absolute',
+                                        top: 0,
+                                        right: 14,
+                                        width: 10,
+                                        height: 10,
+                                        bgcolor: 'background.paper',
+                                        transform: 'translateY(-50%) rotate(45deg)',
+                                        zIndex: 0,
+                                    },
+                                },
                             }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'left',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                            sx={{
-                                display: { xs: 'block', md: 'none' },
-                            }}
+                            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                         >
+                            <MenuItem disabled onClick={handleClose}>
+                                <Avatar /> {userData?.name}
+                            </MenuItem>
+                            <Divider />
+                            <MenuItem disabled onClick={handleClose}>
+                                <ListItemIcon>
+                                    <Settings fontSize="small" />
+                                </ListItemIcon>
+                                Settings
+                            </MenuItem>
                             <MenuItem onClick={() => {
-                                handleCloseUserMenu();
+                                handleClose();
                                 signOut();
                             }}>
-                                <Typography textAlign="center">Logout</Typography>
+                                <ListItemIcon>
+                                    <Logout fontSize="small" />
+                                </ListItemIcon>
+                                Logout
                             </MenuItem>
                         </Menu>
-                    </Box>
+
+                    </>
                 )}
             </Toolbar>
-        </AppBar>
+        </AppBar >
     );
 }
 
