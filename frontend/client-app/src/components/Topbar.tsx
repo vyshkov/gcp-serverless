@@ -4,7 +4,6 @@ import {
     AppBar,
     Avatar,
     Box,
-    Stack,
     IconButton,
     Toolbar,
     Typography,
