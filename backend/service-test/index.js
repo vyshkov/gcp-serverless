@@ -27,14 +27,14 @@ functions.http('helloHttp', (req, res) => {
       }, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${version}`,
+          'Authorization': `Bearer ${secretValue}`,
         },
       });
 
       // Extract the generated quote from the response
       const generatedQuote = response.data.choices[0].text.trim();
 
-      res.status(200).json({ quote: generatedQuote + "!!!" + secretValue, author: "GPT" });
+      res.status(200).json({ quote: generatedQuote + "!", author: "GPT" });
 
     } catch (error) {
       console.error(error);
