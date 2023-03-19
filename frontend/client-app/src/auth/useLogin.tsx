@@ -157,6 +157,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const [token, setToken] = useState<string | undefined | null>(localStorage.getItem("credential"));
 
+  if (token) {
+    const jwtPayload = JSON.parse(window.atob(token.split('.')[1]))
+    console.log(jwtPayload.exp);
+    if (Date.now() >= jwtPayload.exp * 1000) {
+        localStorage.clear();
+        setToken(null);
+    }
+  }
+
   const login = useGoogleOneTapLogin({
     client_id: CLIENT_ID,
     disabled: Boolean(token),

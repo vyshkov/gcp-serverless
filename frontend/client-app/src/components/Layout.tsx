@@ -48,25 +48,21 @@ function Layout() {
 
     useEffect(() => {
         if (token) {
-            const jwtPayload = JSON.parse(window.atob(token.split('.')[1]))
-            console.log(jwtPayload.exp);
-            if (Date.now() >= jwtPayload.exp * 1000) {
-                localStorage.clear();
-            } else {
-                setInProgress(true);
+            setInProgress(true);
+            Promise.all([
                 fetch(`${API_PATH}/me`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     }
                 })
-                    .then(resp => resp.json())
-                    .then(resp => setData(resp || {}))
-                    .finally(() => setInProgress(false));
-            }
-
-            fetch(`${API_PATH}/hello`)
+                .then(resp => resp.json())
+                .then(resp => setData(resp || {})),
+                
+                fetch(`${API_PATH}/hello`)
                 .then(resp => resp.json())
                 .then(resp => setQuote(resp || {}))
+
+            ]).finally(() => setInProgress(false));
         }
     }, [token])
 
@@ -93,11 +89,10 @@ function Layout() {
                         {isInProgress ? (
                             <CircularProgress />
                         ) : (
-                            <Typography variant="h6">Secured API response: {data?.payload?.given_name || "-"} {data?.payload?.family_name || "-"}</Typography>
-                        )}
-
-                        {quote && (
-                            <Typography>{quote.quote} ({quote.author})</Typography>
+                            <>
+                                <Typography variant="h6">Secured API response: {data?.payload?.given_name || "-"} {data?.payload?.family_name || "-"}</Typography>
+                                <Typography>{quote?.quote} ({quote?.author})</Typography>
+                            </>
                         )}
                     </>
                 ) : (
