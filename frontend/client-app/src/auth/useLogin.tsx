@@ -115,6 +115,8 @@ export const useGoogleOneTapLogin = (configuration: UseGoogleOneTapLoginProps) =
         theme: 'outline',
         size: 'large',
       })
+    } else {
+      console.error("Google One Tap Login is not initialized");
     }
   }
 

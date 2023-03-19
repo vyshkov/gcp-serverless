@@ -72,9 +72,13 @@ function Layout() {
 
             ]).finally(() => setInProgress(false));
         } else {
-            renderLoginButton(refContainer.current);
+            setTimeout(() => {
+                if (refContainer.current) {
+                    renderLoginButton(refContainer.current);
+                }
+            }, 500)
         }
-    }, [token, renderLoginButton])
+    }, [token, renderLoginButton, refContainer])
 
     return (
         <Stack sx={{ height: "100vh", display: "flex" }}>
