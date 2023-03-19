@@ -138,7 +138,7 @@ interface AuthContextData {
 const AuthContext = React.createContext<AuthContextData>({ login: () => {}, token: null, userData: undefined, isLogged: false });
 
 interface AuthProviderProps {
-  children: React.ReactNode;
+  children: React.ReactNode | React.ReactNode[];
 }
 
 const CLIENT_ID = "397907536090-h8dln0rh8picm5vvk1qkeu0qhvkgek49.apps.googleusercontent.com";

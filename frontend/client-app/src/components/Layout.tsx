@@ -72,7 +72,7 @@ function Layout() {
 
     return (
         <Box>
-            <AppBar position='static'>
+            <AppBar position='static' sx={{ background: "rgba(0,0,0,0.5)" }}>
                 <Toolbar>
                     <Typography variant="h6" sx={{ flexGrow: 1 }}>MyDictionary</Typography>
                     {token ? (
