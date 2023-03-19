@@ -109,11 +109,23 @@ export const useGoogleOneTapLogin = (configuration: UseGoogleOneTapLoginProps) =
     }
   }, [configuration, script]);
 
-  return () => window.google.accounts.id.prompt();
+  const renderLoginButton = (element: /* DOM element reutned by useRef */ any) => {
+    window.google.accounts.id.renderButton(element, {
+      theme: 'outline',
+      size: 'large',
+    })
+  }
+
+  const logout = () => {
+    window.google.accounts.id.disableAutoSelect();
+  }
+
+  return { renderLoginButton, logout };
 };
 
 interface AuthContextData {
-  login: () => void;
+  renderLoginButton: (element: any) => void;
+  signOut: () => void;
   userData?: {
     iss: string;
     sub: string;
@@ -135,7 +147,7 @@ interface AuthContextData {
   isLogged: boolean;
 }
 
-const AuthContext = React.createContext<AuthContextData>({ login: () => {}, token: null, userData: undefined, isLogged: false });
+const AuthContext = React.createContext<AuthContextData>({ renderLoginButton: () => {}, signOut: () => {}, token: null, userData: undefined, isLogged: false });
 
 interface AuthProviderProps {
   children: React.ReactNode | React.ReactNode[];
@@ -166,7 +178,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  const login = useGoogleOneTapLogin({
+  const { renderLoginButton, logout } = useGoogleOneTapLogin({
     client_id: CLIENT_ID,
     disabled: Boolean(token),
     callback: ({ credential }) => {
@@ -177,7 +189,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
   });
 
   const memoizedProps = useMemo(
-      () => ({ login, userData: (token && parseJwt(token)) || {}, token, isLogged: !!token }), [login, token]
+      () => ({ 
+        renderLoginButton, 
+        signOut: () => {
+          logout();
+          localStorage.clear();
+          setToken(null);
+        },
+        userData: (token && parseJwt(token)) || {},
+        token, 
+        isLogged: !!token 
+      }), [renderLoginButton, token, logout]
   );
   return (
     <AuthContext.Provider value={memoizedProps}>

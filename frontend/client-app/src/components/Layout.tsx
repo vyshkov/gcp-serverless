@@ -1,8 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
-import { AppBar, Avatar, Box, Button, CircularProgress, Container, IconButton, Toolbar, Typography } from '@mui/material';
-import { Stack } from '@mui/system';
+import { 
+    Box, 
+    CircularProgress, 
+    Container, 
+    Stack, 
+    Typography, 
+} from '@mui/material';
+
 import { useAuth } from '../auth/useLogin';
+import Topbar from './Topbar';
 
 const dev = false;
 
@@ -41,10 +48,11 @@ type Quote = {
 }
 
 function Layout() {
-    const { login, userData, token } = useAuth();
+    const { renderLoginButton, token } = useAuth();
     const [quote, setQuote] = useState<Quote>();
     const [data, setData] = useState<JWT>();
     const [isInProgress, setInProgress] = useState(false);
+    const refContainer = useRef(null);
 
     useEffect(() => {
         if (token) {
@@ -57,33 +65,21 @@ function Layout() {
                 })
                 .then(resp => resp.json())
                 .then(resp => setData(resp || {})),
-                
+
                 fetch(`${API_PATH}/hello`)
-                .then(resp => resp.json())
-                .then(resp => setQuote(resp || {}))
+                    .then(resp => resp.json())
+                    .then(resp => setQuote(resp || {}))
 
             ]).finally(() => setInProgress(false));
+        } else {
+            renderLoginButton(refContainer.current);
         }
-    }, [token])
+    }, [token, renderLoginButton])
 
     return (
-        <Box>
-            <AppBar position='static' sx={{ background: "rgba(0,0,0,0.5)" }}>
-                <Toolbar>
-                    <Typography variant="h6" sx={{ flexGrow: 1 }}>MyDictionary</Typography>
-                    {token ? (
-                        <Stack sx={{ flexDirection: "row", alignItems: "center" }}>
-                            <Typography variant="h6" sx={{ paddingRight: 2 }}>{userData?.given_name}</Typography>
-                            <IconButton sx={{ p: 0 }}>
-                                <Avatar alt={userData?.given_name} src={userData?.picture} />
-                            </IconButton>
-                        </Stack>
-                    ) : (
-                        <Button onClick={login} variant="contained" color="secondary">Login</Button>
-                    )}
-                </Toolbar>
-            </AppBar>
-            <Container maxWidth="lg" sx={{ padding: 3 }}>
+        <Stack sx={{ height: "100vh", display: "flex" }}>
+            <Topbar />
+            <Container maxWidth="lg" sx={{ padding: 3, flex: 1, display: "flex", flexDirection: "column" }}>
                 {token ? (
                     <>
                         {isInProgress ? (
@@ -96,10 +92,12 @@ function Layout() {
                         )}
                     </>
                 ) : (
-                    <Typography variant="h6">Please login to access secured API</Typography>
+                    <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <Box ref={refContainer} />
+                    </Box>
                 )}
             </Container>
-        </Box>
+        </Stack>
     );
 }
 
