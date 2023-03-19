@@ -47,6 +47,7 @@ You should enable couple APIs in GCP in order to be able to provusion API Gatewa
  - Artifact Registry API
  - Cloud Build API
  - IAM Service Account Credentials API (for CI/CD identity federation) 
+ - Secret Manager API
 
 Your service account should have following roles
  - Owner (to create firestore database)

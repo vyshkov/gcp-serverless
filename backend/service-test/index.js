@@ -1,6 +1,7 @@
 const axios = require('axios');
 const functions = require('@google-cloud/functions-framework');
 const cors = require('cors')({ origin: true });
+const { SecretManagerServiceClient } = require('@google-cloud/secret-manager');
 
 functions.http('helloHttp', (req, res) => {
   cors(req, res, async () => {
@@ -22,8 +23,19 @@ functions.http('helloHttp', (req, res) => {
   
       // Extract the generated quote from the response
       const generatedQuote = response.data.choices[0].text.trim();
+
+      // Create a client for the Secret Manager API
+      const client = new SecretManagerServiceClient();
+
+      // Retrieve the value of a secret
+      const [version] = await client.accessSecretVersion({
+        name: 'projects/397907536090/secrets/openai-secret/versions/latest',
+      });
+
+      const secretValue = version.payload.data.toString();
   
-      res.status(200).json({ quote: generatedQuote, author: "GPT" });
+      res.status(200).json({ quote: generatedQuote + "!!!" + secretValue, author: "GPT" });
+      
     } catch (error) {
       console.error(error);
       res.status(500).send({ error: 'Internal server error: ' + error });

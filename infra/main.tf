@@ -32,6 +32,24 @@ resource "google_storage_bucket" "functions_bucket" {
   location      = "US"
 }
 
+# Secret manager
+resource "google_project_service" "secretmanager" {
+  provider = google-beta
+  service  = "secretmanager.googleapis.com"
+}
+
+resource "google_secret_manager_secret" "my-secret" {
+  provider = google-beta
+
+  secret_id = "openai-secret"
+
+  replication {
+    automatic = true
+  }
+
+  depends_on = [google_project_service.secretmanager]
+}
+
 # FN 1
 module "function_test_service" {
   # the path to the module
@@ -63,6 +81,15 @@ module "function_test_service_2" {
 
   function_name        = "httptest2"
   function_description = "http_test2 desc"
+}
+
+resource "google_secret_manager_secret_iam_binding" "my_secret_binding" {
+  provider = google-beta
+  secret_id = google_secret_manager_secret.my-secret.secret_id
+  members = [
+    "serviceAccount:397907536090-compute@developer.gserviceaccount.com"
+  ]
+  role = "roles/secretmanager.secretAccessor"
 }
 output "function_uri_2" {
   value = module.function_test_service_2.function_uri
