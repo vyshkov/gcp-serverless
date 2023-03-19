@@ -110,10 +110,12 @@ export const useGoogleOneTapLogin = (configuration: UseGoogleOneTapLoginProps) =
   }, [configuration, script]);
 
   const renderLoginButton = (element: /* DOM element reutned by useRef */ any) => {
-    window.google.accounts.id.renderButton(element, {
-      theme: 'outline',
-      size: 'large',
-    })
+    if (element && window.google && window.google.accounts && window.google.accounts.id) {
+      window.google.accounts.id.renderButton(element, {
+        theme: 'outline',
+        size: 'large',
+      })
+    }
   }
 
   const logout = () => {

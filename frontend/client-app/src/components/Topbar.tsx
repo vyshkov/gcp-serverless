@@ -37,7 +37,7 @@ function Topbar() {
                 />
                 <Box sx={{ flexGrow: 1 }} />
                 {token && (
-                    <Stack sx={{ flexDirection: "row", alignItems: "center" }}>
+                    <Box>
                         <IconButton
                             onClick={handleOpenUserMenu}
                             sx={{ p: 0 }}
@@ -69,7 +69,7 @@ function Topbar() {
                                 <Typography textAlign="center">Logout</Typography>
                             </MenuItem>
                         </Menu>
-                    </Stack>
+                    </Box>
                 )}
             </Toolbar>
         </AppBar>
