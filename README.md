@@ -22,9 +22,23 @@ You will have to maually setup some things:
 
 ![gcp serverless (3)](https://user-images.githubusercontent.com/7352031/226132768-0792cbc1-551a-48c2-bda8-cedbcc9c7f2d.png)
 
-This architecture is good because of its scalability and costs of hosting (almost free)
-Still, the API management with GCP API Gateway is pretty complex due to limited functionality and bad documentation.
+*Pros of the architecture:*
+ - Free for small usage (~2M requests per month)
+ - Very scalable
+ - No need to manage servers
+ - No need to have a domain name (you can use GCP API gateway domain name)
+ - No need to manage SSL certificates
+ - Free sign in with Google (Oauth2)
+ - Can be provisioned in minutes
+ - Easy to maintain
+ - Open technology stack (Node.js, React, OpenAPI, Terraform, GitHub Actions, etc.)
 
+*Cons of the architecture:*
+ - Not fully automated (you will have to setup some things manually)
+ - API geteway is hard to configure through openAPI yaml, no any API management UI
+ - Not using CDN for cost optimization (but it can be easily added)
+ - Browser caching files stored on the bucket (e.g. index.html) for 1 hour 
+ 
 ## Prerequisites 
 
 In order to automate the deployment of the infrastructure, you need to install the following tools:
