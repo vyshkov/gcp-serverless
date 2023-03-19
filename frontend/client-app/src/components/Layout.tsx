@@ -97,7 +97,7 @@ function Layout() {
                     </>
                 ) : (
                     <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <Box ref={refContainer} />
+                        <Box sx={{ transform: "scale(1.5)"}} ref={refContainer} />
                     </Box>
                 )}
             </Container>
