@@ -16,7 +16,6 @@ import {
 import { useAuth } from '../auth/useLogin';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
-import PersonAdd from '@mui/icons-material/PersonAdd';
 
 function Topbar() {
     const { signOut, userData, token } = useAuth();
