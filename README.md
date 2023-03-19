@@ -1,6 +1,9 @@
 # gcp-serverless
-CDN https://gcp-serverless.surge.sh/
-API GW https://api-gw-main-52snvftm.uc.gateway.dev/
+
+| Resource    | Link                                         |
+|-------------|----------------------------------------------|
+| CDN         | https://gcp-serverless.surge.sh/             |
+| API GW      | https://api-gw-main-52snvftm.uc.gateway.dev/ |
 
 Goals of this project:
  - Learn GCP
