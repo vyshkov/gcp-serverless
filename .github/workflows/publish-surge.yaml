@@ -1,4 +1,4 @@
-name: publish-frontend-to-bucket
+name: publish-frontend-surge
 
 on:
   workflow_dispatch:
