@@ -18,8 +18,20 @@
 const functions = require('@google-cloud/functions-framework');
 const escapeHtml = require('escape-html');
 const jwt = require('jsonwebtoken');
+const Firestore = require('@google-cloud/firestore');
 
 const cors = require('cors')({ origin: true });
+
+const COLLECTION_NAME = 'users';
+
+const firestore = new Firestore({
+    timestampsInSnapshots: true
+    // NOTE: Don't hardcode your project credentials here.
+    // If you have to, export the following to your shell:
+    //   GOOGLE_APPLICATION_CREDENTIALS=<path>
+    // keyFilename: '/cred/cloud-functions-firestore-000000000000.json',
+});
+
 /**
  * Responds to an HTTP request using data from the request body parsed according
  * to the "content-type" header.
@@ -37,8 +49,26 @@ functions.http('helloHttp', (req, res) => {
         if (authHeader) {
             // Decode the JWT token
             const decodedToken = jwt.decode(authHeader.split(' ')[1], { complete: true });
+            const email = decodedToken.payload.email;
 
-            res.send(decodedToken);
+            firestore.collection(COLLECTION_NAME).where('email', '==', email).get()
+                .then(querySnapshot => {
+                    if(!querySnapshot.empty) {
+                        const user = querySnapshot.docs[0].data()
+                        return res.status(200).send({ ...decodedToken.payload, ...user }); 
+                    } else {
+                        return res.status(403).send({
+                            error: 'The user is not in the database'
+                        });
+                    }
+                }).catch(err => {
+                    console.error(err);
+                    return res.status(500).send({
+                        error: 'Unable to retrieve the document',
+                        err
+                    });
+                });
+            
         } else {
             res.send(403, { error: "Failed to get users auth token "});
         }

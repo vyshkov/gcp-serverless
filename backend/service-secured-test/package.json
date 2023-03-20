@@ -3,27 +3,33 @@
     "version": "0.0.1",
     "private": true,
     "license": "Apache-2.0",
-    "author": "Google Inc.",
+    "author": "Volodymyr Vyshko",
     "repository": {
-        "type": "git",
-        "url": "https://github.com/GoogleCloudPlatform/nodejs-docs-samples.git"
+        "type": "git"
     },
     "engines": {
         "node": ">=12.0.0"
     },
+    "watch": {
+        "start": "*.js"
+    },
     "scripts": {
-        "start": "npx functions-framework --target=helloHttp"
+        "watch": "npm-watch start",
+        "start": "cross-env GOOGLE_CLOUD_PROJECT=learning-words-trial-2 GOOGLE_APPLICATION_CREDENTIALS=\"../../infra/gcp-service-account-credentials.json\" npx functions-framework --target=helloHttp"
     },
     "dependencies": {
+        "@google-cloud/firestore": "^6.5.0",
         "@google-cloud/functions-framework": "^3.1.0",
         "cors": "^2.8.5",
         "escape-html": "^1.0.3",
         "jsonwebtoken": "9.0.0"
     },
     "devDependencies": {
+        "cross-env": "^7.0.3",
         "gaxios": "^5.0.0",
         "mocha": "^10.0.0",
         "moment": "^2.24.0",
+        "npm-watch": "^0.11.0",
         "promise-retry": "^2.0.0",
         "sinon": "^15.0.0",
         "supertest": "^6.0.0",
