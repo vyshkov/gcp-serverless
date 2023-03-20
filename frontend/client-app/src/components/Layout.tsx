@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
 
-import { 
-    Box, 
-    CircularProgress, 
-    Container, 
-    Stack, 
-    Typography, 
+import {
+    Box,
+    CircularProgress,
+    Container,
+    Stack,
+    Typography,
 } from '@mui/material';
 
 import { useAuth } from '../auth/useLogin';
@@ -18,59 +18,47 @@ const LOCAL_API_PATH = "http://localhost:8080"
 
 const API_PATH = dev ? LOCAL_API_PATH : GW_API_PATH;
 
-type JWT = {
-    header: {
-        alg: string;
-        typ: string;
-    };
-    payload: {
-        iss: string;
-        sub: string;
-        aud: string;
-        exp: number;
-        iat: number;
-        email: string;
-        email_verified: boolean;
-        at_hash: string;
-        name: string;
-        picture: string;
-        given_name: string;
-        family_name: string;
-        locale: string;
-        alg: string;
-        kid: string;
-    };
-}
-
-type Quote = {
-    quote: string;
-    author: string;
+type UserInfo = {
+    email?: string;
+    email_verified?: boolean;
+    name?: string;
+    picture?: string;
+    given_name?: string;
+    family_name?: string;
+    locale?: string;
+    roles?: string[];
+    error?: string;
 }
 
 function Layout() {
     const { renderLoginButton, token } = useAuth();
-    const [quote, setQuote] = useState<Quote>();
-    const [data, setData] = useState<JWT>();
-    const [isInProgress, setInProgress] = useState(false);
+    const [anonimous, setAnonimous] = useState(false);
+    const [data, setData] = useState<UserInfo>();
     const refContainer = useRef(null);
 
     useEffect(() => {
         if (token) {
-            setInProgress(true);
-            Promise.all([
-                fetch(`${API_PATH}/me`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
+            fetch(`${API_PATH}/me`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
+            })
+                .then(resp => {
+                    console.log(resp);
+                    if (resp.status === 403) {
+                        setAnonimous(true);
+                        console.warn("You are not authorized to access this resource");
+                    } else {
+                        setAnonimous(false);
                     }
+                    return resp.json();
                 })
-                .then(resp => resp.json())
-                .then(resp => setData(resp || {})),
-
-                fetch(`${API_PATH}/hello`)
-                    .then(resp => resp.json())
-                    .then(resp => setQuote(resp || {}))
-
-            ]).finally(() => setInProgress(false));
+                .then(resp => {
+                    setData(resp);
+                })
+                .catch(err => {
+                    console.log(err)
+                });
         } else {
             setTimeout(() => {
                 if (refContainer.current) {
@@ -78,27 +66,20 @@ function Layout() {
                 }
             }, 500)
         }
-    }, [token, renderLoginButton, refContainer])
+    }, [token, renderLoginButton, refContainer]);
 
     return (
         <Stack sx={{ height: "100vh", display: "flex" }}>
             <Topbar />
-            <Container maxWidth="lg" sx={{ padding: 3, flex: 1, display: "flex", flexDirection: "column" }}>
+            <Container maxWidth="lg" sx={{ padding: 3, flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                 {token ? (
-                    <>
-                        {isInProgress ? (
-                            <CircularProgress />
-                        ) : (
-                            <>
-                                <Typography variant="h6">Secured API response: {data?.payload?.given_name || "-"} {data?.payload?.family_name || "-"}</Typography>
-                                <Typography>{quote?.quote} ({quote?.author})</Typography>
-                            </>
-                        )}
-                    </>
+                    anonimous ? (
+                        <Typography> Error: {data?.error} </Typography>
+                    ) : (
+                        data ? <Typography> Logged in as {data?.email} </Typography> : <CircularProgress />
+                    )
                 ) : (
-                    <Box sx={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <Box sx={{ transform: "scale(1.5)"}} ref={refContainer} />
-                    </Box>
+                    <Box sx={{ transform: "scale(1.5)" }} ref={refContainer} />
                 )}
             </Container>
         </Stack>
