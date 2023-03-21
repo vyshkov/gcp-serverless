@@ -2,7 +2,6 @@ import { useEffect, useState, useRef } from 'react';
 
 import {
     Box,
-    CircularProgress,
     Container,
     Stack,
     Typography,
