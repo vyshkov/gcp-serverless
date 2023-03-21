@@ -10,6 +10,7 @@ import {
 
 import { useAuth } from '../auth/useLogin';
 import Topbar from './Topbar';
+import BasicTable from './Table';
 
 const dev = false;
 
@@ -71,17 +72,19 @@ function Layout() {
     return (
         <Stack sx={{ height: "100vh", display: "flex" }}>
             <Topbar />
-            <Container maxWidth="lg" sx={{ padding: 3, flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+            <Container maxWidth="lg" sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", overflow: "auto", p: 0 }}>
                 {token ? (
                     anonimous ? (
                         <Typography> Error: {data?.error} </Typography>
                     ) : (
-                        data ? <Typography> Logged in as {data?.email} </Typography> : <CircularProgress />
+                        <BasicTable />
                     )
                 ) : (
                     <Box sx={{ transform: "scale(1.5)" }} ref={refContainer} />
                 )}
+                
             </Container>
+            { data?.email && <Typography component="div" sx={{ textAlign: "center", backgroundColor: "rgba(0,0,0,0.2)", p: 0.5 }}> Logged in as {data?.email} </Typography>}
         </Stack>
     );
 }
