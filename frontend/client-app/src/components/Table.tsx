@@ -5,6 +5,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { Box, TextField } from '@mui/material';
+import { useState } from 'react';
 
 const rows = [
     { word: 'Hello', translation: 'Привіт' },
@@ -26,31 +28,45 @@ const rows = [
 ];
 
 export default function BasicTable() {
-    return (
+    const [search, setSearch] = useState("");
 
-        <TableContainer component={Paper} sx={{ px: 1, pt: 4, flex: 1, background: "transparent", boxShadow: "none" }}>
-            <Table aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Word</TableCell>
-                        <TableCell align="right">Translation</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {rows.map((row) => (
-                        <TableRow
-                            key={row.word}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            <TableCell component="th" scope="row">
-                                {row.word}
-                            </TableCell>
-                            <TableCell align="right">{row.translation}</TableCell>
+    return (
+        <>
+            <Box sx={{ width: 1, px: 2, pt: 2 }}>
+                <TextField 
+                    id="standard-basic" 
+                    label="Search" 
+                    variant="standard"
+                    sx={{ width: 1 }} 
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+            </Box>
+            
+            <TableContainer component={Paper} sx={{ px: 1, pt: 4, flex: 1, background: "transparent", boxShadow: "none" }}>
+                <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Word</TableCell>
+                            <TableCell align="right">Translation</TableCell>
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+                    </TableHead>
+                    <TableBody>
+                        {rows.filter((el) => el.word.toLowerCase().includes(search)).map((row) => (
+                            <TableRow
+                                key={row.word}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                            >
+                                <TableCell component="th" scope="row">
+                                    {row.word}
+                                </TableCell>
+                                <TableCell align="right">{row.translation}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </>
+        
 
     );
 }
