@@ -51,7 +51,7 @@ export default function BasicTable() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {rows.filter((el) => el.word.toLowerCase().includes(search)).map((row) => (
+                        {rows.filter((el) => el.word.toLowerCase().includes(search.toLowerCase())).map((row) => (
                             <TableRow
                                 key={row.word}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
