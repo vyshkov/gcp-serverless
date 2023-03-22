@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/system';
 
 import API_PATH from '../api';
+import AddWordsDialog from './AddWordDialog';
 
 interface Word {
     word: string;
@@ -30,10 +31,23 @@ export default function BasicTable() {
     const [search, setSearch] = useState("");
     const [words, setWords] = useState<Word[]>([]);
     const [inProgress, setInProgress] = useState(false);
+    const [isWordDialogOpen, setIsDialogOpen] = useState(false);
 
-    useEffect(() => {
+    const handleAddWordOpen = () => {
+        setIsDialogOpen(true);
+    };
+
+    const handleAddWordClose = () => {
+        setSearch("");
+        if (token) {
+            reload(token, setIsUserAllowed);
+        }
+        setIsDialogOpen(false);
+    };
+
+    const reload = (token: string, setIsUserAllowed: (allowed: boolean) => void) => {
         setInProgress(true);
-        fetch(`${API_PATH}/service-dictionary`, {
+        return fetch(`${API_PATH}/service-dictionary`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             }
@@ -48,11 +62,16 @@ export default function BasicTable() {
         .then(res => res.json())
         .then(words => {
             console.log(words);
-            setWords(words);
+            setWords(words.reverse());
         })
         .catch(err => console.log(err))
         .finally(() => setInProgress(false));
+    }
 
+    useEffect(() => {
+        if (token) {
+            reload(token, setIsUserAllowed);
+        }
     }, [token, setIsUserAllowed]);
 
     return (
@@ -61,13 +80,14 @@ export default function BasicTable() {
                 <OutlinedInput
                     placeholder='Search...'
                     sx={{ width: 1 }}
+                    value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     disabled={inProgress}
                     endAdornment={
                         <InputAdornment position="end">
                             <IconButton
                                 aria-label="toggle password visibility"
-                                onClick={() => { }}
+                                onClick={handleAddWordOpen}
                                 edge="end"
                             >
                                 <AddIcon />
@@ -104,6 +124,7 @@ export default function BasicTable() {
                     </TableContainer>
                 )
             )}
+            <AddWordsDialog open={isWordDialogOpen} handleClose={handleAddWordClose} search={search} />
         </Stack>
     );
 }
