@@ -102,7 +102,7 @@ export default function BasicTable() {
     }, [token, setIsUserAllowed]);
 
     return (
-        <Stack sx={{ flex: 1, display: "flex", justifyContent: "flex-start", alignItems: "center", width: 1, padding: 0 }}>
+        <Stack sx={{ flex: 1, display: "flex", justifyContent: "flex-start", alignItems: "center", width: 1, padding: 0, minHeight: 0 }}>
             <Box sx={{ width: 1, px: 2, pt: 3 }}>
                 <OutlinedInput
                     placeholder='Search...'
@@ -132,7 +132,7 @@ export default function BasicTable() {
                         No words found
                     </Typography>
                 ) : (
-                    <TableContainer component={Paper} sx={{ px: 1, pt: 2, flex: 1, background: "transparent", boxShadow: "none" }}>
+                    <TableContainer component={Paper} sx={{ px: 1, pt: 2, flex: 1, background: "transparent", boxShadow: "none", overflow: "auto" }}>
                         <Table aria-label="simple table">
                             <TableBody>
                                 {words.filter(el => wordMatchesSearch(el, search)).map((row) => (
