@@ -46,7 +46,7 @@ export default function BasicTable() {
         .catch(err => console.log(err))
         .finally(() => setInProgress(false));
 
-    }, []);
+    }, [token]);
 
     return (
         <Stack sx={{ flex: 1, display: "flex", justifyContent: "flex-start", width: 1, padding: 0 }}>
