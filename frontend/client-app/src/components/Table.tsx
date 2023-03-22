@@ -26,7 +26,7 @@ function wordMatchesSearch(w: { word: string; translation: string; }, search: st
 }
 
 export default function BasicTable() {
-    const { token } = useAuth();
+    const { token, setIsUserAllowed } = useAuth();
     const [search, setSearch] = useState("");
     const [words, setWords] = useState<Word[]>([]);
     const [inProgress, setInProgress] = useState(false);
@@ -38,6 +38,13 @@ export default function BasicTable() {
                 Authorization: `Bearer ${token}`,
             }
         })
+        .then(res => {
+            if (res.status === 403) {
+                setIsUserAllowed(false);
+                throw new Error("You are not authorized to access this resource");
+            }
+            return res;
+        })
         .then(res => res.json())
         .then(words => {
             console.log(words);
@@ -46,7 +53,7 @@ export default function BasicTable() {
         .catch(err => console.log(err))
         .finally(() => setInProgress(false));
 
-    }, [token]);
+    }, [token, setIsUserAllowed]);
 
     return (
         <Stack sx={{ flex: 1, display: "flex", justifyContent: "flex-start", width: 1, padding: 0 }}>
