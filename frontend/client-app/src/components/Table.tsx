@@ -7,7 +7,7 @@ import Paper from '@mui/material/Paper';
 
 import AddIcon from '@mui/icons-material/Add'
 
-import { Box, CircularProgress, IconButton, InputAdornment, OutlinedInput } from '@mui/material';
+import { Box, CircularProgress, IconButton, InputAdornment, ListItemIcon, ListItemText, Menu, MenuItem, OutlinedInput } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../auth/useLogin';
 import Typography from '@mui/material/Typography';
@@ -15,6 +15,8 @@ import { Stack } from '@mui/system';
 
 import API_PATH from '../api';
 import AddWordsDialog from './AddWordDialog';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 interface Word {
     word: string;
@@ -32,6 +34,31 @@ export default function BasicTable() {
     const [words, setWords] = useState<Word[]>([]);
     const [inProgress, setInProgress] = useState(false);
     const [isWordDialogOpen, setIsDialogOpen] = useState(false);
+
+    const [selected, setSelected] = useState<string | null>(null);
+    const [contextMenu, setContextMenu] = useState<{
+        mouseX: number;
+        mouseY: number;
+      } | null>(null);
+
+    const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
+        setContextMenu(
+            contextMenu === null
+              ? {
+                  mouseX: event.clientX + 2,
+                  mouseY: event.clientY - 6,
+                }
+              : // repeated contextmenu when it is already open closes it with Chrome 84 on Ubuntu
+                // Other native context menus might behave different.
+                // With this behavior we prevent contextmenu from the backdrop to re-locale existing context menus.
+                null,
+          );
+    };
+
+    const handleClose = () => {
+        setContextMenu(null);
+        setSelected(null);
+    };
 
     const handleAddWordOpen = () => {
         setIsDialogOpen(true);
@@ -52,20 +79,20 @@ export default function BasicTable() {
                 Authorization: `Bearer ${token}`,
             }
         })
-        .then(res => {
-            if (res.status === 403) {
-                setIsUserAllowed(false);
-                throw new Error("You are not authorized to access this resource");
-            }
-            return res;
-        })
-        .then(res => res.json())
-        .then(words => {
-            console.log(words);
-            setWords(words.reverse());
-        })
-        .catch(err => console.log(err))
-        .finally(() => setInProgress(false));
+            .then(res => {
+                if (res.status === 403) {
+                    setIsUserAllowed(false);
+                    throw new Error("You are not authorized to access this resource");
+                }
+                return res;
+            })
+            .then(res => res.json())
+            .then(words => {
+                console.log(words);
+                setWords(words.reverse());
+            })
+            .catch(err => console.log(err))
+            .finally(() => setInProgress(false));
     }
 
     useEffect(() => {
@@ -75,7 +102,7 @@ export default function BasicTable() {
     }, [token, setIsUserAllowed]);
 
     return (
-        <Stack sx={{ flex: 1, display: "flex", justifyContent: "flex-start", width: 1, padding: 0 }}>
+        <Stack sx={{ flex: 1, display: "flex", justifyContent: "flex-start", alignItems: "center", width: 1, padding: 0 }}>
             <Box sx={{ width: 1, px: 2, pt: 3 }}>
                 <OutlinedInput
                     placeholder='Search...'
@@ -98,7 +125,7 @@ export default function BasicTable() {
             </Box>
 
             {inProgress ? (
-                <CircularProgress />
+                <CircularProgress sx={{ p: 2 }} size={80} />
             ) : (
                 words?.length === 0 ? (
                     <Typography sx={{ textAlign: "center", pt: 2 }}>
@@ -111,7 +138,11 @@ export default function BasicTable() {
                                 {words.filter(el => wordMatchesSearch(el, search)).map((row) => (
                                     <TableRow
                                         key={row.word}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 }, background: selected === row.word ? "rgba(0,0,0,0.5)" : "transparent" }}
+                                        onClick={(evt: React.MouseEvent<HTMLElement>) => {
+                                            handleClickListItem(evt);
+                                            setSelected(row.word);
+                                        }}
                                     >
                                         <TableCell component="th" scope="row">
                                             {row.word}
@@ -125,6 +156,39 @@ export default function BasicTable() {
                 )
             )}
             <AddWordsDialog open={isWordDialogOpen} handleClose={handleAddWordClose} search={search} />
+            <Menu
+                open={contextMenu !== null}
+                anchorReference="anchorPosition"
+                anchorPosition={
+                    contextMenu !== null
+                      ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+                      : undefined
+                  }
+              
+                onClose={handleClose}
+                MenuListProps={{
+                    'aria-labelledby': 'lock-button',
+                    role: 'listbox',
+                }}
+            >
+
+                <MenuItem
+                    onClick={() => alert(selected)}
+                >
+                    <ListItemIcon>
+                        <DeleteIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Delete</ListItemText>
+                </MenuItem>
+                <MenuItem
+                    onClick={() => alert(selected)}
+                >
+                    <ListItemIcon>
+                        <EditIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Edit</ListItemText>
+                </MenuItem>
+            </Menu>
         </Stack>
     );
 }
