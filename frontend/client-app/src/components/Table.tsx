@@ -2,10 +2,12 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, TextField } from '@mui/material';
+
+import AddIcon from '@mui/icons-material/Add'
+
+import { Box, IconButton, InputAdornment, OutlinedInput } from '@mui/material';
 import { useState } from 'react';
 
 const rows = [
@@ -27,31 +29,40 @@ const rows = [
     { word: 'I am fine, and you?', translation: 'Добре, а ви?' },
 ];
 
+function wordMatchesSearch(w: { word: string; translation: string; }, search: string) {
+    return w.word.toLowerCase().includes(search.toLowerCase())
+        || w.translation.toLowerCase().includes(search.toLowerCase());
+}
+
 export default function BasicTable() {
     const [search, setSearch] = useState("");
 
     return (
         <>
-            <Box sx={{ width: 1, px: 2, pt: 2 }}>
-                <TextField 
-                    id="standard-basic" 
-                    label="Search" 
-                    variant="standard"
-                    sx={{ width: 1 }} 
+            <Box sx={{ width: 1, px: 2, pt: 3 }}>
+                <OutlinedInput
+                    placeholder='Search...'
+                    sx={{ width: 1 }}
                     onChange={(e) => setSearch(e.target.value)}
+                    endAdornment={
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={() => { }}
+                                edge="end"
+                            >
+                                <AddIcon />
+                            </IconButton>
+                        </InputAdornment>
+                    }
                 />
+
             </Box>
-            
-            <TableContainer component={Paper} sx={{ px: 1, pt: 4, flex: 1, background: "transparent", boxShadow: "none" }}>
+
+            <TableContainer component={Paper} sx={{ px: 1, pt: 2, flex: 1, background: "transparent", boxShadow: "none" }}>
                 <Table aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Word</TableCell>
-                            <TableCell align="right">Translation</TableCell>
-                        </TableRow>
-                    </TableHead>
                     <TableBody>
-                        {rows.filter((el) => el.word.toLowerCase().includes(search.toLowerCase())).map((row) => (
+                        {rows.filter(el => wordMatchesSearch(el, search)).map((row) => (
                             <TableRow
                                 key={row.word}
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -66,7 +77,5 @@ export default function BasicTable() {
                 </Table>
             </TableContainer>
         </>
-        
-
     );
 }
