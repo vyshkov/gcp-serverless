@@ -17,7 +17,7 @@ resource "google_cloudfunctions2_function" "function" {
 
   build_config {
     runtime     = "nodejs18"
-    entry_point = "helloHttp" # Set the entry point
+    entry_point = var.entry_point # Set the entry point
     source {
       storage_source {
         bucket = var.bucket_name
@@ -31,6 +31,10 @@ resource "google_cloudfunctions2_function" "function" {
     available_memory   = "256M"
     timeout_seconds    = 60
   }
+
+  depends_on = [
+    google_storage_bucket_object.object
+  ]
 }
 
 # Cloud run biding to make it able to call from anywhere

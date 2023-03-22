@@ -77,23 +77,26 @@ output "function_uri_1" {
   value = module.function_test_service.function_uri
 }
 
-# FN 2
-module "function_test_service_2" {
+# Function which is responsible for the dictionary API
+module "function_service_dictionary" {
   # the path to the module
   source = "./modules/function"
 
   # the path of the source code
-  source_dir = "../backend/service-test"
+  source_dir = "../backend/service-dictionary"
+
+  # the entry point of the function
+  entry_point = "main"
 
   # bucket where the function zip will be stored
   bucket_name = google_storage_bucket.functions_bucket.name
 
-  function_name        = "httptest2"
-  function_description = "http_test2 desc"
+  function_name        = "service-dictionary"
+  function_description = "Word dictionary CRUD"
 }
 
-output "function_uri_2" {
-  value = module.function_test_service_2.function_uri
+output "function_service_dictionary" {
+  value = module.function_service_dictionary.function_uri
 }
 
 
@@ -130,7 +133,7 @@ resource "google_api_gateway_api_config" "api_cfg" {
     document {
       path = "spec.yaml"
       contents = (base64encode(templatefile("api.yaml", {
-        function_test_service = module.function_test_service_2.function_uri
+        function_service_dictionary = module.function_service_dictionary.function_uri
         function_service_me   = module.function_test_service.function_uri
         managed_service       = google_api_gateway_api.api_cfg.managed_service
       })))

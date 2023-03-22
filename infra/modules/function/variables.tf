@@ -11,7 +11,10 @@ variable "function_description" {
   type = string
   default = "test-function"  
 }
-
+variable "entry_point" {
+  type = string
+  default = "helloHttp"  
+}
 variable "source_dir" {
   type = string
 }
