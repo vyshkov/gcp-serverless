@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import {
     Box,
@@ -24,8 +24,6 @@ function Layout() {
             }, 500)
         }
     }, [token, renderLoginButton, refContainer]);
-
-    console.log(">>>", isUserAllowed, "<<<" );
 
     return (
         <Stack sx={{ height: "100vh", display: "flex" }}>
