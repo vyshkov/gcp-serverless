@@ -24,7 +24,12 @@ You will have to maually setup some things:
 
 ## An idea of the architecture (implementation in progress)
 
+### Infrastructure architecture
 ![gcp serverless (4)](https://user-images.githubusercontent.com/7352031/226208196-ed342d2c-c7df-48da-88bb-95c863d6db82.png)
+
+### Application component/deployent architecture
+![app](https://user-images.githubusercontent.com/7352031/227012552-0079ae0a-b6fd-47c6-91f7-6394ddd381f7.png)
+
 
 *Pros of the architecture:*
  - Free for small usage (~2M requests per month)
