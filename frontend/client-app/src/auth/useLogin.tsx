@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useMemo, useState } from "react";
 
 const googleSignInScriptURL: string = "https://accounts.google.com/gsi/client";
@@ -74,6 +75,7 @@ export default function useScript(src: string): string {
 }
 
 // Further information -> https://developers.google.com/identity/gsi/web/reference/js-reference#IdConfiguration
+/* eslint-enable */
 interface IdConfiguration {
   client_id: string;
   auto_select?: boolean;
@@ -161,23 +163,19 @@ interface AuthProviderProps {
 const CLIENT_ID = "397907536090-h8dln0rh8picm5vvk1qkeu0qhvkgek49.apps.googleusercontent.com";
 
 function parseJwt(token: string) {
-  var base64Url = token.split('.')[1];
-  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
-    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const jsonPayload = decodeURIComponent(window.atob(base64).split('').map((c) => `%${  (`00${  c.charCodeAt(0).toString(16)}`).slice(-2)}`).join(''));
 
   return JSON.parse(jsonPayload);
 }
 
-export function AuthProvider({ children }: AuthProviderProps) {
-
+export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [token, setToken] = useState<string | undefined | null>(localStorage.getItem("credential"));
   const [isUserAllowed, setIsUserAllowed] = useState<boolean>(true);
 
   if (token) {
     const jwtPayload = JSON.parse(window.atob(token.split('.')[1]))
-    console.log(jwtPayload.exp);
     if (Date.now() >= jwtPayload.exp * 1000) {
       localStorage.clear();
       setToken(null);
@@ -188,7 +186,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     client_id: CLIENT_ID,
     disabled: Boolean(token),
     callback: ({ credential }) => {
-      console.log('credential', credential);
       setToken(credential);
       setIsUserAllowed(true);
       localStorage.setItem('credential', credential);

@@ -4,20 +4,21 @@ import {
     AppBar,
     Avatar,
     Box,
+    Divider,
     IconButton,
-    Toolbar,
+    ListItemIcon,
     Menu,
     MenuItem,
-    Tooltip,
-    Divider,
-    ListItemIcon
+    Toolbar,
+    Tooltip
 } from '@mui/material';
 
-import { useAuth } from '../auth/useLogin';
-import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
+import Settings from '@mui/icons-material/Settings';
 
-function Topbar() {
+import { useAuth } from '../auth/useLogin';
+
+const Topbar = () => {
     const { signOut, userData, token } = useAuth();
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

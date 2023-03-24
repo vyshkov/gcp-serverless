@@ -4,39 +4,35 @@ import Layout from './components/Layout';
 
 import './App.css';
 
-const Background = () => {
-  return (
+const Background = () => (
     <div className="background">
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
+      <span />
     </div>
   )
-}
 
 
-function App() {
-  return (
+const App = () => (
     <AuthProvider>
       <Background />
       <Layout />
     </AuthProvider>
-  );
-}
+  )
 
 export default App;

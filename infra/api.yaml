@@ -17,6 +17,13 @@ responses:
     description: A successful response
     schema:
       type: object
+parameters:
+  IdParameter:
+    name: id
+    in: path
+    description: The ID of the entity
+    required: true
+    type: string
 paths:
   # Words API
   /service-dictionary:
@@ -40,16 +47,41 @@ paths:
         address: ${function_service_dictionary}
       security:
         - google_id_token: []
-  # Me API
-  /me:
+  /service-dictionary/{id}:
     get:
-      summary: Get current user info
-      operationId: me
-      x-google-backend:
-        address: ${function_service_me}
+      summary: GET word by id
+      operationId: getWord
+      parameters:
+        - $ref: '#/parameters/IdParameter'
       responses:
         '200':
           $ref: '#/responses/SuccessfulResponse'
+      x-google-backend:
+        address: ${function_service_dictionary}
+      security:
+        - google_id_token: []
+    put:
+      summary: Update word by id
+      operationId: putWord
+      parameters:
+        - $ref: '#/parameters/IdParameter'
+      responses:
+        '200':
+          $ref: '#/responses/SuccessfulResponse'
+      x-google-backend:
+        address: ${function_service_dictionary}
+      security:
+        - google_id_token: []
+    delete:
+      summary: DELETE word by id
+      operationId: deleteWord
+      parameters:
+        - $ref: '#/parameters/IdParameter'
+      responses:
+        '200':
+          $ref: '#/responses/SuccessfulResponse'
+      x-google-backend:
+        address: ${function_service_dictionary}
       security:
         - google_id_token: []
   # Configure root route to serve index.html file

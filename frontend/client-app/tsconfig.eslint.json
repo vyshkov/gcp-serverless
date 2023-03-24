@@ -1,0 +1,12 @@
+{
+    "extends": "./tsconfig.json",
+    "include": [
+      // repeated from base config's "include" setting
+      "src",
+  
+      // these are the eslint-only inclusions
+      ".eslintrc.js",
+      "jest.config.js",
+      "webpack.config.js"
+    ]
+  }

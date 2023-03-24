@@ -1,9 +1,9 @@
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 
 import AddIcon from '@mui/icons-material/Add'
 
@@ -19,15 +19,15 @@ import {
     MenuItem, 
     OutlinedInput
 } from '@mui/material';
-import { useEffect, useState } from 'react';
-import { useAuth } from '../auth/useLogin';
-import Typography from '@mui/material/Typography';
 import { Stack } from '@mui/system';
+import { useEffect, useState } from 'react';
+import Typography from '@mui/material/Typography';
 
-import API_PATH from '../api';
-import AddWordsDialog from './AddWordDialog';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+
+import { AddWordsDialog } from './AddWordDialog';
+import useFetch from '../hooks/useFetch';
 
 interface Word {
     id: string;
@@ -40,8 +40,55 @@ function wordMatchesSearch(w: { word: string; translation: string; }, search: st
         || w.translation.toLowerCase().includes(search.toLowerCase());
 }
 
-export default function BasicTable() {
-    const { token, setIsUserAllowed } = useAuth();
+interface TableContentProps {
+    words: Word[];
+    search: string;
+    selected: Word | null;
+    setSelected: (w: Word | null) => void;
+    handleClickListItem: (evt: React.MouseEvent<HTMLElement>) => void;
+}
+
+export const TableContent = ({ 
+    words, 
+    search, 
+    selected, 
+    setSelected, 
+    handleClickListItem 
+}: TableContentProps) => (
+    words?.length === 0 ? (
+        <Typography sx={{ textAlign: "center", pt: 2 }}>
+            No words found
+        </Typography>
+    ) : (
+        <TableContainer
+            component={Paper}
+            sx={{ px: 1, pt: 2, flex: 1, background: "transparent", boxShadow: "none", overflow: "auto" }}
+        >
+            <Table>
+                <TableBody>
+                    {words.filter(el => wordMatchesSearch(el, search)).map((row) => (
+                        <TableRow
+                            key={row.id}
+                            sx={{ '&:last-child td, &:last-child th': { border: 0 }, background: selected?.id === row.id ? "rgba(0,0,0,0.5)" : "transparent" }}
+                            onClick={(evt: React.MouseEvent<HTMLElement>) => {
+                                handleClickListItem(evt);
+                                setSelected(row);
+                            }}
+                        >
+                            <TableCell component="th" scope="row" sx={{ fontWeight: "bold", letterSpacing: 1 }}>
+                                {row.word}
+                            </TableCell>
+                            <TableCell align="right">{row.translation}</TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </TableContainer>
+    )
+)
+
+export const BasicTable = () => {
+    const myFetch = useFetch();
     const [search, setSearch] = useState("");
     const [words, setWords] = useState<Word[]>([]);
     const [inProgress, setInProgress] = useState(false);
@@ -79,49 +126,39 @@ export default function BasicTable() {
 
     const handleAddWordClose = () => {
         setSearch("");
-        if (token) {
-            reload(token, setIsUserAllowed);
-        }
+        reload();
         setIsDialogOpen(false);
     };
 
-    const reload = (token: string, setIsUserAllowed: (allowed: boolean) => void) => {
+    const reload = () => {
         setInProgress(true);
-        return fetch(`${API_PATH}/service-dictionary`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            }
-        })
-            .then(res => {
-                if (res.status === 403) {
-                    setIsUserAllowed(false);
-                    throw new Error("You are not authorized to access this resource");
-                }
-                return res;
-            })
-            .then(res => res.json())
+        return myFetch("service-dictionary", "GET")
             .then(words => {
-                console.log(words);
                 setWords(words.reverse());
             })
-            .catch(err => console.log(err))
+            .catch(err => console.error(err))
             .finally(() => setInProgress(false));
     }
 
     const deleteWord = () => {
-        setIsUpdating(true);
-        console.log(selected)
-        setTimeout(() => {
-            setIsUpdating(false)
-            handleClose();
-        }, 1000);
+        if (selected) {
+            setIsUpdating(true);
+            myFetch(`service-dictionary/${selected.id}`, "DELETE")
+                .then(() => {
+                    handleClose();
+                })
+                .catch(err => console.error(err))
+                .finally(() => {
+                    setIsUpdating(false)
+                });
+        } else {
+            console.error("No word selected");
+        }
     }
 
     useEffect(() => {
-        if (token) {
-            reload(token, setIsUserAllowed);
-        }
-    }, [token, setIsUserAllowed]);
+        reload();
+    }, []);
 
     return (
         <Stack sx={{ flex: 1, display: "flex", justifyContent: "flex-start", alignItems: "center", width: 1, padding: 0, minHeight: 0 }}>
@@ -156,36 +193,13 @@ export default function BasicTable() {
             {inProgress ? (
                 <CircularProgress sx={{ p: 2 }} size={80} />
             ) : (
-                words?.length === 0 ? (
-                    <Typography sx={{ textAlign: "center", pt: 2 }}>
-                        No words found
-                    </Typography>
-                ) : (
-                    <TableContainer
-                        component={Paper}
-                        sx={{ px: 1, pt: 2, flex: 1, background: "transparent", boxShadow: "none", overflow: "auto" }}
-                    >
-                        <Table>
-                            <TableBody>
-                                {words.filter(el => wordMatchesSearch(el, search)).map((row) => (
-                                    <TableRow
-                                        key={row.id}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 }, background: selected?.id === row.id ? "rgba(0,0,0,0.5)" : "transparent" }}
-                                        onClick={(evt: React.MouseEvent<HTMLElement>) => {
-                                            handleClickListItem(evt);
-                                            setSelected(row);
-                                        }}
-                                    >
-                                        <TableCell component="th" scope="row" sx={{ fontWeight: "bold", letterSpacing: 1 }}>
-                                            {row.word}
-                                        </TableCell>
-                                        <TableCell align="right">{row.translation}</TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                )
+                <TableContent 
+                    words={words}
+                    search={search}
+                    selected={selected}
+                    setSelected={setSelected}
+                    handleClickListItem={handleClickListItem}
+                />
             )}
             <AddWordsDialog open={isWordDialogOpen} handleClose={handleAddWordClose} search={search} />
             <Menu
@@ -224,3 +238,5 @@ export default function BasicTable() {
         </Stack>
     );
 }
+
+export default BasicTable;

@@ -60,22 +60,22 @@ resource "google_secret_manager_secret_iam_binding" "my_secret_binding" {
 }
 
 # FN 1
-module "function_test_service" {
-  # the path to the module
-  source = "./modules/function"
+# module "function_test_service" {
+#   # the path to the module
+#   source = "./modules/function"
 
-  # the path of the source code
-  source_dir = "../backend/service-secured-test"
+#   # the path of the source code
+#   source_dir = "../backend/service-secured-test"
 
-  # bucket where the function zip will be stored
-  bucket_name = google_storage_bucket.functions_bucket.name
+#   # bucket where the function zip will be stored
+#   bucket_name = google_storage_bucket.functions_bucket.name
 
-  function_name        = "httptest1"
-  function_description = "http_test1 desc"
-}
-output "function_uri_1" {
-  value = module.function_test_service.function_uri
-}
+#   function_name        = "httptest1"
+#   function_description = "http_test1 desc"
+# }
+# output "function_uri_1" {
+#   value = module.function_test_service.function_uri
+# }
 
 # Function which is responsible for the dictionary API
 module "function_service_dictionary" {
@@ -134,7 +134,6 @@ resource "google_api_gateway_api_config" "api_cfg" {
       path = "spec.yaml"
       contents = (base64encode(templatefile("api.yaml", {
         function_service_dictionary = module.function_service_dictionary.function_uri
-        function_service_me         = module.function_test_service.function_uri
         managed_service             = google_api_gateway_api.api_cfg.managed_service
         google_oauth_client_id      = var.google_oauth_client_id
       })))

@@ -1,27 +1,26 @@
-import {useEffect, forwardRef, useState} from 'react';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import CloseIcon from '@mui/icons-material/Close';
-import Slide from '@mui/material/Slide';
-import { TransitionProps } from '@mui/material/transitions';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import { Stack } from '@mui/system';
-import { useAuth } from '../auth/useLogin';
-import API_PATH from '../api';
+import { TransitionProps } from '@mui/material/transitions';
+import { forwardRef, useEffect, useState } from 'react';
 
-const Transition = forwardRef(function Transition(
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CloseIcon from '@mui/icons-material/Close';
+import Dialog from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
+import Slide from '@mui/material/Slide';
+import TextField from '@mui/material/TextField';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+
+import useFetch from '../hooks/useFetch';
+
+const Transition = forwardRef((
     props: TransitionProps & {
         children: React.ReactElement;
     },
     ref: React.Ref<unknown>,
-) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
+) => <Slide direction="up" ref={ref} {...props} />);
 
 interface AddWordsDialogProps {
     open: boolean;
@@ -29,9 +28,8 @@ interface AddWordsDialogProps {
     search: string;
 }
 
-export default function AddWordsDialog({ open, handleClose, search }: AddWordsDialogProps) {
-    
-    const { token, setIsUserAllowed } = useAuth();
+export const AddWordsDialog = ({ open, handleClose, search }: AddWordsDialogProps) => {
+    const myFetch = useFetch();
     const [word, setWord] = useState<string>(search);
     const [translation, setTranslation] = useState<string>("");
     const [inProgress, setInProgress] = useState(false);
@@ -42,23 +40,9 @@ export default function AddWordsDialog({ open, handleClose, search }: AddWordsDi
 
     const handleAddWord = () => {
         setInProgress(true);
-        fetch(`${API_PATH}/service-dictionary`, {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`,
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                word,
-                translation,
-            })
-        })
-        .then(res => {
-            if (res.status === 403) {
-                setIsUserAllowed(false);
-                throw new Error("You are not authorized to access this resource");
-            }
-            return res;
+        myFetch("/service-dictionary", "POST", {
+            word,
+            translation,
         })
         .finally(() => { 
             setInProgress(false);
