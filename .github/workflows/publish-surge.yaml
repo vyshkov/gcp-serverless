@@ -19,6 +19,7 @@ jobs:
         node-version: 18
     - run: ls -la frontend/client-app
     - run: cp -r frontend/client-app/* .
+    - run: cp -r frontend/client-app/.eslintrc.js .
     - run: ls -la
     - run: npm i 
     - run: npm run build 
