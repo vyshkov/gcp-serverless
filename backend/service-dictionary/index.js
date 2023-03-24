@@ -79,9 +79,11 @@ functions.http('main', (req, res) => {
         break;
       case 'DELETE':
         // Delete a document
-        firestore.collection(WORDS_COLLECTION).doc(req.body.id).delete()
+        const id = req.path.split('/').pop();
+        console.log(">> Deleting document with id", id);
+        firestore.collection(WORDS_COLLECTION).doc(id).delete()
           .then(() => {
-            res.status(200).send({ id: req.body.id });
+            res.status(200).send({ id });
           }
           ).catch(err => defaulErrorHandler(err, res));
         break;
