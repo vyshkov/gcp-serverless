@@ -22,7 +22,7 @@ paths:
         '200':
           description: A successful response
           schema:
-            type: string
+            type: object
       x-google-backend:
         address: ${function_service_dictionary}
       security:
@@ -34,7 +34,7 @@ paths:
         '200':
           description: A successful response
           schema:
-            type: string
+            type: object
       x-google-backend:
         address: ${function_service_dictionary}
       security:
