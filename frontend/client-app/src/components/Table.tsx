@@ -144,7 +144,7 @@ export default function BasicTable() {
                                             setSelected(row.word);
                                         }}
                                     >
-                                        <TableCell component="th" scope="row">
+                                        <TableCell component="th" scope="row" sx={{ fontWeight: "bold", letterSpacing: 1 }}>
                                             {row.word}
                                         </TableCell>
                                         <TableCell align="right">{row.translation}</TableCell>
