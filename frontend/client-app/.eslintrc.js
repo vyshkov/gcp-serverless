@@ -49,6 +49,7 @@ module.exports = {
       "no-shadow": 0,
       "@typescript-eslint/no-shadow": 0,
       "react/react-in-jsx-scope": "off",
+      "react-hooks/exhaustive-deps": "off",
       "sort-imports-es6-autofix/sort-imports-es6": [
         2,
         {
