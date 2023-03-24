@@ -12,6 +12,11 @@ host: ${managed_service}
 x-google-endpoints:
 - name: ${managed_service}
   allowCors: true
+responses:
+  SuccessfulResponse:
+    description: A successful response
+    schema:
+      type: object
 paths:
   # Words API
   /service-dictionary:
@@ -20,9 +25,7 @@ paths:
       operationId: getWords
       responses:
         '200':
-          description: A successful response
-          schema:
-            type: object
+          $ref: '#/responses/SuccessfulResponse'
       x-google-backend:
         address: ${function_service_dictionary}
       security:
@@ -32,9 +35,7 @@ paths:
       operationId: addWord
       responses:
         '200':
-          description: A successful response
-          schema:
-            type: object
+          $ref: '#/responses/SuccessfulResponse'
       x-google-backend:
         address: ${function_service_dictionary}
       security:
@@ -48,9 +49,7 @@ paths:
         address: ${function_service_me}
       responses:
         '200':
-          description: A successful response
-          schema:
-            type: string
+          $ref: '#/responses/SuccessfulResponse'
       security:
         - google_id_token: []
   # Configure root route to serve index.html file
