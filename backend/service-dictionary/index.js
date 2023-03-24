@@ -58,7 +58,7 @@ functions.http('main', (req, res) => {
     switch (req.method) {
       case 'GET':
         // Get all the documents
-        firestore.collection(WORDS_COLLECTION).where('userId', '==', decodedToken.payload.email).get()
+        firestore.collection(WORDS_COLLECTION).where('userId', '==', decodedToken.payload.email).withIds().get()
           .then(querySnapshot => {
             res.status(200).send(querySnapshot.docs.map(doc => doc.data()));
           }).catch(err => defaulErrorHandler(err, res));
