@@ -51,7 +51,7 @@ resource "google_secret_manager_secret" "my-secret" {
 }
 
 resource "google_secret_manager_secret_iam_binding" "my_secret_binding" {
-  provider = google-beta
+  provider  = google-beta
   secret_id = google_secret_manager_secret.my-secret.secret_id
   members = [
     "serviceAccount:${var.default_service_account}"
@@ -134,8 +134,9 @@ resource "google_api_gateway_api_config" "api_cfg" {
       path = "spec.yaml"
       contents = (base64encode(templatefile("api.yaml", {
         function_service_dictionary = module.function_service_dictionary.function_uri
-        function_service_me   = module.function_test_service.function_uri
-        managed_service       = google_api_gateway_api.api_cfg.managed_service
+        function_service_me         = module.function_test_service.function_uri
+        managed_service             = google_api_gateway_api.api_cfg.managed_service
+        google_oauth_client_id      = var.google_oauth_client_id
       })))
     }
   }

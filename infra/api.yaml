@@ -25,10 +25,8 @@ paths:
             type: string
       x-google-backend:
         address: ${function_service_dictionary}
-      x-security:
-      - google_id_token:
-          audiences:
-          - "397907536090-h8dln0rh8picm5vvk1qkeu0qhvkgek49.apps.googleusercontent.com"
+      security:
+        - google_id_token: []
     post:
       summary: Save new word to dictionary
       operationId: addWord
@@ -39,10 +37,8 @@ paths:
             type: string
       x-google-backend:
         address: ${function_service_dictionary}
-      x-security:
-      - google_id_token:
-          audiences:
-          - "397907536090-h8dln0rh8picm5vvk1qkeu0qhvkgek49.apps.googleusercontent.com"
+      security:
+        - google_id_token: []
   # Me API
   /me:
     get:
@@ -55,10 +51,8 @@ paths:
           description: A successful response
           schema:
             type: string
-      x-security:
-      - google_id_token:
-          audiences:
-          - "397907536090-h8dln0rh8picm5vvk1qkeu0qhvkgek49.apps.googleusercontent.com"
+      security:
+        - google_id_token: []
   # Configure root route to serve index.html file
   /:
     get:
@@ -107,3 +101,4 @@ securityDefinitions:
     type: "oauth2"
     x-google-issuer: "https://accounts.google.com"
     x-google-jwks_uri: "https://www.googleapis.com/oauth2/v3/certs"
+    x-google-audiences: "${google_oauth_client_id}"
