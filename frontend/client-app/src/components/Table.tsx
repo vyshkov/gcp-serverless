@@ -33,6 +33,7 @@ interface Word {
     id: string;
     word: string;
     translation: string;
+    lastUpdated: number;
 }
 
 function wordMatchesSearch(w: { word: string; translation: string; }, search: string) {
@@ -132,7 +133,7 @@ export const BasicTable = () => {
     const reload = () => {
         setIsUpdating(true);
         return myFetch("service-dictionary", "GET")
-            .then(setWords)
+            .then(words => setWords(words.sort((a: Word, b: Word) => b.lastUpdated - a.lastUpdated)))
             .catch(err => console.error(err))
             .finally(() => setIsUpdating(false));
     }
