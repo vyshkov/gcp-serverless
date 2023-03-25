@@ -1,4 +1,4 @@
-const dev = false;
+const dev = true;
 
 const GW_API_PATH = "https://api-gw-main-52snvftm.uc.gateway.dev";
 const LOCAL_API_PATH = "http://localhost:8080"
