@@ -1,0 +1,15 @@
+name: update-service-dictionary
+
+on:
+  push:
+    paths:
+      - backend/service-dictionary/**
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy service
+        uses: update-function
+        with:
+          service_name: service-dictionary

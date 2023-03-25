@@ -9,7 +9,7 @@ on:
           default: 'service-dictionary'
 
 jobs:
-  update_cloud_function:
+  deploy-workflow:
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
