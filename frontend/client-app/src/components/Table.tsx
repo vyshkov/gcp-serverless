@@ -29,6 +29,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import { AddWordsDialog } from './AddWordDialog';
 import useFetch from '../hooks/useFetch';
 
+import Definitions from './Definitions';
+
 interface Word {
     id: string;
     word: string;
@@ -36,29 +38,27 @@ interface Word {
     lastUpdated: number;
 }
 
-function wordMatchesSearch(w: { word: string; translation: string; }, search: string) {
-    return w.word.toLowerCase().includes(search.toLowerCase())
-        || w.translation.toLowerCase().includes(search.toLowerCase());
-}
-
 interface TableContentProps {
     words: Word[];
-    search: string;
     selected: Word | null;
     setSelected: (w: Word | null) => void;
     handleClickListItem: (evt: React.MouseEvent<HTMLElement>) => void;
 }
 
+function wordMatchesSearch(w: { word: string; translation: string; }, search: string) {
+    return w.word.toLowerCase().includes(search.toLowerCase())
+        || w.translation.toLowerCase().includes(search.toLowerCase());
+}
+
 export const TableContent = ({ 
     words, 
-    search, 
     selected, 
     setSelected, 
     handleClickListItem 
 }: TableContentProps) => (
     words?.length === 0 ? (
         <Typography sx={{ textAlign: "center", pt: 2 }}>
-            No words found
+            No saved words found
         </Typography>
     ) : (
         <TableContainer
@@ -67,7 +67,7 @@ export const TableContent = ({
         >
             <Table>
                 <TableBody>
-                    {words.filter(el => wordMatchesSearch(el, search)).map((row) => (
+                    {words.map((row) => (
                         <TableRow
                             key={row.id}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 }, background: selected?.id === row.id ? "rgba(0,0,0,0.5)" : "transparent" }}
@@ -157,6 +157,8 @@ export const BasicTable = () => {
         reload();
     }, []);
 
+    const filteredWords = words.filter(el => wordMatchesSearch(el, search));
+
     return (
         <Stack sx={{ flex: 1, display: "flex", justifyContent: "flex-start", alignItems: "center", width: 1, padding: 0, minHeight: 0 }}>
             <Backdrop
@@ -187,12 +189,14 @@ export const BasicTable = () => {
                 />
             </Box>
             <TableContent
-                words={words}
-                search={search}
+                words={filteredWords}
                 selected={selected}
                 setSelected={setSelected}
                 handleClickListItem={handleClickListItem}
             />
+            { search && filteredWords.length === 0 && (
+                <Definitions word={search} />
+            )}
             <AddWordsDialog open={isWordDialogOpen} handleClose={handleAddWordClose} search={search} />
             <Menu
                 open={contextMenu !== null}

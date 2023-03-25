@@ -13,9 +13,9 @@ import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
-import { DictionaryEntry, getFreeDefinition } from '../utils/freeDictionary';
-import useDebounce from '../hooks/useDebounce';
 import useFetch from '../hooks/useFetch';
+
+import Definitions from './Definitions';
 
 const Transition = forwardRef((
     props: TransitionProps & {
@@ -34,25 +34,12 @@ export const AddWordsDialog = ({ open, handleClose, search }: AddWordsDialogProp
     const myFetch = useFetch();
     
     const [word, setWord] = useState<string>(search);
-    const debouncedSearch = useDebounce(word, 1500);
     const [translation, setTranslation] = useState<string>("");
     const [inProgress, setInProgress] = useState(false);
-    const [freeDefinitions, setFreeDefinitions] = useState<DictionaryEntry[]>([]);
     
     useEffect(() => {
         setWord(search);
     }, [search]);
-
-    useEffect(() => {
-        if (debouncedSearch) {
-            getFreeDefinition(debouncedSearch)
-                .then((res) => {
-                    if (res.length) {
-                        setFreeDefinitions(res);
-                    }
-                });
-        }
-    }, [debouncedSearch]);
 
     const handleAddWord = () => {
         setInProgress(true);
@@ -99,8 +86,8 @@ export const AddWordsDialog = ({ open, handleClose, search }: AddWordsDialogProp
                     </Button>
                 </Toolbar>
             </AppBar>
-            <Stack sx={{ display: "flex", flex: 1, minHeight: 0 }}>
-                <Box sx={{ p: 3 }}>
+            <Stack sx={{ flex: 1, display: "flex", justifyContent: "flex-start", alignItems: "center", width: 1, padding: 0, minHeight: 0 }}>
+                <Box sx={{ p: 3, width: 1 }}>
                     <TextField
                         disabled={inProgress}
                         sx={{ width: 1 }}
@@ -110,7 +97,7 @@ export const AddWordsDialog = ({ open, handleClose, search }: AddWordsDialogProp
                         onChange={(e) => setWord(e.target.value)}
                     />
                 </Box>
-                <Box sx={{ p: 3 }}>
+                <Box sx={{ p: 3, width: 1 }}>
                     <TextField
                         disabled={inProgress}
                         sx={{ width: 1 }}
@@ -120,13 +107,7 @@ export const AddWordsDialog = ({ open, handleClose, search }: AddWordsDialogProp
                         onChange={(e) => setTranslation(e.target.value)}
                     />
                 </Box>
-                <Box sx={{ p: 3, flex: 1, backgroundColor: "rgba(0,0,0,0.1)", margin: 3, overflow: "auto", borderRadius: 1, minHeight: 0}} >
-                    {freeDefinitions.map(def => (
-                        <Button key={def.word + def.meanings[0].partOfSpeech} variant="outlined" sx={{ my: 1, textTransform: "none" }}>
-                            {def.word} [{def.phonetic}] {def.meanings?.map(m => m.definitions?.slice(0, 2).map(d => d.definition).join(", ")).join(" ")} 
-                        </Button>
-                    ))}
-                </Box>
+                <Definitions word={word} />
             </Stack>
         </Dialog>
     );
