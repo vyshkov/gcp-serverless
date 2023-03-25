@@ -64,11 +64,14 @@ functions.http('main', (req, res) => {
           }).catch(err => defaulErrorHandler(err, res));
         break;
       case 'POST':
-        // Create a new document
-        firestore.collection(WORDS_COLLECTION).add({ ...req.body, userId: decodedToken.payload.email })
-          .then(docRef => {
-            res.status(200).send({ id: docRef.id });
-          }).catch(err => defaulErrorHandler(err, res));
+        firestore.collection(WORDS_COLLECTION).add({ 
+          ...req.body, 
+          userId: decodedToken.payload.email, 
+          lastUpdated: new Date().getTime() 
+        })
+        .then(docRef => {
+          res.status(200).send({ id: docRef.id });
+        }).catch(err => defaulErrorHandler(err, res));
         break;
       case 'PUT':
         // Update a document
