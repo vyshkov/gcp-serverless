@@ -10,6 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy service
-        uses: update-function
+        uses: ./update-cloud-function
         with:
           service_name: service-dictionary
