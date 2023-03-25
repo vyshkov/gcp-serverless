@@ -15,7 +15,7 @@ import Topbar from './Topbar';
 
 const Layout = () => {
     const { renderLoginButton, token, isUserAllowed, userData } = useAuth();
-    const refContainer = useRef(null);
+    const refContainer = useRef(null); 
 
     useEffect(() => {
         if (!token) {

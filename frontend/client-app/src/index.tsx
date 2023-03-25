@@ -1,25 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+
+import CustomThemeProvider from './themes/CustomThemeProvider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const theme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
 
 root.render(
-  <ThemeProvider theme={theme}>
-    <CssBaseline />
+  <CustomThemeProvider>
     <App />
-  </ThemeProvider>
+  </CustomThemeProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

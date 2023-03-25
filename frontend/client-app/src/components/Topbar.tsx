@@ -5,21 +5,24 @@ import {
     Avatar,
     Box,
     Divider,
+    FormControlLabel,
     IconButton,
     ListItemIcon,
     Menu,
     MenuItem,
+    Switch,
     Toolbar,
     Tooltip
 } from '@mui/material';
 
 import Logout from '@mui/icons-material/Logout';
-import Settings from '@mui/icons-material/Settings';
 
 import { useAuth } from '../auth/useLogin';
+import { useCustomTheme } from '../themes/CustomThemeProvider';
 
 const Topbar = () => {
     const { signOut, userData, token } = useAuth();
+    const { setTheme, currentTheme } = useCustomTheme();
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -95,11 +98,15 @@ const Topbar = () => {
                                 <Avatar /> {userData?.name}
                             </MenuItem>
                             <Divider />
-                            <MenuItem disabled onClick={handleClose}>
-                                <ListItemIcon>
-                                    <Settings fontSize="small" />
-                                </ListItemIcon>
-                                Settings
+                            <MenuItem onClick={() => {
+                                if (currentTheme === 'normal') {
+                                    setTheme('dark');
+                                } else {
+                                    setTheme('normal');
+                                }
+                                handleClose();
+                            }}>
+                                <FormControlLabel control={<Switch checked={currentTheme === 'dark'} />} label="Dark skin" />
                             </MenuItem>
                             <MenuItem onClick={() => {
                                 handleClose();
