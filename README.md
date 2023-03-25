@@ -56,6 +56,25 @@ One possible reason of lower SLA could be application level bugs and misconfigur
  - Browser caching files stored on the bucket (e.g. index.html) for 1 hour 
  - Using Surge.sh instead of GCP CDN to save costs
  
+## Comparison with Firebase
+
+Looking to this architecture, you may think of using Firebase instead of GCP. And that would work for small typical web projects.
+
+However, if you have specific requirements for your application that are not met by Firebase, you may choose to build your own serverless architecture using Cloud Functions and Firestore in GCP. For example, if you need more control over your serverless architecture or you need to integrate with other GCP services, building your own architecture may be the better option.
+
+In addition, if you have an existing GCP environment and want to leverage your existing infrastructure and expertise, using Cloud Functions and Firestore directly in GCP can be a good choice.
+
+To summarize, you may want to use GCP over Firebase because of:
+ - Better scalability and performance (Firebase is limited to 3K concurrent function invocations)
+ - More control over your serverless architecture. E.g. you can use Cloud Functions for websocket connections, which is not possible with Firebase
+ - Ability to integrate with other GCP services, like ApiGee, Cloud Run, etc.
+ - Ability to leverage your existing GCP environment and expertise
+ - Ability to use other GCP services, like Cloud Storage, Cloud SQL, etc.
+ - Can be mexed with non-serverless GCP services, like App Engine, Compute Engine, GKE, etc.
+ - Observability and monitoring tools, like Stackdriver, Cloud Logging, Cloud Trace, etc.
+ - In general, it gives you more flexibility and control over your application. You cna buld an optimal architecture for your needs.
+
+
 ## Prerequisites 
 
 In order to automate the deployment of the infrastructure, you need to install the following tools:
