@@ -91,7 +91,6 @@ export const BasicTable = () => {
     const myFetch = useFetch();
     const [search, setSearch] = useState("");
     const [words, setWords] = useState<Word[]>([]);
-    const [inProgress, setInProgress] = useState(false);
     const [isWordDialogOpen, setIsDialogOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
 
@@ -131,23 +130,20 @@ export const BasicTable = () => {
     };
 
     const reload = () => {
-        setInProgress(true);
+        setIsUpdating(true);
         return myFetch("service-dictionary", "GET")
-            .then(words => {
-                setWords(words.reverse());
-            })
+            .then(setWords)
             .catch(err => console.error(err))
-            .finally(() => setInProgress(false));
+            .finally(() => setIsUpdating(false));
     }
 
     const deleteWord = () => {
         if (selected) {
             setIsUpdating(true);
             myFetch(`service-dictionary/${selected.id}`, "DELETE")
-                .then(() => {
-                    handleClose();
-                })
-                .catch(err => console.error(err))
+                .then(handleClose)
+                .then(reload)
+                .catch(console.error)
                 .finally(() => {
                     setIsUpdating(false)
                 });
@@ -174,12 +170,12 @@ export const BasicTable = () => {
                     sx={{ width: 1 }}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    disabled={inProgress || isUpdating}
+                    disabled={isUpdating}
                     endAdornment={
                         <InputAdornment position="end">
                             <IconButton
                                 aria-label="toggle password visibility"
-                                disabled={inProgress || isUpdating}
+                                disabled={isUpdating}
                                 onClick={handleAddWordOpen}
                                 edge="end"
                             >
@@ -189,18 +185,13 @@ export const BasicTable = () => {
                     }
                 />
             </Box>
-
-            {inProgress ? (
-                <CircularProgress sx={{ p: 2 }} size={80} />
-            ) : (
-                <TableContent 
-                    words={words}
-                    search={search}
-                    selected={selected}
-                    setSelected={setSelected}
-                    handleClickListItem={handleClickListItem}
-                />
-            )}
+            <TableContent
+                words={words}
+                search={search}
+                selected={selected}
+                setSelected={setSelected}
+                handleClickListItem={handleClickListItem}
+            />
             <AddWordsDialog open={isWordDialogOpen} handleClose={handleAddWordClose} search={search} />
             <Menu
                 open={contextMenu !== null}
