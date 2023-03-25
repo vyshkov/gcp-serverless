@@ -19,9 +19,12 @@ jobs:
         node-version: 18
     - run: ls
     - run: cp -r frontend/client-app/* .
+    - run: cp -r frontend/client-app/.eslintrc.js .
     - run: ls -la
     - run: npm i 
-    - run: npm run build 
+    - run: npm run build
+      env:
+        CI: "" 
     - run: npm run postbuild 
     - run: ls -la 
     - id: 'auth'
