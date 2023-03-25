@@ -20,6 +20,15 @@ interface CustomThemeProviderProps {
   children: React.ReactNode | React.ReactNode[];
 }
 
+const Background = ({ colors }: { colors: string[] }) => (
+  <div className="background" style={{ background: colors[0] }}>
+    {colors.slice(1).map((color, i) => (
+      // eslint-disable-next-line react/no-array-index-key
+      <span key={i} style={{ color }} />
+    ))}
+  </div>
+)
+
 const CustomThemeProvider = ({ children }: CustomThemeProviderProps) => {
 
   // Read current theme from localStorage or maybe from an api
@@ -40,10 +49,31 @@ const CustomThemeProvider = ({ children }: CustomThemeProviderProps) => {
   const contextValue = React.useMemo(() => ({
     currentTheme: themeName,
     setTheme,
-  }), [themeName])
+  }), [themeName]);
+
+  const dark = {
+    bgColor: "#3b2d4e",
+    color1: "#583C87",
+    color2: "#666233",
+    color3: "#E45A84",
+  }
+
+  const light = {
+    bgColor: "#ece6dc",
+    color1: "#fffbae",
+    color2: "#c2ffd0",
+    color3: "#cfe4ce",
+  };
+
+  const bgTheme = themeName === 'dark' ? dark : light;
+
+  const { bgColor, color1, color2, color3 } = bgTheme;
+
+  const darkBackgroundColors = [bgColor, color1, color1, color2, color1, color2, color2, color2, color1, color2, color1, color2, color2, color1, color1, color3, color2, color1, color3];
 
   return (
     <CustomThemeContext.Provider value={contextValue}>
+      <Background colors={darkBackgroundColors} />
       <CssBaseline />
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </CustomThemeContext.Provider>
