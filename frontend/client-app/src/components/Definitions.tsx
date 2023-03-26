@@ -1,4 +1,4 @@
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import useDebounce from "../hooks/useDebounce";
 
@@ -9,6 +9,7 @@ const Definitions = ({ word }: { word: string }) => {
     const debouncedSearch = useDebounce(word, 1500);
     const [freeDefinitions, setFreeDefinitions] = useState<DictionaryEntry[]>([]);
     const [inProgress, setInProgress] = useState(false);
+    const theme = useTheme();
 
     useEffect(() => {
         if (debouncedSearch) {
@@ -26,7 +27,7 @@ const Definitions = ({ word }: { word: string }) => {
     }, [debouncedSearch]);
 
     return (
-        <Box sx={{ p: 3, flex: 1, backgroundColor: "rgba(0,0,0,0.1)", margin: 3, overflow: "auto", width: 1, borderRadius: 1, minHeight: 0, position: "relative" }} >
+        <Box sx={{ p: 3, flex: 1, backgroundColor: theme?.custom?.transparentLight, margin: 3, overflow: "auto", width: 1, borderRadius: 1, minHeight: 0, position: "relative" }} >
             {inProgress && ( 
                 <Box 
                     sx={{ 
