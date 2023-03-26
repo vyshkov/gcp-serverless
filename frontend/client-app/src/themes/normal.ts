@@ -13,6 +13,10 @@ const theme = createTheme({
       default: '#f5f5f5',
     },
   },
+  custom: {
+    transparentLight: 'rgba(255,255,255,0.1)',
+    transparentMedium: 'rgba(255,255,255,0.5)',
+  },
 })
 
 export default theme

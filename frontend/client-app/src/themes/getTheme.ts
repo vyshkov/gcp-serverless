@@ -3,7 +3,6 @@ import type { Theme } from '@mui/material';
 import dark from './dark'
 import normal from './normal'
 
-
 type Themes = {
     [key: string]: Theme
 }

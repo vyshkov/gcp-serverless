@@ -4,6 +4,17 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 
 import getTheme from './getTheme'
 
+declare module '@mui/material/styles' {
+  interface CustomTheme {
+    custom?: {
+      transparentLight?: string;
+      transparentMedium?: string;
+    };
+  }
+
+  interface Theme extends CustomTheme {}
+  interface ThemeOptions extends CustomTheme {}
+}
 interface CustomThemeContextProps {
   currentTheme: string;
   setTheme: (name: string) => void;

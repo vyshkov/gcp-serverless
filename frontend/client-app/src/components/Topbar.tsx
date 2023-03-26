@@ -12,7 +12,8 @@ import {
     MenuItem,
     Switch,
     Toolbar,
-    Tooltip
+    Tooltip,
+    useTheme,
 } from '@mui/material';
 
 import Logout from '@mui/icons-material/Logout';
@@ -23,6 +24,7 @@ import { useCustomTheme } from '../themes/CustomThemeProvider';
 const Topbar = () => {
     const { signOut, userData, token } = useAuth();
     const { setTheme, currentTheme } = useCustomTheme();
+    const theme = useTheme();
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -34,7 +36,7 @@ const Topbar = () => {
     };
 
     return (
-        <AppBar position='static' sx={{ background: "rgba(0,0,0,0.2)" }}>
+        <AppBar position='static' sx={{ background: theme.custom?.transparentLight }}>
             <Toolbar>
                 <Box
                     component="img"

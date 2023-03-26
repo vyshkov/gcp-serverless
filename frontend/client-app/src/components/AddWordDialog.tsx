@@ -12,6 +12,7 @@ import Slide from '@mui/material/Slide';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import useTheme from '@mui/material/styles/useTheme';
 
 import useFetch from '../hooks/useFetch';
 
@@ -29,10 +30,11 @@ interface AddWordsDialogProps {
     handleClose: () => void;
     search: string;
 }
-
+  
 export const AddWordsDialog = ({ open, handleClose, search }: AddWordsDialogProps) => {
     const myFetch = useFetch();
-    
+    const theme = useTheme();
+ 
     const [word, setWord] = useState<string>(search);
     const [translation, setTranslation] = useState<string>("");
     const [inProgress, setInProgress] = useState(false);
@@ -63,12 +65,12 @@ export const AddWordsDialog = ({ open, handleClose, search }: AddWordsDialogProp
             TransitionComponent={Transition}
             PaperProps={{
                 sx: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    backgroundColor: theme.custom?.transparentMedium,
                     backdropFilter: 'blur(10px)',
                 },
             }}
         >
-            <AppBar sx={{ position: 'static', background: "rgba(0,0,0,0.2)" }}>
+            <AppBar sx={{ position: 'static', background: theme.custom?.transparentLight }}>
                 <Toolbar>
                     <IconButton
                         edge="start"

@@ -17,7 +17,7 @@ import {
     ListItemText, 
     Menu, 
     MenuItem, 
-    OutlinedInput
+    OutlinedInput,
 } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useEffect, useState } from 'react';
@@ -30,6 +30,7 @@ import { AddWordsDialog } from './AddWordDialog';
 import useFetch from '../hooks/useFetch';
 
 import Definitions from './Definitions';
+import theme from '../themes/dark';
 
 interface Word {
     id: string;
@@ -70,7 +71,10 @@ export const TableContent = ({
                     {words.map((row) => (
                         <TableRow
                             key={row.id}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 }, background: selected?.id === row.id ? "rgba(0,0,0,0.5)" : "transparent" }}
+                            sx={{ 
+                                '&:last-child td, &:last-child th': { border: 0 }, 
+                                background: selected?.id === row.id ? theme.custom?.transparentMedium : "transparent" 
+                            }}
                             onClick={(evt: React.MouseEvent<HTMLElement>) => {
                                 handleClickListItem(evt);
                                 setSelected(row);

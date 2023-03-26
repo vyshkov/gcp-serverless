@@ -5,6 +5,7 @@ import {
     Container,
     Stack,
     Typography,
+    useTheme,
 } from '@mui/material';
 
 import { useAuth } from '../auth/useLogin';
@@ -13,9 +14,12 @@ import Table from './Table';
 
 import Topbar from './Topbar';
 
+
 const Layout = () => {
     const { renderLoginButton, token, isUserAllowed, userData } = useAuth();
     const refContainer = useRef(null); 
+    const theme = useTheme();
+    console.log(theme.custom)
 
     useEffect(() => {
         if (!token) {
@@ -28,9 +32,11 @@ const Layout = () => {
     }, [token, renderLoginButton, refContainer]);
 
     return (
-        <Stack sx={{ height: "100vh", display: "flex" }}>
+        <Stack sx={{ height: "100vh", display: "flex", overflow: "hidden" }}>
             <Topbar />
-            <Container maxWidth="lg" sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", overflow: "auto", p: 0 }}>
+            <Container 
+                maxWidth="lg" 
+                sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", overflow: "auto", p: 0 }}>
                 {token && (
                     isUserAllowed ? (
                         <Table />
@@ -40,7 +46,7 @@ const Layout = () => {
                 )}
                 { !token && <Box sx={{ transform: "scale(1.5)" }} ref={refContainer} /> }
             </Container>
-            { userData?.email && <Typography component="div" sx={{ textAlign: "center", backgroundColor: "rgba(0,0,0,0.2)", p: 0.5 }}> Logged in as {userData?.email} </Typography>}
+            { userData?.email && <Typography component="div"sx={{ textAlign: "center", p: 0.5, backgroundColor: theme.custom?.transparentLight }}> Logged in as {userData?.email} </Typography>}
         </Stack>
     );
 }
