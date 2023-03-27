@@ -8,6 +8,10 @@ import TableRow from '@mui/material/TableRow';
 import AddIcon from '@mui/icons-material/Add'
 
 import {
+    enqueueSnackbar 
+} from 'notistack';
+
+import {
     Backdrop,
     Box, 
     CircularProgress, 
@@ -138,7 +142,7 @@ export const BasicTable = () => {
         setIsUpdating(true);
         return myFetch("service-dictionary", "GET")
             .then(words => setWords(words.sort((a: Word, b: Word) => b.lastUpdated - a.lastUpdated)))
-            .catch(err => console.error(err))
+            .catch(() => enqueueSnackbar("Failed to load words", { variant: "error" }))
             .finally(() => setIsUpdating(false));
     }
 
@@ -148,7 +152,7 @@ export const BasicTable = () => {
             myFetch(`service-dictionary/${selected.id}`, "DELETE")
                 .then(handleClose)
                 .then(reload)
-                .catch(console.error)
+                .catch(() => enqueueSnackbar("Failed to delete word", { variant: "error" }))
                 .finally(() => {
                     setIsUpdating(false)
                 });

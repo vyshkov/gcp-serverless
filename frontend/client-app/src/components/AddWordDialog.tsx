@@ -2,6 +2,8 @@ import { Stack } from '@mui/system';
 import { TransitionProps } from '@mui/material/transitions';
 import { forwardRef, useEffect, useState } from 'react';
 
+import { enqueueSnackbar } from 'notistack';
+
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -49,6 +51,7 @@ export const AddWordsDialog = ({ open, handleClose, search }: AddWordsDialogProp
             word,
             translation,
         })
+        .catch(() => enqueueSnackbar("Failed to create word", { variant: "error" }))
         .finally(() => { 
             setInProgress(false);
             setWord("");

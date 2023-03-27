@@ -19,7 +19,6 @@ const Layout = () => {
     const { renderLoginButton, token, isUserAllowed, userData } = useAuth();
     const refContainer = useRef(null); 
     const theme = useTheme();
-    console.log(theme.custom)
 
     useEffect(() => {
         if (!token) {
