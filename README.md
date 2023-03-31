@@ -28,7 +28,7 @@ You will have to maually setup some things:
 ![gcp serverless (4)](https://user-images.githubusercontent.com/7352031/226208196-ed342d2c-c7df-48da-88bb-95c863d6db82.png)
 
 ### Application level technologies
-![app](https://user-images.githubusercontent.com/7352031/227012552-0079ae0a-b6fd-47c6-91f7-6394ddd381f7.png)
+![Пустой диаграммой (1)](https://user-images.githubusercontent.com/7352031/229105723-3e3b4842-dcf6-459d-9599-5e31fca1898d.png)
 
 ### Continious Deployment diagram
 ![Пустой диаграммой](https://user-images.githubusercontent.com/7352031/227735085-b121c162-f890-4823-8221-0b7d720499b0.png)
