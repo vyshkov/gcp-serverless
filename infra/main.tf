@@ -59,23 +59,26 @@ resource "google_secret_manager_secret_iam_binding" "my_secret_binding" {
   role = "roles/secretmanager.secretAccessor"
 }
 
-# FN 1
-# module "function_test_service" {
-#   # the path to the module
-#   source = "./modules/function"
+# Function provides several APIs for translation
+module "function_service_translation" {
+  # the path to the module
+  source = "./modules/function"
 
-#   # the path of the source code
-#   source_dir = "../backend/service-secured-test"
+  # the path of the source code
+  source_dir = "../backend/service-translation"
 
-#   # bucket where the function zip will be stored
-#   bucket_name = google_storage_bucket.functions_bucket.name
+  # the entry point of the function
+  entry_point = "main"
 
-#   function_name        = "httptest1"
-#   function_description = "http_test1 desc"
-# }
-# output "function_uri_1" {
-#   value = module.function_test_service.function_uri
-# }
+  # bucket where the function zip will be stored
+  bucket_name = google_storage_bucket.functions_bucket.name
+
+  function_name        = "service-translation"
+  function_description = "Set of Tranalation APIs"
+}
+output "function_uri_1" {
+  value = module.function_service_translation.function_uri
+}
 
 # Function which is responsible for the dictionary API
 module "function_service_dictionary" {
