@@ -14,6 +14,6 @@ jobs:
       - run: ls -la
       - run: pwd
       - name: Deploy service
-        uses: ./update-cloud-function.yaml@deploy-workflow
+        uses: .github/workflows/update-cloud-function.yaml@deploy-workflow
         with:
           service_name: service-dictionary
