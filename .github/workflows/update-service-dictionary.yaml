@@ -1,6 +1,7 @@
 name: update-service-dictionary
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - backend/service-dictionary/**
@@ -10,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - run: ls -la
       - name: Deploy service
         uses: ./.github/workflows/update-cloud-function
         with:
