@@ -184,3 +184,69 @@ gcloud iam service-accounts add-iam-policy-binding "githubsanew@learning-words-t
 https://iam.googleapis.com/projects/736194043976/locations/global/workloadIdentityPools/githubactions/providers/github  
 
 For more configuration options, see the Workload Identity Federation documentation. If you are using Terraform to automate your infrastructure provisioning, check out the GitHub OIDC Terraform module too.
+
+## Local setup
+
+In order to build the application (Developer role), you won't need to have Terraform installed. Still you will need to have Service account key to access remote cloud sefices.
+
+Go ahead and create a service account key for your local service account. You can do this by going to the IAM & Admin section of the GCP console and selecting Service Accounts. Then select the service account you created for local development and click Create Key. Select JSON as the key type and click Create. This will download a JSON file with your service account key. Save this file somewhere safe, as you will need it later.
+
+### Backend
+
+In this project I am using nodejs for demo purpuses. You can use any language you want. The setup process should be similar.
+
+So first of all make sure you have nodejs >= 18.0.0 installed. You can check it by running the following command:
+
+```shell
+node -v
+```
+
+Then switch to the backend directory and install all dependencies:
+
+```shell
+cd backend/service-dictionary
+npm install
+```
+
+Now you can run the application locally.
+
+Here is an exmple of package.json
+
+```
+{
+    ...
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "dev": "npx tsc-watch --onSuccess \"npm run start\"",
+        "start": "cross-env GOOGLE_CLOUD_PROJECT=learning-words-trial-2 GOOGLE_APPLICATION_CREDENTIALS=\"../../infra/gcp-service-account-credentials.json\" npx functions-framework --target=main",
+        "gcp-build": "npm run build"
+    },
+    "dependencies": {
+        "@google-cloud/firestore": "^6.5.0",
+        "@google-cloud/functions-framework": "^3.1.0",
+        "cors": "^2.8.5",
+        "escape-html": "^1.0.3",
+        "fastify": "^4.15.0",
+        "jsonwebtoken": "9.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "^18.15.10",
+        "cross-env": "^7.0.3",
+        "tsc-watch": "^6.0.0",
+        "typescript": "^5.0.2",
+        "uuid": "^9.0.0"
+    }
+}
+```
+
+Notice here that we are using GOOGLE_CLOUD_PROJECT and GOOGLE_APPLICATION_CREDENTIALS environment variables. The first one is the name of the project, and the second one is the path to the service account key file.
+
+Now you can run the application locally:
+
+```shell
+npm run dev
+```
+
+This will start the application on port 8080. You can test it by sending a request to http://localhost:8080
+
