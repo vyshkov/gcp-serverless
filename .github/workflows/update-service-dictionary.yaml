@@ -13,6 +13,6 @@ jobs:
       - uses: actions/checkout@v3
       - run: ls -la
       - name: Deploy service
-        uses: ./.github/workflows/update-cloud-function.yaml
+        uses: .github/workflows/update-cloud-function.yaml@deploy-workflow
         with:
           service_name: service-dictionary
