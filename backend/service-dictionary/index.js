@@ -39,7 +39,7 @@ function wrap(req, res, fn) {
         });
 
     } else {
-      res.send(403, { error: "Failed to get users auth token !" });
+      res.send(403, { error: "Failed to get users auth token." });
     }
   });
 }
