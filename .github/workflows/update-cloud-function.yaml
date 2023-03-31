@@ -1,6 +1,12 @@
 name: update-function
 
 on:
+  workflow_call:
+    inputs:
+        service_name:
+          description: 'Which module to re-deploy'
+          required: true
+          default: 'service-dictionary'
   workflow_dispatch:
     inputs:
         service_name:
