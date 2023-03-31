@@ -26,7 +26,7 @@ fastify.addContentTypeParser('application/json', {}, (req: FastifyRequest, body:
 });
 
 fastify.get('/', async (request: FastifyRequest , reply: FastifyReply) => {
-    return { hello: 'world123' }
+    return { hello: '2' }
 })
 
 const fastifyFunction = async (request: FastifyRequest , reply: FastifyReply) => {
