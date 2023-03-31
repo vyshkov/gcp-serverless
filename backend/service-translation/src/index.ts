@@ -26,14 +26,14 @@ fastify.addContentTypeParser('application/json', {}, (req: FastifyRequest, body:
 });
 
 fastify.get('/', async (request: FastifyRequest , reply: FastifyReply) => {
-    return { hello: '2' }
+    return { hello: '3' }
 })
 
-const fastifyFunction = async (request: FastifyRequest , reply: FastifyReply) => {
+const main = async (request: FastifyRequest , reply: FastifyReply) => {
     await fastify.ready();
     fastify.server.emit('request', request, reply)
 }
 
 module.exports = {
-    fastifyFunction
+    main
 }

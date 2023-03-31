@@ -14,9 +14,9 @@
     "scripts": {
         "build": "tsc -p tsconfig.json",
         "dev": "npx tsc-watch --onSuccess \"npm run start\"",
-        "start": "cross-env GOOGLE_CLOUD_PROJECT=learning-words-trial-2 GOOGLE_APPLICATION_CREDENTIALS=\"../../infra/gcp-service-account-credentials.json\" npx functions-framework --target=fastifyFunction",
-        "prestart": "npm run build",
-        "gcp-build": "npm run build"
+        "start": "cross-env GOOGLE_CLOUD_PROJECT=learning-words-trial-2 GOOGLE_APPLICATION_CREDENTIALS=\"../../infra/gcp-service-account-credentials.json\" npx functions-framework --target=main",
+        "prestart1": "npm run build",
+        "gcp-build1": "npm run build"
     },
     "dependencies": {
         "@google-cloud/firestore": "^6.5.0",
