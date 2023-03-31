@@ -12,6 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: ls -la
+      - run: pwd
       - name: Deploy service
         uses: ./update-cloud-function.yaml@deploy-workflow
         with:
