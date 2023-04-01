@@ -25,13 +25,7 @@ You will have to maually setup some things:
 ## An idea of the architecture (implementation in progress)
 
 ### Infrastructure architecture
-![gcp serverless (4)](https://user-images.githubusercontent.com/7352031/226208196-ed342d2c-c7df-48da-88bb-95c863d6db82.png)
-
-### Application level technologies
-![Пустой диаграммой (1)](https://user-images.githubusercontent.com/7352031/229105723-3e3b4842-dcf6-459d-9599-5e31fca1898d.png)
-
-### Continious Deployment diagram
-![Пустой диаграммой](https://user-images.githubusercontent.com/7352031/227735085-b121c162-f890-4823-8221-0b7d720499b0.png)
+![gcp serverless(1)](https://user-images.githubusercontent.com/7352031/229307386-f89c6989-bcb7-4a27-be64-ed85af6e6e84.png)
 
 ### SLA
 With this architecture, SLA should be close to 100%, as we never have application downtime when updating componens.
@@ -135,6 +129,9 @@ Other thatn that it will cost you ~$0.026 per GB-month
 
 ## Automate Terraform with GitHub Actions
 
+### Continious Deployment diagram
+![Пустой диаграммой](https://user-images.githubusercontent.com/7352031/227735085-b121c162-f890-4823-8221-0b7d720499b0.png)
+
 GitHub Actions add continuous integration to GitHub repositories to automate software builds, tests, and deployments. Automating Terraform with CI/CD enforces configuration best practices, promotes collaboration and automates the Terraform workflow.
 
 HashiCorp's "Setup Terraform" GitHub Action sets up and configures the Terraform CLI in Github Actions workflows. This allows most Terraform commands to work exactly like they do on your local command line.
@@ -185,7 +182,11 @@ https://iam.googleapis.com/projects/736194043976/locations/global/workloadIdenti
 
 For more configuration options, see the Workload Identity Federation documentation. If you are using Terraform to automate your infrastructure provisioning, check out the GitHub OIDC Terraform module too.
 
-## Local setup
+## Application setup
+
+### Application level technologies
+
+![Пустой диаграммой (1)](https://user-images.githubusercontent.com/7352031/229105723-3e3b4842-dcf6-459d-9599-5e31fca1898d.png)
 
 In order to build the application (Developer role), you won't need to have Terraform installed. Still you will need to have Service account key to access remote cloud sefices.
 
