@@ -31,7 +31,7 @@ const Layout = () => {
     }, [token, renderLoginButton, refContainer]);
 
     return (
-        <Stack sx={{ display: "flex", overflow: "hidden", position: "absolute", top: 0, left: 0, width: 1, height: 1 }}>
+        <Stack sx={{ display: "flex", overflow: "hidden", width: 1, height: "100dvh" }}>
             <Topbar />
             <Container 
                 maxWidth="lg" 
