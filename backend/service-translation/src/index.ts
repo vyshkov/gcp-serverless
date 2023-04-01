@@ -68,6 +68,10 @@ fastify.get('/', async (request: FastifyRequest , reply: FastifyReply) => {
     return { hello: request.headers }
 });
 
+fastify.get('/translate', async (request: FastifyRequest , reply: FastifyReply) => {
+  return { translation: request.headers }
+});
+
 const main = async (request: FastifyRequest , reply: FastifyReply) => {
     await fastify.ready();
     fastify.server.emit('request', request, reply)

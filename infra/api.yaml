@@ -87,6 +87,29 @@ paths:
         path_translation: APPEND_PATH_TO_ADDRESS
       security:
         - google_id_token: []
+  # Translation API
+  /service-translation:
+    get:
+      summary: function_service_translation
+      operationId: mainTranslation
+      responses:
+        '200':
+          $ref: '#/responses/SuccessfulResponse'
+      x-google-backend:
+        address: ${function_service_translation}
+      security:
+        - google_id_token: []
+  /service-translation/translate:
+    get:
+      summary: function_service_translation
+      operationId: translate
+      responses:
+        '200':
+          $ref: '#/responses/SuccessfulResponse'
+      x-google-backend:
+        address: ${function_service_translation}/translate
+      security:
+        - google_id_token: []
   # Configure root route to serve index.html file
   /:
     get:
