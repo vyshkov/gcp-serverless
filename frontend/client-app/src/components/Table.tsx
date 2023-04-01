@@ -179,7 +179,8 @@ export const BasicTable = () => {
             </Backdrop>
             <Box sx={{ width: 1, px: 2, pt: 3 }}>
                 <OutlinedInput
-                    placeholder='Search...'
+                    autoComplete="off"
+                    placeholder="Search..."
                     sx={{ width: 1 }}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
