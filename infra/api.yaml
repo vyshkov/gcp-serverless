@@ -100,7 +100,7 @@ paths:
       security:
         - google_id_token: []
   /service-translation/translate:
-    get:
+    post:
       summary: function_service_translation
       operationId: translate
       responses:

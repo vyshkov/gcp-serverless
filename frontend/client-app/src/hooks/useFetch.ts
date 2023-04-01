@@ -6,7 +6,8 @@ function useFetch() {
     const { token, setIsUserAllowed, signOut } = useAuth();
 
     function myFetch(route: string, method?: string, body?: any) {
-        return fetch(`${API_PATH}/${route}`, {
+        const base = route.startsWith("http") ? "" : `${API_PATH}/`;
+        return fetch(`${base}${route}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 ...(body && { "Content-Type": "application/json" })

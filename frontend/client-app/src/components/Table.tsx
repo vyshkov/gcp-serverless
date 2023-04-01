@@ -163,8 +163,8 @@ export const BasicTable = () => {
 
     useEffect(() => {
         reload();
-        myFetch("service-translation/translate", "GET")
-            .then(res => console.log(res))
+        // myFetch("http://localhost:8080/translate", "POST", { text: "hello", from: "en", to: "uk" })
+        //     .then(res => console.log(res))
     }, []);
 
     const filteredWords = words.filter(el => wordMatchesSearch(el, search));

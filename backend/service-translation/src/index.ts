@@ -1,13 +1,14 @@
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 
-const functions = require('@google-cloud/functions-framework');
 const jwt = require('jsonwebtoken');
 const Firestore = require('@google-cloud/firestore');
 
 import cors from '@fastify/cors'
 import { QuerySnapshot } from "@google-cloud/firestore";
+import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 
 const COLLECTION_NAME = 'users';
+const AZURE_TRANSLATE_SECRET_NAME = "azure-translation-token" ;
 
 const firestore = new Firestore({
     timestampsInSnapshots: true
@@ -16,6 +17,21 @@ const firestore = new Firestore({
     //   GOOGLE_APPLICATION_CREDENTIALS=<path>
     // keyFilename: '/cred/cloud-functions-firestore-000000000000.json',
 });
+
+// function to get secret from GCP
+async function getSecret(): Promise<string> {
+  const client = new SecretManagerServiceClient();
+  const projectId = process.env.GCP_PROJECT || process.env.GOOGLE_CLOUD_PROJECT;
+  const [version] = await client.accessSecretVersion({
+    name: `projects/${projectId}/secrets/${AZURE_TRANSLATE_SECRET_NAME}/versions/latest`,
+  });
+
+  if (!version || !version.payload || !version.payload.data) {
+    throw new Error(`Secret ${AZURE_TRANSLATE_SECRET_NAME} not found`);
+  }
+
+  return version.payload.data.toString();
+}
 
 const fastify = require("fastify")({
     logger: true // you can also define the level passing an object configuration to logger: {level: 'debug'}
@@ -68,8 +84,34 @@ fastify.get('/', async (request: FastifyRequest , reply: FastifyReply) => {
     return { hello: request.headers }
 });
 
-fastify.get('/translate', async (request: FastifyRequest , reply: FastifyReply) => {
-  return { translation: request.headers }
+fastify.post('/translate', async (request: FastifyRequest , reply: FastifyReply) => {
+  const requestBody = request.body as { text: string, from: string, to: string };
+  const text = requestBody.text;
+  const from = requestBody.from;
+  const to = requestBody.to;
+
+  const token = await getSecret();
+  const url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&from=${from}&to=${to}`;
+
+  try {
+    console.log(">>>>>>>>> url", url)
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Ocp-Apim-Subscription-Key': token,
+        'Content-type': 'application/json',
+        'Ocp-Apim-Subscription-Region': 'centralus'
+      },
+      body: JSON.stringify([{ 'Text': text }])
+    });
+
+    console.log(">>>>>>>>> response", response);
+
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    reply.code(500).send({ message: 'Failed to check auth' });
+  }
 });
 
 const main = async (request: FastifyRequest , reply: FastifyReply) => {
