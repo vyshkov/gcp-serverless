@@ -1,12 +1,3 @@
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
-
-import AddIcon from '@mui/icons-material/Add'
-
 import {
     enqueueSnackbar 
 } from 'notistack';
@@ -23,10 +14,10 @@ import {
     MenuItem, 
     OutlinedInput,
 } from '@mui/material';
+
 import { Stack } from '@mui/system';
 import { useEffect, useState } from 'react';
-import Typography from '@mui/material/Typography';
-
+import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
@@ -34,67 +25,15 @@ import { AddWordsDialog } from './AddWordDialog';
 import useFetch from '../hooks/useFetch';
 
 import Suggestions from './Suggestions';
-import theme from '../themes/dark';
 
-interface Word {
-    id: string;
-    word: string;
-    translation: string;
-    lastUpdated: number;
-}
 
-interface TableContentProps {
-    words: Word[];
-    selected: Word | null;
-    setSelected: (w: Word | null) => void;
-    handleClickListItem: (evt: React.MouseEvent<HTMLElement>) => void;
-}
+import { TableContent } from './TableContent';
+import { Word } from '../types';
 
 function wordMatchesSearch(w: { word: string; translation: string; }, search: string) {
     return w.word.toLowerCase().includes(search.toLowerCase())
         || w.translation.toLowerCase().includes(search.toLowerCase());
 }
-
-export const TableContent = ({ 
-    words, 
-    selected, 
-    setSelected, 
-    handleClickListItem 
-}: TableContentProps) => (
-    words?.length === 0 ? (
-        <Typography sx={{ textAlign: "center", pt: 2 }}>
-            No saved words found
-        </Typography>
-    ) : (
-        <TableContainer
-            component={Paper}
-            sx={{ px: 1, pt: 2, flex: 1, background: "transparent", boxShadow: "none", overflow: "auto" }}
-        >
-            <Table>
-                <TableBody>
-                    {words.map((row) => (
-                        <TableRow
-                            key={row.id}
-                            sx={{ 
-                                '&:last-child td, &:last-child th': { border: 0 }, 
-                                background: selected?.id === row.id ? theme.custom?.transparentMedium : "transparent" 
-                            }}
-                            onClick={(evt: React.MouseEvent<HTMLElement>) => {
-                                handleClickListItem(evt);
-                                setSelected(row);
-                            }}
-                        >
-                            <TableCell component="th" scope="row" sx={{ fontWeight: "bold", letterSpacing: 1 }}>
-                                {row.word}
-                            </TableCell>
-                            <TableCell align="right">{row.translation}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-    )
-)
 
 export const BasicTable = () => {
     const myFetch = useFetch();
@@ -158,9 +97,7 @@ export const BasicTable = () => {
                 .finally(() => {
                     setIsUpdating(false)
                 });
-        } else {
-            console.error("No word selected");
-        }
+        } 
     }
 
     useEffect(() => {

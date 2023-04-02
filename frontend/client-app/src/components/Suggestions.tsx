@@ -4,6 +4,8 @@ import useDebounce from "../hooks/useDebounce";
 
 
 import { DictionaryEntry, getFreeDefinition } from "../utils/freeDictionary";
+import { UrbanDictionaryEntry, getUrbanDictionaryDefinition } from "../utils/urbanDictionary";
+
 import useFetch from "../hooks/useFetch";
 
 interface TranslationObject {
@@ -25,6 +27,7 @@ const Suggestions = ({ word, onTranslationPressed }: SuggestionsProps) => {
     const debouncedSearch = useDebounce(word, 1000);
     const [translationResults, setTranslationResults] = useState<string[]>([]);
     const [freeDefinitions, setFreeDefinitions] = useState<DictionaryEntry[]>([]);
+    const [urbanDictionaryDefinitions, setUrbanDictionaryDefinitions] = useState<UrbanDictionaryEntry[]>([]);
     const [isInProgress, setInProgress] = useState(false);
 
     useEffect(() => {
@@ -47,8 +50,10 @@ const Suggestions = ({ word, onTranslationPressed }: SuggestionsProps) => {
             .finally(() => setInProgress(false));
 
             getFreeDefinition(debouncedSearch, previousController?.current)
-                .then(res => setFreeDefinitions(res))
-             
+                .then(res => setFreeDefinitions(res));
+            
+            getUrbanDictionaryDefinition(debouncedSearch, previousController?.current)
+                .then(res => setUrbanDictionaryDefinitions(res));
         }
     }, [debouncedSearch]);
 
@@ -56,16 +61,23 @@ const Suggestions = ({ word, onTranslationPressed }: SuggestionsProps) => {
 
     return (
         <Box sx={{ p: 2, textAlign: "left", width: 1, display: "flex" }}>
-            { showLoading && <CircularProgress size={30} sx={{ mr: 1 }}/> }
-            
-            { !showLoading && translationResults.map((el, i) => ( 
+            {showLoading && <CircularProgress size={30} sx={{ mr: 1 }} />}
+
+            {!showLoading && translationResults.map((el, i) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <Chip key={el + i} label={el} onClick={() => onTranslationPressed(word, el)} sx={{ mr: 1 }} />
             ))}
-            { freeDefinitions?.slice(0, 1)?.map((def, i) => (
+            {freeDefinitions?.slice(0, 1)?.map((def, i) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <Chip key={def.word + i} label={`Definition: ${def.word} ${def.phonetic ? `[${def.phonetic}]` : ""}`} color="secondary" sx={{ mr: 1 }} />
             ))}
+
+            {
+                urbanDictionaryDefinitions?.slice(0, 1)?.map((def, i) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <Chip key={def.word + i} label={`Urban Dictionary: ${def.word}`} color="info" sx={{ mr: 1 }} />
+                ))
+            }
         </Box>
     )
 }
