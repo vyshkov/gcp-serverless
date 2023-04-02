@@ -21,7 +21,7 @@ interface SuggestionsProps {
 const Suggestions = ({ word, onTranslationPressed }: SuggestionsProps) => {
     const myFetch = useFetch();
     const previousController = useRef<AbortController>();
-    const debouncedSearch = useDebounce(word, 1500);
+    const debouncedSearch = useDebounce(word, 1000);
     const [translationResults, setTranslationResults] = useState<string[]>([]);
     const [isInProgress, setInProgress] = useState(false);
 
@@ -46,16 +46,12 @@ const Suggestions = ({ word, onTranslationPressed }: SuggestionsProps) => {
         }
     }, [debouncedSearch]);
 
-    if (!translationResults.length) {
-        return null
-    }
-
-    const changed = word !== debouncedSearch;
+    const showLoading = isInProgress || word !== debouncedSearch || translationResults.length === 0;
 
     return (
         <Box sx={{ p: 2, textAlign: "left", width: 1 }}>
-            { isInProgress || changed && <Typography variant="body2">...</Typography> }
-            { !changed && !isInProgress && translationResults.map(el => <Chip key={el} label={el} onClick={() => onTranslationPressed(word, el)} />) }
+            { showLoading && <Typography variant="body2">...</Typography> }
+            { !showLoading && translationResults.map(el => <Chip key={el} label={el} onClick={() => onTranslationPressed(word, el)} />) }
         </Box>
     )
 }

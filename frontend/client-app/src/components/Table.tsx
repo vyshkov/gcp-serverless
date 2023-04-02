@@ -202,10 +202,13 @@ export const BasicTable = () => {
                 />
             </Box>
             { search?.length > 2 && filteredWords.length === 0 && (
-                <Suggestions word={search} onTranslationPressed={(word, translation) => {
-                    setAutoTranslation(translation);
-                    handleAddWordOpen();
-                }} />
+                <Suggestions 
+                    word={search} 
+                    onTranslationPressed={(word, translation) => {
+                        setAutoTranslation(translation);
+                        handleAddWordOpen();
+                    }} 
+                />
             )}
             <TableContent
                 words={filteredWords}
