@@ -2,10 +2,17 @@ import API_PATH from "../api";
 
 import { useAuth } from "../auth/useLogin";
 
+interface FetchOptions {
+    route: string;
+    method?: string;
+    body?: any;
+    abortController?: AbortController;
+}
+
 function useFetch() {
     const { token, setIsUserAllowed, signOut } = useAuth();
 
-    function myFetch(route: string, method?: string, body?: any) {
+    function myFetch({ route, method, body, abortController }: FetchOptions) {
         const base = route.startsWith("http") ? "" : `${API_PATH}/`;
         return fetch(`${base}${route}`, {
             headers: {
@@ -13,6 +20,7 @@ function useFetch() {
                 ...(body && { "Content-Type": "application/json" })
             },
             method,
+            signal: abortController?.signal,
             body: body ? JSON.stringify(body) : undefined,
         })
         .then(res => {

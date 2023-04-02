@@ -49,10 +49,10 @@ export const AddWordsDialog = ({ open, handleClose, search, autoTranslation }: A
 
     const handleAddWord = () => {
         setInProgress(true);
-        myFetch("/service-dictionary", "POST", {
+        myFetch({ route: "/service-dictionary", method: "POST", body: {
             word,
             translation,
-        })
+        }})
         .catch(() => enqueueSnackbar("Failed to create word", { variant: "error" }))
         .finally(() => { 
             setInProgress(false);

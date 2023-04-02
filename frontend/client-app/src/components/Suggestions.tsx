@@ -1,5 +1,5 @@
 import { Box, Chip, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useDebounce from "../hooks/useDebounce";
 
 
@@ -20,19 +20,29 @@ interface SuggestionsProps {
 
 const Suggestions = ({ word, onTranslationPressed }: SuggestionsProps) => {
     const myFetch = useFetch();
+    const previousController = useRef<AbortController>();
     const debouncedSearch = useDebounce(word, 1500);
     const [translationResults, setTranslationResults] = useState<string[]>([]);
     const [isInProgress, setInProgress] = useState(false);
 
     useEffect(() => {
         if (debouncedSearch) {
+            if (previousController.current) {
+                previousController.current.abort();
+            }
+            const abortController = new AbortController();
+            previousController.current = abortController;
             setInProgress(true);
-            myFetch("service-translation/translate", "POST", { text: word, from: "en", to: "uk" })
-                .then((res: TranslationObject[]) => {
-                    console.log(res);
-                    setTranslationResults(res[0].translations.map(el => el.text));
-                })
-                .finally(() => setInProgress(false));
+            myFetch({ 
+                route: "service-translation/translate", 
+                method: "POST", 
+                body: { text: word, from: "en", to: "uk" },
+                abortController,
+            })
+            .then((res: TranslationObject[]) => {
+                setTranslationResults(res[0].translations.map(el => el.text));
+             })
+            .finally(() => setInProgress(false));
         }
     }, [debouncedSearch]);
 
@@ -40,10 +50,12 @@ const Suggestions = ({ word, onTranslationPressed }: SuggestionsProps) => {
         return null
     }
 
+    const changed = word !== debouncedSearch;
+
     return (
         <Box sx={{ p: 2, textAlign: "left", width: 1 }}>
-            { isInProgress && <Typography variant="body2">Loading...</Typography> }
-            { !isInProgress && translationResults.map(el => <Chip key={el} label={el} onClick={() => onTranslationPressed(word, el)} />) }
+            { isInProgress || changed && <Typography variant="body2">...</Typography> }
+            { !changed && !isInProgress && translationResults.map(el => <Chip key={el} label={el} onClick={() => onTranslationPressed(word, el)} />) }
         </Box>
     )
 }

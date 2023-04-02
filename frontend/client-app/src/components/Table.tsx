@@ -143,7 +143,7 @@ export const BasicTable = () => {
 
     const reload = () => {
         setIsUpdating(true);
-        return myFetch("service-dictionary", "GET")
+        return myFetch({ route: "service-dictionary" })
             .then(words => setWords(words.sort((a: Word, b: Word) => b.lastUpdated - a.lastUpdated)))
             .catch(() => enqueueSnackbar("Failed to load words", { variant: "error" }))
             .finally(() => setIsUpdating(false));
@@ -152,7 +152,7 @@ export const BasicTable = () => {
     const deleteWord = () => {
         if (selected) {
             setIsUpdating(true);
-            myFetch(`service-dictionary/${selected.id}`, "DELETE")
+            myFetch({ route: `service-dictionary/${selected.id}`, method: "DELETE" })
                 .then(handleClose)
                 .then(reload)
                 .catch(() => enqueueSnackbar("Failed to delete word", { variant: "error" }))
