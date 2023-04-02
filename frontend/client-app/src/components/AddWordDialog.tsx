@@ -31,19 +31,21 @@ interface AddWordsDialogProps {
     open: boolean;
     handleClose: () => void;
     search: string;
+    autoTranslation?: string;
 }
   
-export const AddWordsDialog = ({ open, handleClose, search }: AddWordsDialogProps) => {
+export const AddWordsDialog = ({ open, handleClose, search, autoTranslation }: AddWordsDialogProps) => {
     const myFetch = useFetch();
     const theme = useTheme();
  
     const [word, setWord] = useState<string>(search);
-    const [translation, setTranslation] = useState<string>("");
+    const [translation, setTranslation] = useState<string>(autoTranslation || "");
     const [inProgress, setInProgress] = useState(false);
     
     useEffect(() => {
         setWord(search);
-    }, [search]);
+        setTranslation(autoTranslation || "");
+    }, [search, autoTranslation]);
 
     const handleAddWord = () => {
         setInProgress(true);
