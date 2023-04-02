@@ -28,9 +28,17 @@ export interface DictionaryEntry {
     sourceUrls: string[];
   }
 
-export function getFreeDefinition(word) {
-  return fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+export function getFreeDefinition(word: string, previousController?: AbortController): Promise<DictionaryEntry[]> {
+  return fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`, {
+    signal: previousController?.signal,
+  })
     .then((response) => response.json())
+    .then((data) => {
+      if (data.title === 'No Definitions Found') {
+        return [];
+      }
+      return data;
+    })
     .catch((error) => {
       console.error(error);
     });

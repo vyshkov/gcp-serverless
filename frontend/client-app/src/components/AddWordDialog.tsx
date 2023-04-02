@@ -18,8 +18,6 @@ import useTheme from '@mui/material/styles/useTheme';
 
 import useFetch from '../hooks/useFetch';
 
-import Definitions from './Definitions';
-
 const Transition = forwardRef((
     props: TransitionProps & {
         children: React.ReactElement;
@@ -114,7 +112,6 @@ export const AddWordsDialog = ({ open, handleClose, search, autoTranslation }: A
                         onChange={(e) => setTranslation(e.target.value)}
                     />
                 </Box>
-                <Definitions word={word} />
             </Stack>
         </Dialog>
     );

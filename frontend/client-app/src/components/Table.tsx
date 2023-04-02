@@ -33,7 +33,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import { AddWordsDialog } from './AddWordDialog';
 import useFetch from '../hooks/useFetch';
 
-import Definitions from './Definitions';
 import Suggestions from './Suggestions';
 import theme from '../themes/dark';
 
@@ -216,9 +215,6 @@ export const BasicTable = () => {
                 setSelected={setSelected}
                 handleClickListItem={handleClickListItem}
             />
-            { search?.length > 2 && filteredWords.length === 0 && (
-                <Definitions word={search} />
-            )}
             <AddWordsDialog open={isWordDialogOpen} handleClose={handleAddWordClose} search={search} autoTranslation={autoTranslation} />
             <Menu
                 open={contextMenu !== null}
