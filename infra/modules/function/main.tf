@@ -30,6 +30,10 @@ resource "google_cloudfunctions2_function" "function" {
     max_instance_count = 1
     available_memory   = "256M"
     timeout_seconds    = 60
+    environment_variables = {
+        GOOGLE_CLOUD_PROJECT = var.project_id
+        GOOGLE_CLOUD_PROJECT_NUMBER = var.project_number
+    }
   }
 
   depends_on = [

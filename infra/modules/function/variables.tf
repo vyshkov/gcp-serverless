@@ -13,8 +13,15 @@ variable "function_description" {
 }
 variable "entry_point" {
   type = string
-  default = "helloHttp"  
+  default = "main"  
 }
 variable "source_dir" {
+  type = string
+}
+variable "project_id" {
+  type = string
+}
+
+variable "project_number" {
   type = string
 }

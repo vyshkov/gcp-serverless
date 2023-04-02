@@ -3,6 +3,11 @@ variable "project_id" {
   default = "learning-words-trial-2"
 }
 
+variable "project_number" {
+  type    = string
+  default = "397907536090"
+}
+
 variable "region" {
   type    = string
   default = "us-central1"

@@ -38,11 +38,9 @@ resource "google_project_service" "secretmanager" {
   service  = "secretmanager.googleapis.com"
 }
 
-resource "google_secret_manager_secret" "my-secret" {
+resource "google_secret_manager_secret" "azure_translation_token" {
   provider = google-beta
-
-  secret_id = "openai-secret"
-
+  secret_id = "azure-translation-token"
   replication {
     automatic = true
   }
@@ -50,9 +48,9 @@ resource "google_secret_manager_secret" "my-secret" {
   depends_on = [google_project_service.secretmanager]
 }
 
-resource "google_secret_manager_secret_iam_binding" "my_secret_binding" {
+resource "google_secret_manager_secret_iam_binding" "azure_translation_token_secret_binding" {
   provider  = google-beta
-  secret_id = google_secret_manager_secret.my-secret.secret_id
+  secret_id = google_secret_manager_secret.azure_translation_token.secret_id
   members = [
     "serviceAccount:${var.default_service_account}"
   ]
@@ -67,11 +65,11 @@ module "function_service_translation" {
   # the path of the source code
   source_dir = "../backend/service-translation"
 
-  # the entry point of the function
-  entry_point = "main"
-
   # bucket where the function zip will be stored
   bucket_name = google_storage_bucket.functions_bucket.name
+
+  project_id = var.project_id
+  project_number = var.project_number
 
   function_name        = "service-translation"
   function_description = "Set of Tranalation APIs"
@@ -88,11 +86,11 @@ module "function_service_dictionary" {
   # the path of the source code
   source_dir = "../backend/service-dictionary"
 
-  # the entry point of the function
-  entry_point = "main"
-
   # bucket where the function zip will be stored
   bucket_name = google_storage_bucket.functions_bucket.name
+
+  project_id = var.project_id
+  project_number = var.project_number
 
   function_name        = "service-dictionary"
   function_description = "Word dictionary CRUD"
