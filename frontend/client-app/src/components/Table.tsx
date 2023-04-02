@@ -34,6 +34,7 @@ import { AddWordsDialog } from './AddWordDialog';
 import useFetch from '../hooks/useFetch';
 
 import Definitions from './Definitions';
+import Suggestions from './Suggestions';
 import theme from '../themes/dark';
 
 interface Word {
@@ -99,6 +100,7 @@ export const TableContent = ({
 export const BasicTable = () => {
     const myFetch = useFetch();
     const [search, setSearch] = useState("");
+    const [autoTranslation, setAutoTranslation] = useState("");
     const [words, setWords] = useState<Word[]>([]);
     const [isWordDialogOpen, setIsDialogOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -125,6 +127,7 @@ export const BasicTable = () => {
 
     const handleClose = () => {
         setContextMenu(null);
+        setAutoTranslation("");
         setSelected(null);
     };
 
@@ -163,8 +166,8 @@ export const BasicTable = () => {
 
     useEffect(() => {
         reload();
-        myFetch("service-translation/translate", "POST", { text: "hello", from: "en", to: "uk" })
-            .then(res => console.log(res))
+        // myFetch("service-translation/translate", "POST", { text: "hello whats up", from: "en", to: "uk" })
+        //     .then(res => console.log(res))
     }, []);
 
     const filteredWords = words.filter(el => wordMatchesSearch(el, search));
@@ -179,13 +182,6 @@ export const BasicTable = () => {
             </Backdrop>
             <Box sx={{ width: 1, px: 2, pt: 3 }}>
                 <OutlinedInput
-                    inputProps={{
-                        autocomplete: 'new-password',
-                        form: {
-                          autocomplete: 'off',
-                        },
-                      }
-                    }
                     placeholder="Search..."
                     sx={{ width: 1 }}
                     value={search}
@@ -205,6 +201,12 @@ export const BasicTable = () => {
                     }
                 />
             </Box>
+            { search?.length > 2 && filteredWords.length === 0 && (
+                <Suggestions word={search} onTranslationPressed={(word, translation) => {
+                    setAutoTranslation(translation);
+                    handleAddWordOpen();
+                }} />
+            )}
             <TableContent
                 words={filteredWords}
                 selected={selected}
@@ -214,7 +216,7 @@ export const BasicTable = () => {
             { search?.length > 2 && filteredWords.length === 0 && (
                 <Definitions word={search} />
             )}
-            <AddWordsDialog open={isWordDialogOpen} handleClose={handleAddWordClose} search={search} />
+            <AddWordsDialog open={isWordDialogOpen} handleClose={handleAddWordClose} search={search} autoTranslation={autoTranslation} />
             <Menu
                 open={contextMenu !== null}
                 anchorReference="anchorPosition"
