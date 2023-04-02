@@ -5,7 +5,7 @@ import useDebounce from "../hooks/useDebounce";
 import { DictionaryEntry, getFreeDefinition } from "../utils/freeDictionary";
 
 
-const Definitions = ({ word }: { word: string }) => {
+const Suggestions = ({ word }: { word: string }) => {
     const debouncedSearch = useDebounce(word, 1500);
     const [freeDefinitions, setFreeDefinitions] = useState<DictionaryEntry[]>([]);
     const [, setInProgress] = useState(false);
@@ -41,4 +41,4 @@ const Definitions = ({ word }: { word: string }) => {
     )
 }
 
-export default Definitions;
+export default Suggestions;

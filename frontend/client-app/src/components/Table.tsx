@@ -163,8 +163,8 @@ export const BasicTable = () => {
 
     useEffect(() => {
         reload();
-        // myFetch("http://localhost:8080/translate", "POST", { text: "hello", from: "en", to: "uk" })
-        //     .then(res => console.log(res))
+        myFetch("service-translation/translate", "POST", { text: "hello", from: "en", to: "uk" })
+            .then(res => console.log(res))
     }, []);
 
     const filteredWords = words.filter(el => wordMatchesSearch(el, search));
@@ -211,7 +211,7 @@ export const BasicTable = () => {
                 setSelected={setSelected}
                 handleClickListItem={handleClickListItem}
             />
-            { search && filteredWords.length === 0 && (
+            { search?.length > 2 && filteredWords.length === 0 && (
                 <Definitions word={search} />
             )}
             <AddWordsDialog open={isWordDialogOpen} handleClose={handleAddWordClose} search={search} />
