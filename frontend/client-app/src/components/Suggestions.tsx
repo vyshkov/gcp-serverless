@@ -62,12 +62,13 @@ const Suggestions = ({ word, onTranslationPressed, onUrbanDictionaryWordClick, o
     const showLoading = isInProgress || word !== debouncedSearch || translationResults.length === 0;
 
     return (
-        <Box sx={{ p: 2, textAlign: "left", width: 1, display: "flex" }}>
+        <Box sx={{ p: 2, textAlign: "left", width: 1, display: "flex", flexWrap: "wrap" }}>
             {showLoading && <CircularProgress size={30} sx={{ mr: 1 }} />}
 
             {!showLoading && translationResults.map((el, i) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <Chip key={el + i} label={el} onClick={() => onTranslationPressed(word, el)} sx={{ mr: 1 }} />
+                <Chip key={el + i} label={el} onClick={() => onTranslationPressed(word, el)} 
+                    sx={{ mr: 1, mb: 1 }} />
             ))}
             {freeDefinitions?.slice(0, 1)?.map((def, i) => (
                 <Chip 
@@ -76,7 +77,7 @@ const Suggestions = ({ word, onTranslationPressed, onUrbanDictionaryWordClick, o
                     label={`Definition: ${def.word} ${def.phonetic ? `[${def.phonetic}]` : ""}`} 
                     color="secondary" 
                     onClick={() => onFreeDictionaryWordClick(freeDefinitions)}
-                    sx={{ mr: 1 }} 
+                    sx={{ mr: 1, mb: 1 }} 
                 />
             ))}
 
@@ -88,7 +89,7 @@ const Suggestions = ({ word, onTranslationPressed, onUrbanDictionaryWordClick, o
                         label={`Urban Dictionary: ${def.word}`} 
                         color="info" 
                         onClick={() => onUrbanDictionaryWordClick(urbanDictionaryDefinitions)}
-                        sx={{ mr: 1 }} 
+                        sx={{ mr: 1, mb: 1 }} 
                     />
                 ))
             }
