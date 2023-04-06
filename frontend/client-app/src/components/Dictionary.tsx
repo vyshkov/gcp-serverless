@@ -27,7 +27,11 @@ import useFetch from '../hooks/useFetch';
 import Suggestions from './Suggestions';
 
 
+import { DictionaryEntry } from '../utils/freeDictionary';
+import { FreeDictionaryDialog } from './FreeDictionaryDialog';
 import { TableContent } from './TableContent';
+import { UrbanDictionaryDialog } from './UrbanDictionaryDialog';
+import { UrbanDictionaryEntry } from '../utils/urbanDictionary';
 import { Word } from '../types';
 
 function wordMatchesSearch(w: { word: string; translation: string; }, search: string) {
@@ -35,13 +39,15 @@ function wordMatchesSearch(w: { word: string; translation: string; }, search: st
         || w.translation.toLowerCase().includes(search.toLowerCase());
 }
 
-export const BasicTable = () => {
+export const Dictionary = () => {
     const myFetch = useFetch();
     const [search, setSearch] = useState("");
     const [autoTranslation, setAutoTranslation] = useState("");
     const [words, setWords] = useState<Word[]>([]);
     const [isWordDialogOpen, setIsDialogOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
+    const [urbanDictionaryDefinitions, setUrbanDictionaryDefinitions] = useState<UrbanDictionaryEntry[]>([]);
+    const [freeDictionaryDefinitions, setFreeDictionaryDefinitions] = useState<DictionaryEntry[]>([]);
 
     const [selected, setSelected] = useState<Word | null>(null);
     const [contextMenu, setContextMenu] = useState<{
@@ -102,8 +108,6 @@ export const BasicTable = () => {
 
     useEffect(() => {
         reload();
-        // myFetch("service-translation/translate", "POST", { text: "hello whats up", from: "en", to: "uk" })
-        //     .then(res => console.log(res))
     }, []);
 
     const filteredWords = words.filter(el => wordMatchesSearch(el, search));
@@ -140,6 +144,8 @@ export const BasicTable = () => {
             { search?.length > 2 && filteredWords.length === 0 && (
                 <Suggestions 
                     word={search} 
+                    onUrbanDictionaryWordClick={setUrbanDictionaryDefinitions}
+                    onFreeDictionaryWordClick={setFreeDictionaryDefinitions}
                     onTranslationPressed={(word, translation) => {
                         setAutoTranslation(translation);
                         handleAddWordOpen();
@@ -152,7 +158,7 @@ export const BasicTable = () => {
                 setSelected={setSelected}
                 handleClickListItem={handleClickListItem}
             />
-            <AddWordsDialog open={isWordDialogOpen} handleClose={handleAddWordClose} search={search} autoTranslation={autoTranslation} />
+            
             <Menu
                 open={contextMenu !== null}
                 anchorReference="anchorPosition"
@@ -186,8 +192,22 @@ export const BasicTable = () => {
                     <ListItemText>Edit</ListItemText>
                 </MenuItem>
             </Menu>
+            <AddWordsDialog
+                open={isWordDialogOpen}
+                handleClose={handleAddWordClose}
+                search={selected?.word || search}
+                autoTranslation={selected?.translation || autoTranslation}
+            />
+            <UrbanDictionaryDialog 
+                definitions={urbanDictionaryDefinitions}
+                handleClose={() => setUrbanDictionaryDefinitions([])}
+            />
+            <FreeDictionaryDialog
+                definitions={freeDictionaryDefinitions}
+                handleClose={() => setFreeDictionaryDefinitions([])}
+            />
         </Stack>
     );
 }
 
-export default BasicTable;
+export default Dictionary;

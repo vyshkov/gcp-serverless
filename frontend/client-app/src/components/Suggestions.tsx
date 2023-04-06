@@ -19,9 +19,11 @@ interface TranslationObject {
 interface SuggestionsProps {
     word: string;
     onTranslationPressed: (word: string, translation: string) => void;
+    onUrbanDictionaryWordClick: (definitions: UrbanDictionaryEntry[]) => void;
+    onFreeDictionaryWordClick: (definitions: DictionaryEntry[]) => void;
 }
 
-const Suggestions = ({ word, onTranslationPressed }: SuggestionsProps) => {
+const Suggestions = ({ word, onTranslationPressed, onUrbanDictionaryWordClick, onFreeDictionaryWordClick }: SuggestionsProps) => {
     const myFetch = useFetch();
     const previousController = useRef<AbortController>();
     const debouncedSearch = useDebounce(word, 1000);
@@ -68,14 +70,26 @@ const Suggestions = ({ word, onTranslationPressed }: SuggestionsProps) => {
                 <Chip key={el + i} label={el} onClick={() => onTranslationPressed(word, el)} sx={{ mr: 1 }} />
             ))}
             {freeDefinitions?.slice(0, 1)?.map((def, i) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Chip key={def.word + i} label={`Definition: ${def.word} ${def.phonetic ? `[${def.phonetic}]` : ""}`} color="secondary" sx={{ mr: 1 }} />
+                <Chip 
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={def.word + i} 
+                    label={`Definition: ${def.word} ${def.phonetic ? `[${def.phonetic}]` : ""}`} 
+                    color="secondary" 
+                    onClick={() => onFreeDictionaryWordClick(freeDefinitions)}
+                    sx={{ mr: 1 }} 
+                />
             ))}
 
             {
                 urbanDictionaryDefinitions?.slice(0, 1)?.map((def, i) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <Chip key={def.word + i} label={`Urban Dictionary: ${def.word}`} color="info" sx={{ mr: 1 }} />
+                    <Chip 
+                        // eslint-disable-next-line react/no-array-index-key
+                        key={def.word + i} 
+                        label={`Urban Dictionary: ${def.word}`} 
+                        color="info" 
+                        onClick={() => onUrbanDictionaryWordClick(urbanDictionaryDefinitions)}
+                        sx={{ mr: 1 }} 
+                    />
                 ))
             }
         </Box>

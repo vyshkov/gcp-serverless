@@ -10,7 +10,7 @@ import {
 
 import { useAuth } from '../auth/useLogin';
 
-import Table from './Table'; 
+import { Dictionary } from './Dictionary'; 
 
 import Topbar from './Topbar';
 
@@ -38,7 +38,7 @@ const Layout = () => {
                 sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", overflow: "auto", p: 0 }}>
                 {token && (
                     isUserAllowed ? (
-                        <Table />
+                        <Dictionary />
                     ) : (
                         <Typography>Sorry, the user doesnt have permissions</Typography>
                     )

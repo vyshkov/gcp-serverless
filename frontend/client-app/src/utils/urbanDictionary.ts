@@ -17,5 +17,5 @@ export function getUrbanDictionaryDefinition(word: string, previousController?: 
     signal: previousController?.signal,
   })
     .then((response) => response.json())
-    .then((data) => data?.list || [])
+    .then((data) => data?.list.sort((a: UrbanDictionaryEntry, b: UrbanDictionaryEntry) => b.thumbs_up - a.thumbs_up) || [])
 }
