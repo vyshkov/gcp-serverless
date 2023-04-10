@@ -141,9 +141,10 @@ export const Dictionary = () => {
                     }
                 />
             </Box>
-            { search?.length > 2 && filteredWords.length === 0 && (
+            { search?.length > 2 && (
                 <Suggestions 
                     word={search} 
+                    translate={filteredWords.length === 0}
                     onUrbanDictionaryWordClick={setUrbanDictionaryDefinitions}
                     onFreeDictionaryWordClick={setFreeDictionaryDefinitions}
                     onTranslationPressed={(word, translation) => {

@@ -18,12 +18,19 @@ interface TranslationObject {
 
 interface SuggestionsProps {
     word: string;
+    translate: boolean;
     onTranslationPressed: (word: string, translation: string) => void;
     onUrbanDictionaryWordClick: (definitions: UrbanDictionaryEntry[]) => void;
     onFreeDictionaryWordClick: (definitions: DictionaryEntry[]) => void;
 }
 
-const Suggestions = ({ word, onTranslationPressed, onUrbanDictionaryWordClick, onFreeDictionaryWordClick }: SuggestionsProps) => {
+const Suggestions = ({ 
+    word, 
+    translate,
+    onTranslationPressed, 
+    onUrbanDictionaryWordClick, 
+    onFreeDictionaryWordClick 
+}: SuggestionsProps) => {
     const myFetch = useFetch();
     const previousController = useRef<AbortController>();
     const debouncedSearch = useDebounce(word, 1000);
@@ -39,17 +46,22 @@ const Suggestions = ({ word, onTranslationPressed, onUrbanDictionaryWordClick, o
             }
             const abortController = new AbortController();
             previousController.current = abortController;
-            setInProgress(true);
-            myFetch({ 
-                route: "service-translation/translate", 
-                method: "POST", 
-                body: { text: word, from: "en", to: "uk" },
-                abortController,
-            })
-            .then((res: TranslationObject[]) => {
-                setTranslationResults(res[0].translations.map(el => el.text));
-             })
-            .finally(() => setInProgress(false));
+
+            if (translate) {
+                const isEnglish = /^[a-zA-Z\s-]+$/.test(word);
+
+                setInProgress(true);
+                myFetch({ 
+                    route: "service-translation/translate", 
+                    method: "POST", 
+                    body: { text: word, from: isEnglish ? "en" : "uk", to: isEnglish ? "uk" : "en" },
+                    abortController,
+                })
+                .then((res: TranslationObject[]) => {
+                    setTranslationResults(res[0].translations.map(el => el.text));
+                 })
+                .finally(() => setInProgress(false));
+            }
 
             getFreeDefinition(debouncedSearch, previousController?.current)
                 .then(res => setFreeDefinitions(res));
@@ -63,9 +75,9 @@ const Suggestions = ({ word, onTranslationPressed, onUrbanDictionaryWordClick, o
 
     return (
         <Box sx={{ p: 2, textAlign: "left", width: 1, display: "flex", flexWrap: "wrap" }}>
-            {showLoading && <CircularProgress size={30} sx={{ mr: 1 }} />}
+            {translate && showLoading && <CircularProgress size={30} sx={{ mr: 1 }} />}
 
-            {!showLoading && translationResults.map((el, i) => (
+            {translate && !showLoading && translationResults.map((el, i) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <Chip key={el + i} label={el} onClick={() => onTranslationPressed(word, el)} 
                     sx={{ mr: 1, mb: 1 }} />

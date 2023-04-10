@@ -35,11 +35,13 @@ interface AddWordsDialogProps {
 export const AddWordsDialog = ({ open, handleClose, search, autoTranslation }: AddWordsDialogProps) => {
     const myFetch = useFetch();
     const theme = useTheme();
+
+    const isEnglish = /^[a-zA-Z\s-]+$/.test(search);
  
-    const [word, setWord] = useState<string>(search);
-    const [translation, setTranslation] = useState<string>(autoTranslation || "");
+    const [word, setWord] = useState<string>(isEnglish ? search : autoTranslation || "");
+    const [translation, setTranslation] = useState<string>(isEnglish ? autoTranslation || "" : search);
     const [inProgress, setInProgress] = useState(false);
-    
+
     useEffect(() => {
         setWord(search);
         setTranslation(autoTranslation || "");
