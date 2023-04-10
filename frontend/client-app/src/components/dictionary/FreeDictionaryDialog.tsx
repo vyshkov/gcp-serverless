@@ -13,7 +13,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import useTheme from '@mui/material/styles/useTheme';
 
-import { DictionaryEntry } from '../utils/freeDictionary';
+import { DictionaryEntry } from '../../utils/freeDictionary';
 
 const Transition = forwardRef((
     props: TransitionProps & {

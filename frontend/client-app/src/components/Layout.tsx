@@ -8,12 +8,11 @@ import {
     useTheme,
 } from '@mui/material';
 
+import { Outlet } from 'react-router-dom';
+
 import { useAuth } from '../auth/useLogin';
 
-import { Dictionary } from './Dictionary'; 
-
 import Topbar from './Topbar';
-
 
 const Layout = () => {
     const { renderLoginButton, token, isUserAllowed, userData } = useAuth();
@@ -38,7 +37,7 @@ const Layout = () => {
                 sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", overflow: "auto", p: 0 }}>
                 {token && (
                     isUserAllowed ? (
-                        <Dictionary />
+                        <Outlet />
                     ) : (
                         <Typography>Sorry, the user doesnt have permissions</Typography>
                     )

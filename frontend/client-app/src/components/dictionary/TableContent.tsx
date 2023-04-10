@@ -1,6 +1,6 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography, useTheme } from "@mui/material";
 
-import { Word } from "../types";
+import { Word } from "../../types";
 
 interface TableContentProps {
     words: Word[];

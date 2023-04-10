@@ -16,7 +16,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import useTheme from '@mui/material/styles/useTheme';
 
-import useFetch from '../hooks/useFetch';
+import useClient from '../../hooks/useClient';
 
 const Transition = forwardRef((
     props: TransitionProps & {
@@ -33,7 +33,7 @@ interface AddWordsDialogProps {
 }
   
 export const AddWordsDialog = ({ open, handleClose, search, autoTranslation }: AddWordsDialogProps) => {
-    const myFetch = useFetch();
+    const client = useClient();
     const theme = useTheme();
 
     const isEnglish = /^[a-zA-Z\s-]+$/.test(search);
@@ -49,17 +49,14 @@ export const AddWordsDialog = ({ open, handleClose, search, autoTranslation }: A
 
     const handleAddWord = () => {
         setInProgress(true);
-        myFetch({ route: "/service-dictionary", method: "POST", body: {
-            word,
-            translation,
-        }})
-        .catch(() => enqueueSnackbar("Failed to create word", { variant: "error" }))
-        .finally(() => { 
-            setInProgress(false);
-            setWord("");
-            setTranslation("");
-            handleClose();           
-        });
+        client.addWord(word, translation)
+            .catch(() => enqueueSnackbar("Failed to create word", { variant: "error" }))
+            .finally(() => { 
+                setInProgress(false);
+                setWord("");
+                setTranslation("");
+                handleClose();           
+            });
     }
 
     return (

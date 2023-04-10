@@ -12,7 +12,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import useTheme from '@mui/material/styles/useTheme';
 
-import { UrbanDictionaryEntry } from '../utils/urbanDictionary';
+import { UrbanDictionaryEntry } from '../../utils/urbanDictionary';
 
 const Transition = forwardRef((
     props: TransitionProps & {

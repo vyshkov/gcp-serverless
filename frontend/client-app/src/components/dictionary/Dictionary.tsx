@@ -22,17 +22,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
 import { AddWordsDialog } from './AddWordDialog';
-import useFetch from '../hooks/useFetch';
 
 import Suggestions from './Suggestions';
 
-
-import { DictionaryEntry } from '../utils/freeDictionary';
+import { DictionaryEntry } from '../../utils/freeDictionary';
 import { FreeDictionaryDialog } from './FreeDictionaryDialog';
 import { TableContent } from './TableContent';
 import { UrbanDictionaryDialog } from './UrbanDictionaryDialog';
-import { UrbanDictionaryEntry } from '../utils/urbanDictionary';
-import { Word } from '../types';
+import { UrbanDictionaryEntry } from '../../utils/urbanDictionary';
+import { Word } from '../../types';
+import useClient from '../../hooks/useClient';
 
 function wordMatchesSearch(w: { word: string; translation: string; }, search: string) {
     return w.word.toLowerCase().includes(search.toLowerCase())
@@ -40,7 +39,7 @@ function wordMatchesSearch(w: { word: string; translation: string; }, search: st
 }
 
 export const Dictionary = () => {
-    const myFetch = useFetch();
+    const client = useClient();
     const [search, setSearch] = useState("");
     const [autoTranslation, setAutoTranslation] = useState("");
     const [words, setWords] = useState<Word[]>([]);
@@ -87,8 +86,8 @@ export const Dictionary = () => {
 
     const reload = () => {
         setIsUpdating(true);
-        return myFetch({ route: "service-dictionary" })
-            .then(words => setWords(words.sort((a: Word, b: Word) => b.lastUpdated - a.lastUpdated)))
+        return client.getAllWords()
+            .then(setWords)
             .catch(() => enqueueSnackbar("Failed to load words", { variant: "error" }))
             .finally(() => setIsUpdating(false));
     }
@@ -96,7 +95,7 @@ export const Dictionary = () => {
     const deleteWord = () => {
         if (selected) {
             setIsUpdating(true);
-            myFetch({ route: `service-dictionary/${selected.id}`, method: "DELETE" })
+            client.deleteWord(selected.id)
                 .then(handleClose)
                 .then(reload)
                 .catch(() => enqueueSnackbar("Failed to delete word", { variant: "error" }))

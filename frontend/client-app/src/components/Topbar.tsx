@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import { Link } from 'react-router-dom';
 
 import {
     AppBar,
@@ -17,14 +19,18 @@ import {
 } from '@mui/material';
 
 import Logout from '@mui/icons-material/Logout';
+import MenuIcon from '@mui/icons-material/Menu';
 
 import { useAuth } from '../auth/useLogin';
 import { useCustomTheme } from '../themes/CustomThemeProvider';
+import AppDrawer from './Drawer';
 
 const Topbar = () => {
     const { signOut, userData, token } = useAuth();
     const { setTheme, currentTheme } = useCustomTheme();
     const theme = useTheme();
+
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -38,12 +44,24 @@ const Topbar = () => {
     return (
         <AppBar position='static' sx={{ background: theme.custom?.transparentLight }}>
             <Toolbar>
-                <Box
-                    component="img"
-                    alt="The house from the offer."
-                    src="/logo.png"
-                    sx={{ maxHeight: 55, opacity: 0.8 }}
-                />
+                <IconButton
+                    size="large"
+                    edge="start"
+                    aria-label="menu"
+                    sx={{ mr: 2 }}
+                    onClick={() => setIsDrawerOpen(true)}
+                >
+                    <MenuIcon />
+                </IconButton>
+                <Link to="/" style={{ display: "flex", alignItems: "center" }}>
+                    <Box
+                        component="img"
+                        alt="The house from the offer."
+                        src="/logo.png"
+                        sx={{ maxHeight: 55, opacity: 0.8 }}
+                    />
+                </Link>
+                
                 <Box sx={{ flexGrow: 1 }} />
                 {token && (
                     <>
@@ -124,6 +142,7 @@ const Topbar = () => {
                     </>
                 )}
             </Toolbar>
+            <AppDrawer open={isDrawerOpen} onCloseMenu={() => setIsDrawerOpen(false)} />
         </AppBar >
     );
 }

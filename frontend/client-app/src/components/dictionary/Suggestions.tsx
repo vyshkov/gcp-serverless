@@ -1,12 +1,12 @@
 import { Box, Chip, CircularProgress } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import useDebounce from "../hooks/useDebounce";
+import useDebounce from "../../hooks/useDebounce";
 
 
-import { DictionaryEntry, getFreeDefinition } from "../utils/freeDictionary";
-import { UrbanDictionaryEntry, getUrbanDictionaryDefinition } from "../utils/urbanDictionary";
+import { DictionaryEntry, getFreeDefinition } from "../../utils/freeDictionary";
+import { UrbanDictionaryEntry, getUrbanDictionaryDefinition } from "../../utils/urbanDictionary";
 
-import useFetch from "../hooks/useFetch";
+import useFetch from "../../hooks/useFetch";
 
 interface TranslationObject {
     translations: {
