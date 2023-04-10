@@ -10,7 +10,7 @@ const renderStars = (correct: number, incorrect: number) => {
     const total = correct + incorrect;
     const stars = Math.floor((correct / total) * 5);
     return (
-        <Box>{
+        <Box sx={{ display: "flex" }}>{
             Array.from({ length: stars }, (_, i) => (
                 <Typography key={i} variant="h4" sx={{ color: "success.main" }}>
                     ⭐
