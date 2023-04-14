@@ -7,12 +7,14 @@ import reportWebVitals from './reportWebVitals';
 import CustomThemeProvider from './themes/CustomThemeProvider';
 
 
-if ( window.location.pathname === "/" && window.location.hash.startsWith('#/path=')) {
-  // redirect
-  window.location.replace(
-    window.location.origin + window.location.hash.substring(7)
-  );
+const updateForwardedUrl = () => {
+  if (window.location.search.startsWith('?forwardedFrom=')) {
+    const decoded = decodeURIComponent(window.location.search.substring('?forwardedFrom='.length));
+    window.history.replaceState(null, '', decoded);
+  }
 }
+
+updateForwardedUrl();
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

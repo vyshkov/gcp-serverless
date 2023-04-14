@@ -8,8 +8,8 @@
 </head>
 <body>
     <script>
-        // redirect to same host with different route
-        window.location.replace(window.location.origin + `/#/path=${window.location.pathname}`);
+        const url = location.href.replace(location.origin, "");
+		location.href = '/?forwardedFrom='+encodeURIComponent(url);
     </script>
 </body>
 </html>
