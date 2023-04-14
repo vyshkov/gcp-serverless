@@ -9,7 +9,7 @@ import CustomThemeProvider from './themes/CustomThemeProvider';
 
 if (window.location.hash.startsWith('#/path=')) {
   // redirect
-  window.location.href = window.location.origin + window.location.hash.substring(7);
+  window.location.href = window.location.origin + window.location.hash.substring(8);
 }
 
 const root = ReactDOM.createRoot(
