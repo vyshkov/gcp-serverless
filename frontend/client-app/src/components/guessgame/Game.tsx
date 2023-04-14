@@ -21,7 +21,11 @@ const renderStars = (correct: number, incorrect: number) => {
     );
 };
 
-const Game = () => {
+interface GameProps {
+    mode: "en" | "ua"
+}
+
+const Game = ({ mode }: GameProps) => {
     const theme = useTheme();
     const client = useClient();;
     const [allWords, setAllWords] = useState<Word[]>([]);
@@ -33,16 +37,24 @@ const Game = () => {
     const [round, setRound] = useState(0);
 
     useEffect(() => {
+        setRound(0);
+        setCorrect(0);
+        setIncorrect(0);
+        setGuessed(false);
+
         client.getAllWords()
             .then(words => setAllWords(words.slice(0, 5).sort(() => Math.random() - 0.5)));
 
-    }, []);
+    }, [mode]);
 
     useEffect(() => {
         if (allWords.length && round < allWords.length) {
-            setVariants(shuffle([
+            setVariants(shuffle(mode === "en" ? [
                 allWords[round].translation,
                 ...getRandomElements(allWords, round, 2).map(w => w.translation),
+            ] : [
+                allWords[round].word,
+                ...getRandomElements(allWords, round, 2).map(w => w.word),
             ]));
         }
     }, [round, allWords]);
@@ -79,32 +91,37 @@ const Game = () => {
         );
     }
 
+    const mainWord = mode === "en" ? allWords[round].word : allWords[round].translation;
+    const mainTranslation = mode === "en" ? allWords[round].translation : allWords[round].word;
+
     return (
         <Box sx={{ height: 1, width: 1, display: "flex", position: "relative", flexDirection: "column" }}>
             <Box sx={{ display: "flex", flex: 1, justifyContent: "center", alignItems: "center" }}>
-                <Typography variant="h4">{allWords[round].word}</Typography>
+                <Typography variant="h4">{mainWord}</Typography>
             </Box>
             <Box sx={{ display: "flex", flex: 1, justifyContent: "center", alignItems: "center", flexWrap: "wrap" }}>
-                {variants.map((variant) => (
-                    <Button
-                        key={variant}
-                        variant={
-                            guessed ? "contained" : "outlined"
-                        }
-                        color={guessed && (variant === allWords[round].translation ? "success" : "error") || "primary"}
-                        sx={{ mx: 1, p: 2, pointerEvents: guessed ? "none" : "auto" }}
-                        onClick={() => {
-                            setGuessed(true);
-                            if (variant === allWords[round].translation) {
-                                setCorrect(correct + 1);
-                            } else {
-                                setIncorrect(incorrect + 1);
+                <Box sx={{ textAlign: "center" }}>
+                    {variants.map((variant) => (
+                        <Button
+                            key={variant}
+                            variant={
+                                guessed ? "contained" : "outlined"
                             }
-                        }}
-                    >
-                        {variant}
-                    </Button>
-                ))}
+                            color={guessed && (variant === mainTranslation ? "success" : "error") || "primary"}
+                            sx={{ m: 1, p: 2, pointerEvents: guessed ? "none" : "auto" }}
+                            onClick={() => {
+                                setGuessed(true);
+                                if (variant === mainTranslation) {
+                                    setCorrect(correct + 1);
+                                } else {
+                                    setIncorrect(incorrect + 1);
+                                }
+                            }}
+                        >
+                            {variant}
+                        </Button>
+                    ))}
+                </Box>
             </Box>
             <Box>
                 <Typography>Correct: {correct}, Incorrect: {incorrect}, Round: {round}</Typography>

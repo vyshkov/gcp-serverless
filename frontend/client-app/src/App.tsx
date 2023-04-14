@@ -15,7 +15,8 @@ const router = createBrowserRouter([
     element: <Layout />,
     children: [
       { path: "/", element: <Dictionary /> },
-      { path: "/game", element: <Game />}
+      { path: "/gameen", element: <Game mode="en" />},
+      { path: "/gameua", element: <Game mode="ua" />}
     ],
   },
 ]);

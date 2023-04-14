@@ -23,14 +23,21 @@ const AppDrawer = ({ open, onCloseMenu }: AppDrawerProps) => (
         >
             <List>
                 <ListItem disablePadding>
-                    <ListItemButton component={Link} to="/game" onClick={onCloseMenu}>
+                    <ListItemButton component={Link} to="/gameen" onClick={onCloseMenu}>
                         <ListItemIcon>
                             <VideogameAssetIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Guess words" />
+                        <ListItemText primary="Guess words [EN]" />
                     </ListItemButton>
                 </ListItem>
-
+                <ListItem disablePadding>
+                    <ListItemButton component={Link} to="/gameua" onClick={onCloseMenu}>
+                        <ListItemIcon>
+                            <VideogameAssetIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Guess words [UA]" />
+                    </ListItemButton>
+                </ListItem>
             </List>
             <Divider />
         </Box>
