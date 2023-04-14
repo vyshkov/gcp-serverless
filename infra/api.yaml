@@ -110,6 +110,17 @@ paths:
         address: ${function_service_translation}/translate
       security:
         - google_id_token: []
+  /service-translation/translateGoogle:
+    post:
+      summary: function_service_translation
+      operationId: translateGoogle
+      responses:
+        '200':
+          $ref: '#/responses/SuccessfulResponse'
+      x-google-backend:
+        address: ${function_service_translation}/translateGoogle
+      security:
+        - google_id_token: []
   # Configure root route to serve index.html file
   /:
     get:
