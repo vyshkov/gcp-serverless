@@ -8,7 +8,7 @@ import {
     useTheme,
 } from '@mui/material';
 
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../auth/useLogin';
 
@@ -18,6 +18,16 @@ const Layout = () => {
     const { renderLoginButton, token, isUserAllowed, userData } = useAuth();
     const refContainer = useRef(null); 
     const theme = useTheme();
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+      if (window.location.search.startsWith('?forwardedFrom=')) {
+        const decoded = decodeURIComponent(window.location.search.substring('?forwardedFrom='.length));
+        navigate(decoded);
+      }
+    }, []);
+  
 
     useEffect(() => {
         if (!token) {

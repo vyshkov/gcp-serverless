@@ -6,16 +6,6 @@ import reportWebVitals from './reportWebVitals';
 
 import CustomThemeProvider from './themes/CustomThemeProvider';
 
-
-const updateForwardedUrl = () => {
-  if (window.location.search.startsWith('?forwardedFrom=')) {
-    const decoded = decodeURIComponent(window.location.search.substring('?forwardedFrom='.length));
-    window.history.replaceState(null, '', decoded);
-  }
-}
-
-updateForwardedUrl();
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
