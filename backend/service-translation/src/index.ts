@@ -1,4 +1,5 @@
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
+import { v2 as GoogleTranslate } from "@google-cloud/translate";
 
 const jwt = require('jsonwebtoken');
 const Firestore = require('@google-cloud/firestore');
@@ -84,6 +85,16 @@ fastify.get('/', async (request: FastifyRequest , reply: FastifyReply) => {
     return { hello: request.headers }
 });
 
+fastify.post('/translateGoogle', async (request: FastifyRequest , reply: FastifyReply) => {
+  const requestBody = request.body as { text: string, from: string, to: string };
+  const { text, from, to } = requestBody;
+
+  const {Translate} = GoogleTranslate;
+  const translate = new Translate();
+
+  return await translate.translate(text, { from, to });
+});
+
 fastify.post('/translate', async (request: FastifyRequest , reply: FastifyReply) => {
   const requestBody = request.body as { text: string, from: string, to: string };
   const text = requestBody.text;
@@ -94,7 +105,6 @@ fastify.post('/translate', async (request: FastifyRequest , reply: FastifyReply)
   const url = `https://api.cognitive.microsofttranslator.com/translate?api-version=3.0&from=${from}&to=${to}`;
 
   try {
-    console.log(">>>>>>>>> url", url)
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -104,8 +114,6 @@ fastify.post('/translate', async (request: FastifyRequest , reply: FastifyReply)
       },
       body: JSON.stringify([{ 'Text': text }])
     });
-
-    console.log(">>>>>>>>> response", response);
 
     const data = await response.json();
     return data;
