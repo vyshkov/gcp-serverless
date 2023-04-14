@@ -43,7 +43,7 @@ const Game = ({ mode }: GameProps) => {
         setGuessed(false);
 
         client.getAllWords()
-            .then(words => setAllWords(words.slice(0, 5).sort(() => Math.random() - 0.5)));
+            .then(words => setAllWords(words.sort(() => Math.random() - 0.5).slice(0, 5)));
 
     }, [mode]);
 
