@@ -6,14 +6,12 @@ interface TableContentProps {
     words: Word[];
     selected: Word | null;
     setSelected: (w: Word | null) => void;
-    handleClickListItem: (evt: React.MouseEvent<HTMLElement>) => void;
 }
 
 export const TableContent = ({
     words,
     selected,
     setSelected,
-    handleClickListItem
 }: TableContentProps) => {
 
     const theme = useTheme();
@@ -37,8 +35,7 @@ export const TableContent = ({
                                     '&:last-child td, &:last-child th': { border: 0 },
                                     background: selected?.id === row.id ? theme.custom?.transparentMedium : "transparent"
                                 }}
-                                onClick={(evt: React.MouseEvent<HTMLElement>) => {
-                                    handleClickListItem(evt);
+                                onClick={() => {
                                     setSelected(row);
                                 }}
                             >

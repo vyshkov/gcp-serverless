@@ -8,18 +8,12 @@ import {
     CircularProgress, 
     IconButton, 
     InputAdornment, 
-    ListItemIcon, 
-    ListItemText, 
-    Menu, 
-    MenuItem, 
     OutlinedInput,
 } from '@mui/material';
 
 import { Stack } from '@mui/system';
 import { useEffect, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 
 import { AddWordsDialog } from './AddWordDialog';
 
@@ -32,6 +26,8 @@ import { UrbanDictionaryDialog } from './UrbanDictionaryDialog';
 import { UrbanDictionaryEntry } from '../../utils/urbanDictionary';
 import { Word } from '../../types';
 import useClient from '../../hooks/useClient';
+
+import { WordDetailsDialog } from './WordDetailsDialog';
 
 function wordMatchesSearch(w: { word: string; translation: string; }, search: string) {
     return w.word.toLowerCase().includes(search.toLowerCase())
@@ -49,27 +45,8 @@ export const Dictionary = () => {
     const [freeDictionaryDefinitions, setFreeDictionaryDefinitions] = useState<DictionaryEntry[]>([]);
 
     const [selected, setSelected] = useState<Word | null>(null);
-    const [contextMenu, setContextMenu] = useState<{
-        mouseX: number;
-        mouseY: number;
-    } | null>(null);
-
-    const handleClickListItem = (event: React.MouseEvent<HTMLElement>) => {
-        setContextMenu(
-            contextMenu === null
-                ? {
-                    mouseX: event.clientX + 2,
-                    mouseY: event.clientY - 6,
-                }
-                : // repeated contextmenu when it is already open closes it with Chrome 84 on Ubuntu
-                // Other native context menus might behave different.
-                // With this behavior we prevent contextmenu from the backdrop to re-locale existing context menus.
-                null,
-        );
-    };
 
     const handleClose = () => {
-        setContextMenu(null);
         setAutoTranslation("");
         setSelected(null);
     };
@@ -156,42 +133,7 @@ export const Dictionary = () => {
                 words={filteredWords}
                 selected={selected}
                 setSelected={setSelected}
-                handleClickListItem={handleClickListItem}
             />
-            
-            <Menu
-                open={contextMenu !== null}
-                anchorReference="anchorPosition"
-                anchorPosition={
-                    contextMenu !== null
-                        ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
-                        : undefined
-                }
-
-                onClose={handleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'lock-button',
-                    role: 'listbox',
-                }}
-            >
-                <MenuItem
-                    onClick={deleteWord}
-                    disabled={isUpdating}
-                >
-                    <ListItemIcon>
-                        <DeleteIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Delete</ListItemText>
-                </MenuItem>
-                <MenuItem
-                    disabled
-                >
-                    <ListItemIcon>
-                        <EditIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Edit</ListItemText>
-                </MenuItem>
-            </Menu>
             <AddWordsDialog
                 open={isWordDialogOpen}
                 handleClose={handleAddWordClose}
@@ -205,6 +147,13 @@ export const Dictionary = () => {
             <FreeDictionaryDialog
                 definitions={freeDictionaryDefinitions}
                 handleClose={() => setFreeDictionaryDefinitions([])}
+            />
+            <WordDetailsDialog
+                deleteWord={deleteWord}
+                word={selected || null}
+                handleClose={handleClose}
+                onUrbanDictionaryWordClick={setUrbanDictionaryDefinitions}
+                onFreeDictionaryWordClick={setFreeDictionaryDefinitions}
             />
         </Stack>
     );

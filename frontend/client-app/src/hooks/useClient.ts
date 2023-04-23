@@ -14,7 +14,29 @@ function useClient() {
             myFetch({ route: "/service-dictionary", method: "POST", body: {
                 word: english,
                 translation: ukrainian,
-            }})
+            }}),
+        translateAzure: (
+            text: string, 
+            from: string, 
+            to: string, 
+            abortController: AbortController 
+        ) => myFetch({ 
+            route: "service-translation/translate", 
+            method: "POST", 
+            body: { text, from, to},
+            abortController,
+        }),
+        translateGoogle: (
+            text: string, 
+            from: string, 
+            to: string, 
+            abortController: AbortController 
+        ) => myFetch({ 
+            route: "service-translation/translateGoogle", 
+            method: "POST", 
+            body: { text, from, to},
+            abortController,
+        })
     }
 }
 

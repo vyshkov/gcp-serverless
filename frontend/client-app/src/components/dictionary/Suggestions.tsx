@@ -6,7 +6,7 @@ import useDebounce from "../../hooks/useDebounce";
 import { DictionaryEntry, getFreeDefinition } from "../../utils/freeDictionary";
 import { UrbanDictionaryEntry, getUrbanDictionaryDefinition } from "../../utils/urbanDictionary";
 
-import useFetch from "../../hooks/useFetch";
+import useClient from "../../hooks/useClient";
 
 interface TranslationObject {
     translations: {
@@ -31,10 +31,11 @@ const Suggestions = ({
     onUrbanDictionaryWordClick, 
     onFreeDictionaryWordClick 
 }: SuggestionsProps) => {
-    const myFetch = useFetch();
+    const client = useClient();
     const previousController = useRef<AbortController>();
     const debouncedSearch = useDebounce(word, 1000);
     const [translationResults, setTranslationResults] = useState<string[]>([]);
+    const [googleTranslationResults, setGoogleTranslationResults] = useState<string[]>([]);
     const [freeDefinitions, setFreeDefinitions] = useState<DictionaryEntry[]>([]);
     const [urbanDictionaryDefinitions, setUrbanDictionaryDefinitions] = useState<UrbanDictionaryEntry[]>([]);
     const [isInProgress, setInProgress] = useState(false);
@@ -51,16 +52,25 @@ const Suggestions = ({
                 const isEnglish = /^[a-zA-Z\s-]+$/.test(word);
 
                 setInProgress(true);
-                myFetch({ 
-                    route: "service-translation/translate", 
-                    method: "POST", 
-                    body: { text: word, from: isEnglish ? "en" : "uk", to: isEnglish ? "uk" : "en" },
-                    abortController,
-                })
+                client.translateAzure(
+                    word, 
+                    isEnglish ? "en" : "uk", 
+                    isEnglish ? "uk" : "en", 
+                    abortController
+                )
                 .then((res: TranslationObject[]) => {
                     setTranslationResults(res[0].translations.map(el => el.text));
                  })
                 .finally(() => setInProgress(false));
+
+                // client.translateGoogle(
+                //     word,
+                //     isEnglish ? "en" : "uk",
+                //     isEnglish ? "uk" : "en",
+                //     abortController
+                // ).then((res: string[]) => {
+                //     setGoogleTranslationResults(res);
+                // })
             }
 
             getFreeDefinition(debouncedSearch, previousController?.current)
@@ -76,6 +86,12 @@ const Suggestions = ({
     return (
         <Box sx={{ p: 2, textAlign: "left", width: 1, display: "flex", flexWrap: "wrap" }}>
             {translate && showLoading && <CircularProgress size={30} sx={{ mr: 1 }} />}
+
+            {translate && !showLoading && googleTranslationResults[0] && (
+                // eslint-disable-next-line react/no-array-index-key
+                <Chip label={`Google: ${googleTranslationResults[0]}`} onClick={() => onTranslationPressed(word, googleTranslationResults[0])} 
+                    sx={{ mr: 1, mb: 1 }} />
+            )}
 
             {translate && !showLoading && translationResults.map((el, i) => (
                 // eslint-disable-next-line react/no-array-index-key
