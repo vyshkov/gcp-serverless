@@ -4,8 +4,8 @@ import {
     Box, Divider, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText
 } from "@mui/material";
 
-import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 
 interface AppDrawerProps {
     open: boolean;
