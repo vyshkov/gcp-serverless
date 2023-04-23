@@ -99,13 +99,13 @@ const Suggestions = ({
         }
     }, [debouncedSearch]);
 
-    const showLoading = isInProgress || word !== debouncedSearch || translationResults.length === 0;
+    const showLoading = isInProgress || word !== debouncedSearch;
 
     return (
         <Box sx={{ p: 2, textAlign: "left", width: 1, display: "flex", flexWrap: "wrap" }}>
             {translate && showLoading && <CircularProgress size={30} sx={{ mr: 1 }} />}
 
-            {translate && !showLoading && googleTranslationResults.map((el, i) => (
+            {Boolean(googleTranslationResults.length) && googleTranslationResults.map((el, i) => (
                 // eslint-disable-next-line react/no-array-index-key
                 <Chip key={el + i} label={el} onClick={() => onTranslationPressed(word, el)} 
                     sx={{ mr: 1, mb: 1, background: theme.custom?.transparentLight }} />
