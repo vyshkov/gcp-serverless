@@ -1,4 +1,4 @@
-import { Box, Chip, CircularProgress } from "@mui/material";
+import { Box, Chip, CircularProgress, useTheme } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import useDebounce from "../../hooks/useDebounce";
 
@@ -35,10 +35,12 @@ const Suggestions = ({
     const previousController = useRef<AbortController>();
     const debouncedSearch = useDebounce(word, 1000);
     const [translationResults, setTranslationResults] = useState<string[]>([]);
-    const [googleTranslationResults] = useState<string[]>([]);
+    const [googleTranslationResults, setGoogleTranslationResults] = useState<string[]>([]);
     const [freeDefinitions, setFreeDefinitions] = useState<DictionaryEntry[]>([]);
     const [urbanDictionaryDefinitions, setUrbanDictionaryDefinitions] = useState<UrbanDictionaryEntry[]>([]);
     const [isInProgress, setInProgress] = useState(false);
+
+    const theme = useTheme();
 
     useEffect(() => {
         if (debouncedSearch) {
@@ -62,6 +64,20 @@ const Suggestions = ({
                     setTranslationResults(res[0].translations.map(el => el.text));
                  })
                 .finally(() => setInProgress(false));
+
+                fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=uk&hl=en&dt=t&dt=bd&dj=1&source=icon&tk=215202.215202&q=${word}`)
+                    .then(res => res.json())
+                    .then(res => {
+                        console.log("Goog1", res);
+                        if (res?.dict?.length > 0) {
+                            return res.dict.flatMap((el: any) => el.terms);
+                        }
+                        return [];
+                    })
+                    .then(res => {
+                        setGoogleTranslationResults(res);
+                    })
+                    .catch(err => console.log("Goog", err));
 
                 // client.translateGoogle(
                 //     word,
@@ -87,11 +103,11 @@ const Suggestions = ({
         <Box sx={{ p: 2, textAlign: "left", width: 1, display: "flex", flexWrap: "wrap" }}>
             {translate && showLoading && <CircularProgress size={30} sx={{ mr: 1 }} />}
 
-            {translate && !showLoading && googleTranslationResults[0] && (
+            {translate && !showLoading && googleTranslationResults.map((el, i) => (
                 // eslint-disable-next-line react/no-array-index-key
-                <Chip label={`Google: ${googleTranslationResults[0]}`} onClick={() => onTranslationPressed(word, googleTranslationResults[0])} 
-                    sx={{ mr: 1, mb: 1 }} />
-            )}
+                <Chip key={el + i} label={el} onClick={() => onTranslationPressed(word, el)} 
+                    sx={{ mr: 1, mb: 1, background: theme.custom?.transparentLight }} />
+            ))}
 
             {translate && !showLoading && translationResults.map((el, i) => (
                 // eslint-disable-next-line react/no-array-index-key
