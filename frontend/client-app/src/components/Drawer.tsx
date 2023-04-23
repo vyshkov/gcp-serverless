@@ -5,6 +5,7 @@ import {
 } from "@mui/material";
 
 import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 interface AppDrawerProps {
     open: boolean;
@@ -40,6 +41,26 @@ const AppDrawer = ({ open, onCloseMenu }: AppDrawerProps) => (
                 </ListItem>
             </List>
             <Divider />
+            <List>
+                <ListItem disablePadding>
+                    <ListItemButton component={Link} to="https://github.com/vyshkov/gcp-serverless" onClick={onCloseMenu}>
+                        <ListItemIcon>
+                            <GitHubIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Github" />
+                    </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton component={Link} to="https://github.com/vyshkov/gcp-serverless/actions/workflows/publish-surge.yaml" onClick={onCloseMenu}>
+                        <img 
+                            src="https://github.com/vyshkov/gcp-serverless/actions/workflows/publish-surge.yaml/badge.svg" 
+                            alt="Publish to surge"
+                        />
+                    </ListItemButton>
+                </ListItem>
+            </List>
+            
+
         </Box>
     </Drawer>
 )
