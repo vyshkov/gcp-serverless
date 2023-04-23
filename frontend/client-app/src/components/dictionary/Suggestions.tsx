@@ -65,7 +65,9 @@ const Suggestions = ({
                  })
                 .finally(() => setInProgress(false));
 
-                fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=uk&hl=en&dt=t&dt=bd&dj=1&source=icon&tk=215202.215202&q=${word}`)
+                fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=uk&hl=en&dt=t&dt=bd&dj=1&source=icon&tk=215202.215202&q=${word}`, {
+                        signal: abortController.signal
+                })
                     .then(res => res.json())
                     .then(res => {
                         console.log("Goog1", res);
