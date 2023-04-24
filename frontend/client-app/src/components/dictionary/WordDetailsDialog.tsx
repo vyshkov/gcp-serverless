@@ -2,6 +2,7 @@ import { TransitionProps } from '@mui/material/transitions';
 import { forwardRef } from 'react';
 
 import DeleteIcon from '@mui/icons-material/Delete';
+import VoiceChatIcon from '@mui/icons-material/VoiceChat';
 
 import {
     Button,
@@ -68,6 +69,22 @@ export const WordDetailsDialog = ({
                 />
             </DialogContent>
             <DialogActions>
+                <Button
+                    startIcon={<VoiceChatIcon />}
+                    onClick={() => {
+                        // use SpeechSynthesisUtterance
+
+                        const msg = new SpeechSynthesisUtterance(word?.word || "");
+                        // eslint-disable-next-line prefer-destructuring
+                        msg.voice = speechSynthesis.getVoices()[1];
+                        msg.lang = "en-US";
+
+                        window.speechSynthesis.speak(msg);
+                    }}
+                    variant="outlined"
+                >
+                    Pronaunce
+                </Button>
                 <Button 
                     onClick={() => {
                         deleteWord();
